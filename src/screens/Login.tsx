@@ -12,10 +12,6 @@ const Login = () => {
             
             <View style={styles.nhap}>
             <Text style={styles.sodienthoai}>Số điện thoại </Text>
-           <View style={styles.phonenumber}>
-            <View style = {styles.input}></View>
-
-           </View>
             </View>
        
         </View>
@@ -70,12 +66,7 @@ const styles = StyleSheet.create({
         height: 55,
         borderColor:COLORS.Black,
     },
-    input:{
-        paddingVertical: 35,
-        paddingHorizontal: 35,
-        width: 147.67,
-        height: 22,
-    },
+   
     
 
 })
