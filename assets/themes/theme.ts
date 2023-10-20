@@ -33,40 +33,40 @@ export const SPACING : Spacing = {
 
 interface Color{
     Black: ColorValue;
-    BlackRGB10: ColorValue;
-    BLACK_ACCENT: ColorValue;
-    Orange: ColorValue;
-    OrangeRGBA0: ColorValue;
-    GRAY_4: ColorValue;
-    Grey: ColorValue;
-    GRAY_BG: ColorValue;
+    MainBlue: ColorValue;
+    BlueWish: ColorValue;
+    BluePaid: ColorValue;
+    Blue_BG: ColorValue;
+    BlueWish_BG: ColorValue;
+    RedButton: ColorValue;
+    RedCancel: ColorValue;
+    RedCancel_BG: ColorValue;
+    OrangeWait: ColorValue;
+    OrangeWait_BG: ColorValue;
+    LightGray: ColorValue;
+    MediumGray: ColorValue;
     DarkGrey: ColorValue;
     Yellow: ColorValue;
     White: ColorValue;
-    WHITE_TEXT: ColorValue;
-    WhiteRGBA75: ColorValue;
-    WhiteRGBA50: ColorValue;
-    WhiteRGBA32: ColorValue;
-    WhiteRGBA15: ColorValue;
 }
 
 export const COLORS : Color = {
     Black: '#000000',
-    BlackRGB10: 'rgba(0,0,0,0.1)',
-    BLACK_ACCENT:'#080808',
-    Orange: '#FF5524',
-    OrangeRGBA0: 'rgba(255,85,36,0)',
-    GRAY_4:'#313333',   
-    Grey: "#333333",
-    GRAY_BG:'rgba(49, 51, 51, 0.50)',
+    MainBlue : '#4461F2',
+    BlueWish: '#008C95',
+    BluePaid: '#008C95',
+    Blue_BG : "#F5F8FF",
+    BlueWish_BG: "#CDF9FF",
+    RedButton: '#E14058',
+    RedCancel: '#F86666',
+    RedCancel_BG: '#FFD9D9',
+    OrangeWait: '#FF9A03',
+    OrangeWait_BG: '#FFECCF',
+    LightGray: "#C0C0C0",
+    MediumGray:'#595959',
     DarkGrey: '#0b0b0b',
-    Yellow: "E1CD17",
+    Yellow: "E14058 ",
     White: "#FFFFFF",
-    WHITE_TEXT:'#EAF4F4',
-    WhiteRGBA75: "rgba(255,255,255,0.75)",
-    WhiteRGBA50: "rgba(255,255,255,0.50)",
-    WhiteRGBA32: "rgba(255,255,255,0.32)",
-    WhiteRGBA15: "rgba(255,255,255,0.15)",
 }
 
 interface FontFamily {
