@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TestFont from './assets/screens/TestFont'
+import TestFont from './src/screens/TestFont'
 
 const App = () => {
   return (
