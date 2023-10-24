@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     logo:{
         borderRadius: 15,
         marginTop: 20,
-        alignSelf: 'center',
+        alignSelf: 'center',    
         width: 200,
         height: 200,
     }
