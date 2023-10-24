@@ -12,5 +12,7 @@ const Trip2 = () => {
 export default Trip2
 
 const styles = StyleSheet.create({
-
+    header:{
+        
+    }
 })
