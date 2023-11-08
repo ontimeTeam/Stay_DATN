@@ -23,7 +23,7 @@ const App = () => {
                 {/* <Stack.Screen name='Book' component={BookScreen}/>
                 <Stack.Screen name='Trip' component={TripScreen}/>
                 <Stack.Screen name='Profile' component={ProfileScreen}/> */}
-                <Stack.Screen name='AnimateTab' component={}/>
+                {/* <Stack.Screen name='AnimateTab' component={Animation}/> */}
             </Stack.Navigator>
         </NavigationContainer>
     );
