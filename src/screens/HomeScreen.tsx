@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
 import * as React from 'react'
 import { COLORS } from '../../src/themes/theme';
-import BottomTabNavigations from '../navigators/BottomTabNavigations';
 import BookScreen from './BookScreen';
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {

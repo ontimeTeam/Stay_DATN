@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { COLORS } from '../../src/themes/theme';
 
-function BookScreen({ navigation }: { navigation: any }): React.JSX.Element {
+function BookScreen({ navigation }: { navigation: any }) {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>BookScreen</Text>
