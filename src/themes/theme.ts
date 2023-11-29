@@ -38,6 +38,7 @@ interface Color{
     BluePaid: ColorValue;
     Blue_BG: ColorValue;
     BlueWish_BG: ColorValue;
+    Blue_btn: ColorValue;
     RedButton: ColorValue;
     RedCancel: ColorValue;
     RedCancel_BG: ColorValue;
@@ -57,6 +58,7 @@ export const COLORS : Color = {
     BluePaid: '#008C95',
     Blue_BG : "#F5F8FF",
     BlueWish_BG: "#CDF9FF",
+    Blue_btn: '#E2E7FF',
     RedButton: '#E14058',
     RedCancel: '#F86666',
     RedCancel_BG: '#FFD9D9',
