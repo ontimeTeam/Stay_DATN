@@ -1,15 +1,32 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import TestFont from './src/screens/TestFont'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import BottomTabNavigations from './src/navigation/BottomTabNavigations';
+import { NavigationContainer } from '@react-navigation/native';
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  return (
-    <View>
-      <TestFont />
-    </View>
-  )
+    return (
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="BottomTabs" component={BottomTabNavigations} options={{ animation: 'default' }} />
+            </Stack.Navigator>
+        </NavigationContainer>
+        // <View style={styles.container}>
+        //   <Button /> 
+        // </View>
+    )
 }
 
 export default App
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center'
+    }
+})
