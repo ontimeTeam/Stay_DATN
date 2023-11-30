@@ -6,15 +6,11 @@ import Trip from './src/screens/Trip'
 
 const App = () => {
     return (
-        <View>
-            {/* <SplashScreen/> */}
-            <Trip />
-        </View>
+        <Trip />
     )
 }
 
 export default App
 
 const styles = StyleSheet.create({
-
 })
