@@ -15,10 +15,10 @@ const BookScreen: React.FC<PropsType> = props => {
                 isCheck={true}
                 textCenter="BookScreen"
                 iconLeft={IC_BACK}
-                eventLeft={() => navigation.goBack()}
+                eventLeft={() => { navigation.navigate('HomeScreen') }}
             />
-            <Pressable style={styles.btn} onPress={() => { navigation.navigate('HomeScreen') }}>
-                <Text style={styles.text}>BookScreen</Text>
+            <Pressable style={styles.btn} onPress={() => { navigation.navigate('HotelDetail') }}>
+                <Text style={styles.text}>Tiếp theo</Text>
             </Pressable>
         </View>
     );

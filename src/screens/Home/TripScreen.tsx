@@ -242,7 +242,9 @@ const TripScreen: React.FC<PropsType> = props => {
                 </View>
                 <View style={{ borderBottomColor: 'rgba(0, 0, 0, 0.25)', borderBottomWidth: 1, marginVertical: 20 }}>
                 </View>
-                <Pressable style={styles.viewbtnTag}>
+                <Pressable style={styles.viewbtnTag}
+                    onPress={() => { navigation.navigate('RoomListScreen') }}
+                >
                     <Text style={styles.textbtnTag}>
                         Đặt phòng ngay!
                     </Text>
@@ -305,7 +307,9 @@ const TripScreen: React.FC<PropsType> = props => {
                             Hủy đặt phòng
                         </Text>
                     </Pressable>
-                    <Pressable style={styles.viewbtnTag}>
+                    <Pressable style={styles.viewbtnTag}
+                        onPress={() => { navigation.navigate('BillScreen') }}
+                    >
                         <Text style={styles.textbtnTag}>
                             Xem hóa đơn
                         </Text>
@@ -369,7 +373,9 @@ const TripScreen: React.FC<PropsType> = props => {
                             Hủy đặt phòng
                         </Text>
                     </Pressable>
-                    <Pressable style={styles.viewbtnTag}>
+                    <Pressable style={styles.viewbtnTag}
+                        onPress={() => { navigation.navigate('BillScreen') }}
+                    >
                         <Text style={styles.textbtnTag}>
                             Xem hóa đơn
                         </Text>
