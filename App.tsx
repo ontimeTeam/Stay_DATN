@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import TestFont from './src/screens/TestFont'
-import SplashScreen from './src/screens/SplashScreen'
-import Trip from './src/screens/Trip'
+import { AppContextProvider } from './src/resources/context/AppContext';
+import AppNavigation from './src/navigation/AppNavigation';
 
 const App = () => {
     return (
-        <Trip />
+        <AppContextProvider>
+            <AppNavigation />
+        </AppContextProvider>
     )
 }
 

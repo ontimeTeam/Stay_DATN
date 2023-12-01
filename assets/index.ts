@@ -21,3 +21,4 @@ export const ICON_CLOCK = require('./images/Icon_Clock.png');
 export const ICON_CHECK = require('./images/Icon_Check.png');
 export const ICON_CANCEL = require('./images/Icon_Cancel.png');
 export const ICON_TRASH = require('./images/Icon_Trash.png');
+export const IMG_OTP = require('./images/Img_OTP.png');

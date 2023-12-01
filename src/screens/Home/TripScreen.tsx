@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Pressable, ScrollView, Image, ImageSourcePropType, FlatList, ListRenderItemInfo } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, ICON_TRASH, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3 } from '../../assets';
-import Header from '../components/header/Header';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3 } from '../../../assets';
+import Header from '../../components/header/Header';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { TripStackParamList } from '../../navigation/TripStack';
 
 export interface Item {
     id: number;
@@ -12,7 +13,10 @@ export interface Item {
     roomName: string;
 }
 
-const Trip = () => {
+type PropsType = NativeStackScreenProps<TripStackParamList, 'TripScreen'>;
+
+const TripScreen: React.FC<PropsType> = props => {
+    const { navigation } = props;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
     const [keyExtractorUpdateCount, setKeyExtractorUpdateCount] = useState(0);
@@ -146,11 +150,6 @@ const Trip = () => {
         },
 
     ]);
-    const onDelete = (itemId: number) => {
-        console.log("Id: " + itemId);
-        const updatedData = dataCancel.filter((item) => item.id !== itemId);
-        setdataCancel(updatedData);
-    };
     const initialLayout = { width: Dimensions.get('window').width };
 
     const [index, setIndex] = useState(0);
@@ -184,7 +183,7 @@ const Trip = () => {
         </View>
     );
 
-    const [activeTab, setActiveTab] = useState('')
+    const [activeTab, setActiveTab] = useState('Muốn đến')
 
     const handleTabPress = (tab: string) => {
         setActiveTab(tab)
@@ -602,8 +601,10 @@ const Trip = () => {
     return (
         <View style={{ flex: 1 }}>
             <Header
+                styleContainer={{ backgroundColor: 'white' }}
                 isCheck={false}
                 iconLeft={IC_BACK}
+                eventLeft={() => { navigation.goBack() }}
                 textLeft='Chuyến đi'
             />
             <TabView
@@ -632,7 +633,7 @@ const Trip = () => {
 };
 const styles = StyleSheet.create({
     scene: {
-        flex: 1, 
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -702,7 +703,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F5F8FF',
         paddingHorizontal: 20,
-        paddingBottom: 20
+        paddingBottom: 5
     },
     textNo: {
         textAlign: 'center',
@@ -853,4 +854,4 @@ const styles = StyleSheet.create({
         lineHeight: 28,
     },
 });
-export default Trip;
+export default TripScreen;

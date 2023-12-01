@@ -24,6 +24,7 @@ interface HeaderProps {
   styleTextCenter?: StyleProp<TextProps>;
   styleIconRight?: StyleProp<ImageStyle>;
   styleTextLeft?: StyleProp<TextProps>;
+  styleContainer?: StyleProp<ImageStyle>;
   isCheck?: boolean;
 }
 
@@ -40,6 +41,7 @@ const Header: React.FC<HeaderProps> = ({
   styleTextCenter,
   styleIconRight,
   styleTextLeft,
+  styleContainer,
   isCheck,
 }) => {
   const renderIconLeft = () => {
@@ -91,23 +93,23 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <View style={_styles.container}>
-      <View style={_styles.containerChildren}>
+    <View style={[_styles.container, styleContainer]}>
+      <View style={_styles.containerChidren} >
         {renderIconLeft()}
         {renderTextCenter()}
         {renderIconRight()}
       </View>
-    </View>
+
+    </View >
   );
 };
 
 const _styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-
+    backgroundColor: 'transparent',
   },
-  containerChildren: {
-    height: 50,
+  containerChidren: {
+    height: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
