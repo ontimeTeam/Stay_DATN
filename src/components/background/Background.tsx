@@ -9,7 +9,7 @@ export interface BackgroundProps {
 const Background: React.FC<BackgroundProps> = (props) => {
   const { children, source } = props;
   return (
-    <ImageBackground resizeMode="center" source={source} style={styles.container}>
+    <ImageBackground resizeMode="cover" source={source} style={styles.container}>
       <StatusBar
         barStyle="light-content"
         backgroundColor={'transparent'}
@@ -20,7 +20,7 @@ const Background: React.FC<BackgroundProps> = (props) => {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   container: {
     flex: 1,
   },

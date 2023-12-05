@@ -46,6 +46,7 @@ const LoginScreen: React.FC<PropsType> = (props) => {
           />
         </View>
       </SafeAreaView>
+
     </Background>
 
   )

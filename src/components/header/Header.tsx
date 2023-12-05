@@ -109,7 +109,7 @@ const _styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   containerChidren: {
-    height: 'auto',
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

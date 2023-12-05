@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import { COLORS } from '../../themes/theme';
-import EditProfileScreen from './EditProfileScreen';
 import { IC_BACK } from '../../../assets';
 import Header from '../../components/header/Header';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
 import { AppContext } from '../../resources/context/AppContext';
+import Button from '../../components/button/Button';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'ProfileScreen'>;
 const ProfileScreen: React.FC<PropsType> = props => {
@@ -16,17 +16,35 @@ const ProfileScreen: React.FC<PropsType> = props => {
     return (
         <View style={styles.container}>
             <Header
+                styleContainer={{ backgroundColor: COLORS.White }}
                 isCheck={true}
-                textCenter="ProfileScreen"
+                textCenter="Thông tin người dùng"
                 iconLeft={IC_BACK}
             />
-            <Pressable style={styles.btn} onPress={() => {
-                setLoggedIn(false);
-                console.log('isLoggedIn', isLoggedIn);
-            }}>
-                <Text style={styles.text}>Đăng xuất</Text>
-            </Pressable>
+            <View style={styles.containerChildren} >
+                <Button
+                    title="Chỉnh sửa"
+                    onPress={() => navigation.navigate('EditProfile')}
+                />
+                <Button
+                    title="Đổi mật khẩu"
+                    onPress={() => navigation.navigate('ForgotPassword')}
+                />
+                <Button
+                    title="Thẻ của tôi"
+                    onPress={() => navigation.navigate('MyCardScreen')}
+                />
+                <Button
+                    title="Điểu khoản và chính sách"
+                    onPress={() => navigation.navigate('RuleScreen')}
+                />
+                <Button
+                    title="Đăng xuất"
+                    onPress={() => setLoggedIn(false)}
+                />
+            </View>
         </View>
+
     )
 }
 
@@ -36,19 +54,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    btn: {
-        width: 200,
-        height: 50,
-        backgroundColor: 'blue',
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        marginTop: 20
-    },
-    text: {
-        color: COLORS.White,
-        fontFamily: 'Exo2-Regular',
-        fontSize: 18
+    containerChildren: {
+        flex: 1,
+        backgroundColor: COLORS.White,
+        paddingHorizontal: 20,
     }
 })

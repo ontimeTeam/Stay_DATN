@@ -6,3 +6,4 @@ export const IC_TRIP = require('./trip.png');
 export const IC_TRIPon = require('./tripON.png');
 export const IC_PROFILE = require('./profile.png');
 export const IC_PROFILEon = require('./profileON.png');
+

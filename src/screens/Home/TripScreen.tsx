@@ -18,9 +18,11 @@ type PropsType = NativeStackScreenProps<TripStackParamList, 'TripScreen'>;
 const TripScreen: React.FC<PropsType> = props => {
     const { navigation } = props;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    // biến showDeleteModal dùng để hiển thị modal xác nhận xóa, mặc định là false nghĩa là không hiển thị
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+    // biến selectedItemId dùng để lưu id của item được chọn, mặc định là null
     const [keyExtractorUpdateCount, setKeyExtractorUpdateCount] = useState(0);
-
+    // biến keyExtractorUpdateCount dùng để cập nhật keyExtractor của FlatList, mặc định là 0
     const [data, setData] = useState<Item[]>([
         {
             id: 1,
@@ -184,7 +186,7 @@ const TripScreen: React.FC<PropsType> = props => {
     );
 
     const [activeTab, setActiveTab] = useState('Muốn đến')
-
+    // biến activeTab dùng để lưu tab đang được chọn, mặc định là 'Muốn đến'
     const handleTabPress = (tab: string) => {
         setActiveTab(tab)
     }
@@ -274,72 +276,7 @@ const TripScreen: React.FC<PropsType> = props => {
             )
         }
     }
-    const renderListHotelPay = ({ item }: { item: Item }) => {
-        return (
-            <View
-                key={item.id}
-                style={styles.rowItem}>
-                <View style={styles.rowItemChildren}>
-                    <Image
-                        source={item.image}
-                        style={styles.imageItem}
-                    />
-                    <View style={{ flex: 1, width: '100%', marginLeft: 16 }}>
-                        <Text style={styles.textNameHotel}>
-                            {item.nameHotel}
-                        </Text>
-                        <Text style={styles.textRoomName}>
-                            {item.roomName}
-                        </Text>
-                        <View style={[styles.tag, { backgroundColor: '#D9F2DA', borderColor: '#D9F2DA' }]}>
-                            <Image source={ICON_MONEYCHECK} style={{ width: 17, height: 12, marginRight: 5 }} />
-                            <Text style={[styles.textTag, { color: '#2B9230' }]}>
-                                Đã thanh toán
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{ borderBottomColor: 'rgba(0, 0, 0, 0.25)', borderBottomWidth: 1, marginVertical: 20 }}>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                    <Pressable style={styles.viewbtnTag1}>
-                        <Text style={styles.textbtnTag1}>
-                            Hủy đặt phòng
-                        </Text>
-                    </Pressable>
-                    <Pressable style={styles.viewbtnTag}
-                        onPress={() => { navigation.navigate('BillScreen') }}
-                    >
-                        <Text style={styles.textbtnTag}>
-                            Xem hóa đơn
-                        </Text>
-                    </Pressable>
-                </View>
-            </View>
-        );
-    };
-    const renderItemPay = () => {
-        if (data.length === 0) {
-            return (
-                <View style={styles.contanerChildren}>
-                    <Image source={IMG_NOGPS} style={{ width: 250, height: 200, alignSelf: 'center', }} />
-                    <Text style={styles.textNo}>Bạn chưa có chuyến đi nào</Text>
-                </View>
-            )
-        }
-        else {
-            return (
-                <View style={styles.ViewFlatList}>
-                    <FlatList
-                        data={data}
-                        renderItem={renderListHotelPay}
-                        keyExtractor={(item) => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
-            )
-        }
-    }
+
     const renderListHotelConfirm = ({ item }: { item: Item }) => {
         return (
             <View
@@ -459,14 +396,18 @@ const TripScreen: React.FC<PropsType> = props => {
             )
         }
     }
+
+    // Hàm xử lý khi nhấn nút xóa
     const handleDeleteItem = () => {
         if (selectedItemId) {
             setdataCancel((prevData) => prevData.filter((item) => item.id !== selectedItemId));
+            // setdataCancel là hàm cập nhật dataCancel, prevData là dataCancel hiện tại
             setKeyExtractorUpdateCount((prevCount) => prevCount + 1);
+            // setKeyExtractorUpdateCount là hàm cập nhật keyExtractorUpdateCount, prevCount là keyExtractorUpdateCount hiện tại
         }
         setShowDeleteModal(false);
     };
-
+    // Hàm xử lý khi nhấn giữ item trong FlatList để hiển thị modal xác nhận xóa
     const handleLongPress = (itemId: number) => {
         console.log("Id: " + itemId);
         setSelectedItemId(itemId);
@@ -477,7 +418,6 @@ const TripScreen: React.FC<PropsType> = props => {
             const handleDelete = () => {
                 handleDeleteItem();
             };
-
             return (
                 <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
                     <Text style={styles.deleteButtonText}>Delete</Text>
@@ -532,7 +472,8 @@ const TripScreen: React.FC<PropsType> = props => {
                         data={dataCancel}
                         renderItem={renderListHotelCancel}
                         showsVerticalScrollIndicator={false}
-                        keyExtractor={(item, index) => `${item.id}_${keyExtractorUpdateCount}`} // Sử dụng keyExtractorUpdateCount để cập nhật keyExtractor
+                        keyExtractor={(item, index) => `${item.id}_${keyExtractorUpdateCount}`} 
+                        // Sử dụng keyExtractorUpdateCount để cập nhật keyExtractor
                     />
 
                 </View>
@@ -546,6 +487,7 @@ const TripScreen: React.FC<PropsType> = props => {
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
                     contentContainerStyle={{
+                        flex: 1,
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -553,7 +495,6 @@ const TripScreen: React.FC<PropsType> = props => {
                     }}
                 >
                     {renderTabButton('Muốn đến', 'Muốn đến')}
-                    {renderTabButton('Đã thanh toán', 'Đã thanh toán')}
                     {renderTabButton('Chờ xác nhận', 'Chờ xác nhận')}
                 </ScrollView>
             </View>
@@ -579,12 +520,6 @@ const TripScreen: React.FC<PropsType> = props => {
                 return (
                     <View style={{ flex: 1 }}>
                         {renderItemWant()}
-                    </View>
-                )
-            case 'Đã thanh toán':
-                return (
-                    <View style={{ flex: 1 }}>
-                        {renderItemPay()}
                     </View>
                 )
             case 'Chờ xác nhận':
@@ -681,16 +616,17 @@ const styles = StyleSheet.create({
 
     },
     btn: {
+        flex: 1,
         flexDirection: 'row',
         height: 40,
-        width: 'auto',
+        width: '50%',
         paddingVertical: 8,
         paddingHorizontal: 10,
         borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        marginRight: 20,
+        marginHorizontal: 10,
     },
     textbtn: {
         fontSize: 14,
