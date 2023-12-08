@@ -147,7 +147,10 @@ const DATALOCATION: ListLocation[] = ([
         nameLocation: 'Vũng Tàu',
     }
 ]);
-const ItemBanner = ({ item, onPress }: { item: Banner; onPress: () => void }) => {
+const ItemBanner = ({ item, onPress }: {
+    item: Banner;
+    onPress: () => void;
+}) => {
     const [placeIcon, setPlaceIcon] = useState(ICON_PLANE_WHITE);
     // biến placeIcon dùng để set icon cho địa điểm, mặc định là ICON_PLANE_WHITE
     const [isCheck, setIsCheck] = useState(false);
@@ -173,7 +176,7 @@ const ItemBanner = ({ item, onPress }: { item: Banner; onPress: () => void }) =>
             />
             <View
                 style={styles.viewChildren}>
-                <Text style={styles.txtNameBanner}>
+                <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>
                     {item.nameHotel}
                 </Text>
                 <View style={styles.viewStar}>
@@ -655,7 +658,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width * 0.5 - 15,
         height: Dimensions.get('screen').width * 0.5 - 15,
         borderRadius: 16,
-        resizeMode: 'cover',
+        resizeMode: 'stretch',
     },
     viewTitleBottom: {
         position: 'absolute',

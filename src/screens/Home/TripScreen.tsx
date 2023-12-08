@@ -472,8 +472,8 @@ const TripScreen: React.FC<PropsType> = props => {
                         data={dataCancel}
                         renderItem={renderListHotelCancel}
                         showsVerticalScrollIndicator={false}
-                        keyExtractor={(item, index) => `${item.id}_${keyExtractorUpdateCount}`} 
-                        // Sử dụng keyExtractorUpdateCount để cập nhật keyExtractor
+                        keyExtractor={(item, index) => `${item.id}_${keyExtractorUpdateCount}`}
+                    // Sử dụng keyExtractorUpdateCount để cập nhật keyExtractor
                     />
 
                 </View>

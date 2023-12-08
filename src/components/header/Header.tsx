@@ -10,10 +10,12 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
+import { COLORS } from '../../themes/theme';
 interface HeaderProps {
   iconLeft?: ImageSourcePropType;
   textLeft?: string;
   textCenter?: string;
+  textCenterMini?: string;
   iconCenter?: ImageSourcePropType;
   iconRight?: ImageSourcePropType;
   eventLeft?: () => void;
@@ -22,6 +24,7 @@ interface HeaderProps {
   styleIconLeft?: StyleProp<ImageStyle>;
   styleIconCenter?: StyleProp<ImageStyle>;
   styleTextCenter?: StyleProp<TextProps>;
+  styleTextCenterMini?: StyleProp<TextProps>;
   styleIconRight?: StyleProp<ImageStyle>;
   styleTextLeft?: StyleProp<TextProps>;
   styleContainer?: StyleProp<ImageStyle>;
@@ -32,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({
   iconLeft,
   textLeft,
   textCenter,
+  textCenterMini,
   iconCenter,
   iconRight,
   eventLeft,
@@ -39,6 +43,7 @@ const Header: React.FC<HeaderProps> = ({
   styleIconLeft,
   styleIconCenter,
   styleTextCenter,
+  styleTextCenterMini,
   styleIconRight,
   styleTextLeft,
   styleContainer,
@@ -67,8 +72,9 @@ const Header: React.FC<HeaderProps> = ({
   const renderTextCenter = () => {
     if (textCenter && isCheck) {
       return (
-        <Pressable >
+        <Pressable style={_styles.viewTextCenter}>
           <Text style={[_styles.textCenterHeader, styleTextCenter]}>{textCenter}</Text>
+          <Text style={[_styles.textCenterHeaderMini, styleTextCenterMini]}>{textCenterMini}</Text>
         </Pressable>
       );
     } else if (iconCenter && !isCheck) {
@@ -165,6 +171,18 @@ const _styles = StyleSheet.create({
   iconCenter: {
     width: 64,
     height: 64,
+  },
+  viewTextCenter: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  textCenterHeaderMini: {
+    fontFamily: 'Exo2-Regular',
+    fontSize: 16,
+    color: COLORS.Black,
+    textAlign: 'center',
   },
 });
 export default Header;
