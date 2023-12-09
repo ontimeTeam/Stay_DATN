@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../themes/theme'
+import Background from '../components/background/Background'
 
 const TestFont = () => {
     const [otp, setOtp] = useState('') 
@@ -15,6 +16,7 @@ const TestFont = () => {
     }
 
     return (
+        
         <View style={styles.container}>
             <Image source={require('../../assets/images/imgOTP.png')} style={styles.logo} />
             <Text style={styles.header}>Xác nhận OTP</Text>
