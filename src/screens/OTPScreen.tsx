@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     otpInput: {
+        fontFamily: FONT_FAMILY.exo2_medium,
         width: 40,
         height: 40,
         marginTop:-200,  
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
         borderRadius: 5 ,
     },
     button: {
-        backgroundColor: '#7157C5',
+        backgroundColor: COLORS.MainBlue,
         marginTop: 10,
         bottom:90,
         paddingVertical: 10,
