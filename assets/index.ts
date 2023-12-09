@@ -1,5 +1,5 @@
 // export const BG_SPLASH = require('./images/SplashScreen.gif');
-// export const BG_LOGIN = require('./images/BGLogin.png');
+export const BG_LOGIN = require('./images/BGLogin.png');
 // export const LOGO = require('./images/LogoApp_Transparent.png');
 // export const IC_BACK = require('./images/BackIcon.png');
 export const IC_HOME = require('./images/home.png');

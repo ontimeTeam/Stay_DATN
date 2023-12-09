@@ -89,7 +89,7 @@ export const FONT_FAMILY : FontFamily = {
     exo2_extralight: 'Exo2-ExtraLight',
     exo2_medium: 'Exo2-Medium',
     exo2_regular: 'Exo2-Regular',
-    exo2_semibold: 'Exo2-Semibold',
+    exo2_semibold: 'Exo2-SemiBold',
     exo2_thin: 'Exo2-Thin',
 }
 
