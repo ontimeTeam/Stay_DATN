@@ -5,13 +5,16 @@ import { LoginStackParamList } from '../../navigation/LoginStack';
 import Background from '../../components/background/Background';
 import { BG_LOGIN, IMG_OTP, LOGO } from '../../../assets';
 import Button from '../../components/button/Button';
+import { AppContext } from '../../resources/context/AppContext';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'OTPScreen'>;
 
 const OTPScreen: React.FC<PropsType> = (props) => {
   const { navigation } = props;
+  const { isLoggedIn, setLoggedIn } = React.useContext(AppContext);
   const goLoginScreen = () => {
     console.log('goLoginScreen');
+    setLoggedIn(true);
     navigation.navigate('LoginScreen');
   };
   return (

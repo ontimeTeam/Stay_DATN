@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, ImageSourcePropType, Pressable } from 'react-native'
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { BookStackParamList } from '../../navigation/BookStack'
@@ -10,7 +10,8 @@ interface ListRoomHotel {
   id: number;
   nameRoom: string;
   price: string;
-  imageRoom: string;
+  // imageRoom: string; // nếu là string thì truyền vào bằng source={{uri: item.imageRoom}}
+  imageRoom: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
 const DATAROOMHOTEL: ListRoomHotel[] = ([
   {
@@ -42,6 +43,26 @@ const DATAROOMHOTEL: ListRoomHotel[] = ([
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
 const RoomListScreen: React.FC<PropsType> = props => {
   const { navigation } = props;
+  const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
+    const onPressSelectRoom = () => {
+      navigation.navigate('RoomDetailScreen')
+    }
+    return (
+      <View style={styles.containerItemRoom}>
+        <Image source={item.imageRoom} style={styles.imageRoom} />
+        <View style={styles.containerTextRoom}>
+          <Text style={styles.nameRoom} numberOfLines={1} ellipsizeMode='tail'>{item.nameRoom}</Text>
+          <View style={styles.containerCenter}>
+            <Text style={styles.priceRoom}>{item.price} ₫</Text>
+            <Pressable style={styles.btnSeclect} onPress={onPressSelectRoom}>
+              <Text style={styles.textSelect}>Chọn</Text>
+            </Pressable>
+          </View>
+          <Text style={styles.textBottom}>Chưa bao gồm thuế và các loại phí</Text>
+        </View>
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <Header
@@ -52,14 +73,14 @@ const RoomListScreen: React.FC<PropsType> = props => {
         styleContainer={{ backgroundColor: COLORS.White }}
       />
       <View style={styles.containerChildren}>
-        <Text style={styles.textRoom}>Gồm 4 loại phòng</Text> 
+        <Text style={styles.textRoom}>Gồm 4 loại phòng</Text>
         {/* nếu có numberRoom thì thay bằng numberRoom */}
-        {/* <FlatList
+        <FlatList
           data={DATAROOMHOTEL}
           renderItem={ItemRoomHotel}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
-        /> */}
+        />
       </View>
     </View>
   )
@@ -84,5 +105,63 @@ const styles = StyleSheet.create({
     fontFamily: 'Exo2-Regular',
     color: '#595959',
     marginVertical: 15,
+  },
+  containerItemRoom: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    borderRadius: 16,
+    gap: 12,
+    marginBottom: 20,
+    paddingBottom: 20,
+    backgroundColor: COLORS.White,
+  },
+  imageRoom: {
+    width: '100%',
+    height: 140,
+    resizeMode: 'stretch',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  containerTextRoom: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 20,
+  },
+  nameRoom: {
+    fontFamily: 'Exo2-Regular',
+    fontSize: 22,
+    color: COLORS.Black,
+  },
+  containerCenter: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
+    marginVertical: 10,
+  },
+  priceRoom: {
+    fontFamily: 'Exo2-SemiBold',
+    fontSize: 20,
+    color: COLORS.Black,
+  },
+  btnSeclect: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 32,
+    backgroundColor: COLORS.MainBlue,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textSelect: {
+    fontFamily: 'Exo2-SemiBold',
+    fontSize: 16,
+    color: COLORS.White,
+  },
+  textBottom: {
+    fontFamily: 'Exo2-Regular',
+    fontSize: 14,
+    color: "#777E90",
   },
 })

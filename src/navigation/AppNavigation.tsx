@@ -8,8 +8,8 @@ const AppNavigation = () => {
     const {isLoggedIn} = useContext(AppContext);
     return (
       <NavigationContainer>
-        {isLoggedIn ? <BottomNavigation /> : <LoginStack />}
-        {/* {isLoggedIn ? <LoginStack /> : <BottomNavigation />} */}
+        {/* {isLoggedIn ? <BottomNavigation /> : <LoginStack />} */}
+        {isLoggedIn ? <LoginStack /> : <BottomNavigation />}
       </NavigationContainer>
     );
 }

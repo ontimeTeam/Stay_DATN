@@ -22,10 +22,10 @@ type SearchDetailScreenProps = {};
 
 export type BookStackParamList = {
     BookScreen: BookScreenProps | undefined;
-    HotelDetail: HotelDetailScreenProps | undefined;
-    RoomDetail: RoomDetailScreenProps | undefined;
+    HotelDetailScreen: HotelDetailScreenProps | undefined;
+    RoomDetailScreen: RoomDetailScreenProps | undefined;
     RoomListScreen: RoomListScreenProps | undefined;
-    Payment: PaymentScreenProps | undefined;
+    PaymentScreen: PaymentScreenProps | undefined;
     HomeScreen: HomeScreenProps | undefined;
     BillScreen: BillScreenProps | undefined;
     SearchScreen: SearchScreenProps | undefined;
@@ -43,10 +43,10 @@ const BookStack = () => {
             }}
         >
             <Stack.Screen name="BookScreen" component={BookScreen} />
-            <Stack.Screen name="HotelDetail" component={HotelDetailScreen} />
-            <Stack.Screen name="RoomDetail" component={RoomDetailScreen} />
+            <Stack.Screen name="HotelDetailScreen" component={HotelDetailScreen} />
+            <Stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
             <Stack.Screen name="RoomListScreen" component={RoomListScreen} />
-            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="BillScreen" component={BillScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
