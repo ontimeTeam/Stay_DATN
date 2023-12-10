@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../themes/theme'
+import Background from '../components/background/Background'
+import Button from '../components/button/Button'
+import { BG_LOGIN } from '../../assets'
 
-const TestFont = () => {
-    const [otp, setOtp] = useState('') 
+const OTPScreen = () => {
+    const [otp, setOtp] = useState('')
 
     const handleRegistration = () => {
         // Xử lý logic xác minh OTP ở đây
@@ -15,96 +18,103 @@ const TestFont = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Image source={require('../../assets/images/imgOTP.png')} style={styles.logo} />
-            <Text style={styles.header}>Xác nhận OTP</Text>
-            <Text style={styles.testFont}>Nhập mã OTP gửi đến số điện thoại +84 90909900</Text>
+        <Background source={BG_LOGIN}>
+            <SafeAreaView style={styles.container}>
+                <Image source={require('../../assets/images/imgOTP.png')} style={styles.logo} />
+                <Text style={styles.header}>Xác nhận OTP</Text>
+                <Text style={styles.testFont}>Nhập mã OTP gửi đến số điện thoại +84 90909900</Text>
 
-            <View style={styles.otpContainer}>
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.otpInput}
-                    maxLength={1}
-                    onChangeText={text => {
-                        if (text.length === 1) {
-                            setOtp(otp + text)
-                        }
-                    }}
-                    keyboardType="numeric"
-                />
-            </View>
+                <View style={styles.otpContainer}>
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        style={styles.otpInput}
+                        maxLength={1}
+                        onChangeText={text => {
+                            if (text.length === 1) {
+                                setOtp(otp + text)
+                            }
+                        }}
+                        keyboardType="numeric"
+                    />
+                </View>
+                {/* <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+                    <Text style={styles.buttonText}>Xác nhận</Text>
+                </TouchableOpacity> */}
+                <View style={{ alignItems: 'center' }}>
+                    <Button
+                        onPress={handleRegistration}
+                        title='Xác nhận'
+                    />
+                </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleRegistration}>
-                <Text style={styles.buttonText}>Xác nhận</Text>
-            </TouchableOpacity>
-        </View>
+            </SafeAreaView>
+        </Background>
     )
 }
 
-export default TestFont
+export default OTPScreen
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLORS.Blue_BG,
+        flex: 1,
         paddingVertical: 15,
         paddingHorizontal: 20
     },
     header: {
         marginTop: 40,
-        width: 220,
+        width: 'auto',
         height: 60,
         alignSelf: 'center',
-        left: 10,
-        fontFamily: FONT_FAMILY.exo2_bold,
+        fontFamily: FONT_FAMILY.exo2_semibold,
         fontSize: 30,
         color: COLORS.Black,
     },
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         borderRadius: 20,
-        marginTop: 20,
+        marginTop: 30,
         alignSelf: 'center',
         width: 220,
         height: 220,
@@ -129,19 +139,20 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     otpInput: {
+        fontFamily: FONT_FAMILY.exo2_medium,
         width: 40,
         height: 40,
-        marginTop:-200,  
+        marginTop: -200,
         borderColor: 'gray',
         borderWidth: 1,
         paddingHorizontal: 10,
         textAlign: 'center',
-        borderRadius: 5 ,
+        borderRadius: 5,
     },
     button: {
-        backgroundColor: '#7157C5',
+        backgroundColor: COLORS.MainBlue,
         marginTop: 10,
-        bottom:90,
+        bottom: 90,
         paddingVertical: 10,
         borderRadius: 15,
         alignItems: 'center',

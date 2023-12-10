@@ -5,20 +5,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomTabNavigations from './src/navigation/BottomTabNavigations';
 import { NavigationContainer } from '@react-navigation/native';
+import OTPScreen from './src/screens/OTPScreen'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const App = () => {
     return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="BottomTabs" component={BottomTabNavigations} options={{ animation: 'default' }} />
-            </Stack.Navigator>
-        </NavigationContainer>
-        // <View style={styles.container}>
-        //   <Button /> 
-        // </View>
+        // <NavigationContainer>
+        //     <Stack.Navigator screenOptions={{ headerShown: false }}>
+        //         <Stack.Screen name="BottomTabs" component={BottomTabNavigations} options={{ animation: 'default' }} />
+        //     </Stack.Navigator>
+        // </NavigationContainer>
+        <View >
+            <OTPScreen/>
+        </View>
     )
 }
 
