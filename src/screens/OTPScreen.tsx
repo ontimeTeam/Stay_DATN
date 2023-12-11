@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, SafeAreaView } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, SafeAreaView, ScrollView } from 'react-native'
+import React, { useState, useRef } from 'react'
 import { COLORS, FONT_FAMILY } from '../themes/theme'
 import Background from '../components/background/Background'
 import Button from '../components/button/Button'
@@ -17,74 +17,102 @@ const OTPScreen = () => {
         // Xử lý logic xác minh OTP
     }
 
+    const secondTextInputRef = useRef<TextInput>(null);
+
     return (
         <Background source={BG_LOGIN}>
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <Image source={require('../../assets/images/imgOTP.png')} style={styles.logo} />
                 <Text style={styles.header}>Xác nhận OTP</Text>
                 <Text style={styles.testFont}>Nhập mã OTP gửi đến số điện thoại +84 90909900</Text>
-
                 <View style={styles.otpContainer}>
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.otpInput}
-                        maxLength={1}
-                        onChangeText={text => {
-                            if (text.length === 1) {
-                                setOtp(otp + text)
-                            }
-                        }}
-                        keyboardType="numeric"
-                    />
+                    <>
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                        <TextInput
+                            style={styles.otpInput}
+                            maxLength={1}
+                            onChangeText={text => {
+                                if (text.length === 1) {
+                                    setOtp(otp + text)
+                                }
+                            }}
+                            keyboardType='numeric'
+                            returnKeyType='next'
+                            onSubmitEditing={() => {
+                                secondTextInputRef.current?.focus();
+                            }}
+                        />
+                    </>
+
                 </View>
                 {/* <TouchableOpacity style={styles.button} onPress={handleRegistration}>
                     <Text style={styles.buttonText}>Xác nhận</Text>
@@ -95,10 +123,9 @@ const OTPScreen = () => {
                         title='Xác nhận'
                     />
                 </View>
-
-            </SafeAreaView>
+            </View>
         </Background>
-    )
+    );
 }
 
 export default OTPScreen
@@ -140,14 +167,14 @@ const styles = StyleSheet.create({
     },
     otpInput: {
         fontFamily: FONT_FAMILY.exo2_medium,
-        width: 40,
-        height: 40,
+        width: 'auto',
+        height: 50,
         marginTop: -200,
-        borderColor: 'gray',
-        borderWidth: 1,
+        borderColor: COLORS.MainBlue,
+        borderBottomWidth: 2,
         paddingHorizontal: 10,
         textAlign: 'center',
-        borderRadius: 5,
+        fontSize: 24,
     },
     button: {
         backgroundColor: COLORS.MainBlue,
