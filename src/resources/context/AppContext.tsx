@@ -21,8 +21,8 @@ const defaultContextValue: AppContextProps = {
 export const AppContext = createContext<AppContextProps>(defaultContextValue);
 
 export const AppContextProvider = ({children}: AppContextProviderProps) => {
-  const [isLoggedIn, setLoggedIn] = useState(true);
-  // const [isLoggedIn, setLoggedIn] = useState(false); 
+  // const [isLoggedIn, setLoggedIn] = useState(true);
+  const [isLoggedIn, setLoggedIn] = useState(false); 
   // false: LoginScreen, true: BottomNavigation
   const [pay, setPay] = useState<string>('Card');
 

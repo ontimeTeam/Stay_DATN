@@ -19,13 +19,16 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
   const [text, setText] = useState(''); // text là giá trị ngày tháng năm mà người dùng chọn
   const [valuePassword, setValuePassword] = useState(""); // valuePassword là giá trị mật khẩu mà người dùng nhập
   const [isActiceEye, setIsActiceEye] = useState(false); // isActiceEye là giá trị boolean để hiện icon mở mắt hoặc đóng mắt
-  const [value, setValue] = useState(""); // value là giá trị số điện thoại mà người dùng nhập
+  const [valuePhone, setValuePhone] = useState(""); // value là giá trị số điện thoại mà người dùng nhập
 
   const handleIconPress = () => {
     setIsActiceEye(!isActiceEye);
   }
   const handleInputChangePassword = (textPass: string) => {
     setValuePassword(textPass);
+  }
+  const handleInputChangePhoneNumber = (textPhone: string) => {
+    setValuePhone(textPhone);
   }
   const onChange = (event: any, selectedDate: Date | undefined) => {
     const currentMode = selectedDate || date;
@@ -46,7 +49,7 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
   const goScreenOTP = async (
     phoneNumber: string
   ) => {
-    navigation.navigate("OTPScreen", { phoneNumber: value, type: true });
+    navigation.navigate("OTPScreen", { phoneNumber: valuePhone, type: false });
   };
 
   return (
@@ -67,6 +70,8 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
             <View style={styles.viewLeft}>
               <Text style={styles.titleMini}>Số điện thoại</Text>
               <TextInput
+                value={valuePhone}
+                onChangeText={(valuePhone) => handleInputChangePhoneNumber(valuePhone)}
                 style={styles.input}
                 placeholder="Số điện thoại"
                 keyboardType="numeric"
@@ -122,7 +127,7 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
             style={styles.btnLinear}
           >
             <Pressable
-              onPress={() => goScreenOTP(value)}>
+              onPress={() => goScreenOTP(valuePhone)}>
               <Text style={styles.titlebtn}>Đăng Ký</Text>
             </Pressable>
           </LinearGradient>

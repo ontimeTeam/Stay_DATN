@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, TextInput, Pressable, Image, Alert, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LoginStackParamList } from '../../navigation/LoginStack';
 import Background from '../../components/background/Background';
@@ -7,20 +7,19 @@ import { BG_LOGIN, ICON_EYE, ICON_EYE_CLOSE, LOGO } from '../../../assets';
 import Header from '../../components/header/Header';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import LinearGradient from 'react-native-linear-gradient';
+import { AppContext } from '../../resources/context/AppContext';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'LoginScreen'>;
 
 const LoginScreen: React.FC<PropsType> = (props) => {
   const { navigation } = props;
-  const [value, setValue] = useState(""); // value là giá trị số điện thoại mà người dùng nhập
   const [valuePassword, setValuePassword] = useState(""); // valuePassword là giá trị mật khẩu mà người dùng nhập
   const [isActiceEye, setIsActiceEye] = useState(false); // isActiceEye là giá trị boolean để hiện icon mở mắt hoặc đóng mắt
-  const goScreenOTP = async (
-    phoneNumber: string
-  ) => {
-    navigation.navigate("OTPScreen", { phoneNumber: value, type: true });
+  const { isLoggedIn, setLoggedIn } = useContext(AppContext);
+  const goHome = async () => {
+    setLoggedIn(true);
+    console.log('goHome');
   };
-
   const handleIconPress = () => {
     setIsActiceEye(!isActiceEye);
   }
@@ -63,7 +62,7 @@ const LoginScreen: React.FC<PropsType> = (props) => {
             style={styles.btnLinear}
           >
             <Pressable
-              onPress={() => goScreenOTP(value)}>
+              onPress={() => goHome()}>
               <Text style={styles.titlebtn}>Đăng Nhập</Text>
             </Pressable>
           </LinearGradient>
