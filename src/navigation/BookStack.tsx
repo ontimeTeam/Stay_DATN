@@ -25,11 +25,11 @@ export type BookStackParamList = {
     HotelDetailScreen: HotelDetailScreenProps | undefined;
     RoomDetailScreen: RoomDetailScreenProps | undefined;
     RoomListScreen: RoomListScreenProps | undefined;
-    PaymentScreen: PaymentScreenProps | undefined;
     HomeScreen: HomeScreenProps | undefined;
-    BillScreen: BillScreenProps | undefined;
     SearchScreen: SearchScreenProps | undefined;
     SearchDetailScreen: SearchDetailScreenProps | undefined;
+    PaymentScreen: PaymentScreenProps | undefined;
+    BillScreen: BillScreenProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<BookStackParamList>();
@@ -46,11 +46,11 @@ const BookStack = () => {
             <Stack.Screen name="HotelDetailScreen" component={HotelDetailScreen} />
             <Stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
             <Stack.Screen name="RoomListScreen" component={RoomListScreen} />
-            <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="BillScreen" component={BillScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
             <Stack.Screen name="SearchDetailScreen" component={SearchDetailScreen} />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+            <Stack.Screen name="BillScreen" component={BillScreen} />
         </Stack.Navigator >
     )
 }

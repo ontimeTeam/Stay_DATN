@@ -70,6 +70,10 @@ const HotelCityListScreen: React.FC<PropsType> = props => {
   const ItemHotelAll = ({ item }: { item: ListHotel }) => {
     const onPressItemAll = () => {
       console.log(item);
+      navigation.navigate('HotelDetailScreen');
+    }
+    const onPressSelectRoom = () => {
+      console.log(item);
       navigation.navigate('RoomListScreen');
     }
     return (
@@ -86,7 +90,7 @@ const HotelCityListScreen: React.FC<PropsType> = props => {
           </View>
           <View style={styles.containerBottom}>
             <Text style={styles.price}>Từ {item.price} ₫</Text>
-            <Pressable style={styles.btnBook} onPress={onPressItemAll}>
+            <Pressable style={styles.btnBook} onPress={onPressSelectRoom}>
               <Text style={styles.textBook}>Chọn Phòng</Text>
             </Pressable>
           </View>
@@ -98,6 +102,7 @@ const HotelCityListScreen: React.FC<PropsType> = props => {
     <View style={styles.container}>
       <Header
         iconLeft={IC_BACK}
+        eventLeft={() => navigation.goBack()}
         isCheck={true} // truyền true nếu muốn hiển thị textCenter
         textCenter='Hồ Chí Minh' // truyền nameLocation từ trang HomeScreen
         textCenterMini='Khám phá' // mặc định chữ khám phá

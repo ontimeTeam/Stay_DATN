@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react';
+import React, { createContext, useState } from 'react';
 
 interface AppContextProps {
   isLoggedIn: boolean;
@@ -13,18 +13,20 @@ type AppContextProviderProps = {
 
 const defaultContextValue: AppContextProps = {
   isLoggedIn: false,
-  setLoggedIn: () => {},
-  pay: 'Card',
-  setPay: () => {},
+  setLoggedIn: () => { },
+  pay: '',
+  setPay: () => { },
 };
 
 export const AppContext = createContext<AppContextProps>(defaultContextValue);
 
-export const AppContextProvider = ({children}: AppContextProviderProps) => {
-  // const [isLoggedIn, setLoggedIn] = useState(true);
-  const [isLoggedIn, setLoggedIn] = useState(false); 
+export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+  // khi muốn hiện thị màn hình BottomNavigation thì setLoggedIn(true)
+  const [isLoggedIn, setLoggedIn] = useState(true);
+  // Khi muốn hiện thị màn hình LoginScreen thì setLoggedIn(false)
+  // const [isLoggedIn, setLoggedIn] = useState(false);
   // false: LoginScreen, true: BottomNavigation
-  const [pay, setPay] = useState<string>('Card');
+  const [pay, setPay] = useState<string>('');
 
   const appContextValue: AppContextProps = {
     isLoggedIn,

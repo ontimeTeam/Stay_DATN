@@ -43,12 +43,18 @@ const DATAROOMHOTEL: ListRoomHotel[] = ([
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
 const RoomListScreen: React.FC<PropsType> = props => {
   const { navigation } = props;
+  
   const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
     const onPressSelectRoom = () => {
+      console.log(item);
+      navigation.navigate('PaymentScreen')
+    }
+    const onPressItemAll = () => {
+      console.log(item);
       navigation.navigate('RoomDetailScreen')
     }
     return (
-      <View style={styles.containerItemRoom}>
+      <Pressable onPress={onPressItemAll} style={styles.containerItemRoom}>
         <Image source={item.imageRoom} style={styles.imageRoom} />
         <View style={styles.containerTextRoom}>
           <Text style={styles.nameRoom} numberOfLines={1} ellipsizeMode='tail'>{item.nameRoom}</Text>
@@ -60,17 +66,18 @@ const RoomListScreen: React.FC<PropsType> = props => {
           </View>
           <Text style={styles.textBottom}>Chưa bao gồm thuế và các loại phí</Text>
         </View>
-      </View>
+      </Pressable>
     )
   }
   return (
     <View style={styles.container}>
       <Header
         iconLeft={IC_BACK}
+        eventLeft={() => navigation.goBack()}
         isCheck={true} // truyền true nếu muốn hiển thị textCenter
         textCenter='Danh sách phòng'
         textCenterMini='La Vela SaiGon Hotel' // truyền vào nameHotel
-        styleContainer={{ backgroundColor: COLORS.White }}
+        styleContainer={{ backgroundColor: COLORS.White}}
       />
       <View style={styles.containerChildren}>
         <Text style={styles.textRoom}>Gồm 4 loại phòng</Text>

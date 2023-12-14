@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, View, Dimensions, Pressable, Alert } from 'react-native'
+import { Image, SafeAreaView, StyleSheet, Text, View, Dimensions, Pressable, Alert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LoginStackParamList } from '../../navigation/LoginStack';
@@ -51,7 +51,7 @@ const OTPScreen: React.FC<PropsType> = (props) => {
   };
   return (
     <Background source={BG_LOGIN}>
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.containerChidren}>
           <Image source={IMG_OTP} style={styles.ImgOTP} />
           <Text style={styles.title}>Xác nhận OTP</Text>
@@ -99,7 +99,7 @@ const OTPScreen: React.FC<PropsType> = (props) => {
             Gửi lại mã OTP
           </Text>
         </View>
-      </SafeAreaView>
+      </ScrollView>
     </Background>
   )
 };

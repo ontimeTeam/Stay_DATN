@@ -6,10 +6,10 @@ import Test from './src/container/Test';
 
 const App = () => {
     return (
-        <AppContextProvider>
-            <AppNavigation />
-        </AppContextProvider>
-        // <Test/>
+        // <AppContextProvider>
+        //     <AppNavigation />
+        // </AppContextProvider>
+        <Test/>
     )
 }
 
