@@ -44,3 +44,6 @@ export const IMG_ROOM_1 = require('./images/DeluxeDoubleRoom.png');
 export const IMG_ROOM_2 = require('./images/LuxuryDeluxeRoom-1KingBed.png');
 export const IMG_ROOM_3 = require('./images/LuxuryRoomwithBalcony.png');
 export const IMG_ROOM_4 = require('./images/ClubLoungePresidentialSuite-ClubBenefitsIncluded.png');
+export const NO_CARD = require('./images/noCard.png');
+export const RIGHT_ARROW = require('./images/right_arrow.png');
+export const MASTER = require('./images/master_card.png');
