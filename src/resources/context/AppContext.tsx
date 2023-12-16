@@ -14,7 +14,7 @@ type AppContextProviderProps = {
 const defaultContextValue: AppContextProps = {
   isLoggedIn: false,
   setLoggedIn: () => { },
-  pay: '',
+  pay: 'Momo',
   setPay: () => { },
 };
 
@@ -26,7 +26,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   // Khi muốn hiện thị màn hình LoginScreen thì setLoggedIn(false)
   // const [isLoggedIn, setLoggedIn] = useState(false);
   // false: LoginScreen, true: BottomNavigation
-  const [pay, setPay] = useState<string>('');
+  const [pay, setPay] = useState<string>('Momo');
 
   const appContextValue: AppContextProps = {
     isLoggedIn,

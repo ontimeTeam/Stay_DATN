@@ -83,4 +83,5 @@ export const MOMO = require('./images/Momo.png');
 export const ZALOPAY = require('./images/ZaloPay.png');
 export const CARD = require('./images/Card.png');
 export const MASTERCARD = require('./images/MasterCard.png');
+export const SUBTRACT = require('./images/Subtract.png');
 

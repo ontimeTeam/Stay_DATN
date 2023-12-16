@@ -8,6 +8,7 @@ import HotelDetailScreen from '../screens/Home/HotelDetailScreen';
 import RoomDetailScreen from '../screens/Home/RoomDetailScreen';
 import RoomListScreen from '../screens/Home/RoomListScreen';
 import PaymentScreen from '../screens/Home/PaymentScreen';
+import BillScreen from '../screens/Home/BillScreen';
 
 type HomeScreenProps = {};
 type TripScreenProps = {};
@@ -17,6 +18,7 @@ type HotelCityListScreenProps = {};
 type ProfileScreenProps = {};
 type RoomListScreenProps = {};
 type PaymentScreenProps = {};
+type BillScreenProps = {};
 
 export type HomeStackParamList = {
     HomeScreen: HomeScreenProps | undefined;
@@ -27,6 +29,7 @@ export type HomeStackParamList = {
     RoomDetailScreen: RoomDetailScreenProps | undefined;
     RoomListScreen: RoomListScreenProps | undefined;
     PaymentScreen: PaymentScreenProps | undefined;
+    BillScreen: BillScreenProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -46,6 +49,7 @@ const HomeStack = () => {
             <Stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
             <Stack.Screen name="RoomListScreen" component={RoomListScreen} />
             <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+            <Stack.Screen name="BillScreen" component={BillScreen} />
         </Stack.Navigator >
     )
 }

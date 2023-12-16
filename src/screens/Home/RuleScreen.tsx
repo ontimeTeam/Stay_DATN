@@ -14,8 +14,9 @@ const RuleScreen: React.FC<PropsType> = props => {
         <ScrollView style={styles.container}>
             <Header
                 styleContainer={{ backgroundColor: COLORS.White }}
-                isCheck={true}
-                textCenter="Điều khoản và chính sách"
+                isCheck={false}
+                textLeft='Điều khoản và chính sách'
+                eventLeft={() => navigation.goBack()}
                 iconLeft={IC_BACK}
             />
             <View style={{ paddingHorizontal: 25, paddingVertical: 18 }}>
@@ -52,19 +53,19 @@ export default RuleScreen
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: COLORS.White
     },
     title: {
         fontFamily: 'Exo2-SemiBold',
         color: COLORS.Black,
         marginBottom: 4,
-        fontSize: 18
+        fontSize: 20
     },
     content: {
         fontFamily: 'Exo2-Regular',
         color: COLORS.Black,
         marginBottom: 3,
-        // textAlign: 'justify',
-        fontSize: 15
+        fontSize: 18
     }
 })

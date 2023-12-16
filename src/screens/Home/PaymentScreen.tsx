@@ -1,14 +1,40 @@
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Dimensions, Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BookStackParamList } from '../../navigation/BookStack';
 import Header from '../../components/header/Header';
-import { ICON_STAR, IC_BACK, ROOM_1 } from '../../../assets';
+import { CARD, ICON_STAR, IC_BACK, MOMO, ROOM_1, ZALOPAY } from '../../../assets';
 import { COLORS } from '../../themes/theme';
+import { AppContext } from '../../resources/context/AppContext';
+import ModalPayment from '../../components/modal/ModalPayment';
+import Button from '../../components/button/Button';
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'PaymentScreen'>
 const PaymentScreen: React.FC<PropsType> = props => {
   const { navigation } = props;
+
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const { pay } = React.useContext(AppContext);
+  const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
+  const [namePay, setNamePay] = useState<string>('Ví MoMo');
+
+  useEffect(() => {
+    if (pay === 'Momo') {
+      setImagePay(MOMO);
+      setNamePay('Ví MoMo');
+    } else if (pay === 'ZaloPay') {
+      setImagePay(ZALOPAY);
+      setNamePay('Ví ZaloPay');
+    } else if (pay === 'Card') {
+      setImagePay(CARD);
+      setNamePay('Thẻ (MasterCard, Visa/Credit) ');
+    }
+  }, [pay]);
+
+  const onPress = () => {
+    setModalVisible(false);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Header
@@ -60,7 +86,36 @@ const PaymentScreen: React.FC<PropsType> = props => {
           <Text style={styles.txtTitleTime}>Tổng cộng</Text>
           <Text style={styles.txtTime}>6,181,942 ₫</Text>
         </View>
+        <View style={styles.viewTimeRoom1}>
+          <View style={styles.viewTime1}>
+            <Image source={imagePay} style={styles.imgPay} />
+            <Text style={styles.txtNamePay}>{namePay}</Text>
+          </View>
+          <Pressable
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.txtChange}>Thay đổi</Text>
+          </Pressable>
+        </View>
+        <ModalPayment
+          visible={modalVisible}
+          onPress={onPress}
+          Cancel={() => {
+            setModalVisible(false);
+          }}
+        />
       </View>
+      <Button
+        title="Thanh toán"
+        stylePressable={{ 
+          width: '90%', 
+          alignSelf: 'center', 
+          marginVertical: 30,
+        }}
+        onPress={() => {
+          navigation.navigate('BillScreen');
+        }}
+      />
     </ScrollView>
   )
 }
@@ -146,7 +201,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 20,
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
   viewTime: {
     flexDirection: 'row',
@@ -154,6 +209,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
+  },
+  viewTimeRoom1: {
+    backgroundColor: COLORS.White,
+    borderRadius: 20,
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  viewTime1: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
   },
   txtTitleTime: {
     fontFamily: 'Exo2-Regular',
@@ -174,5 +242,25 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "rgba(0, 0, 0, 0.25)",
     marginVertical: 10,
+  },
+
+  imgPay: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  txtNamePay: {
+    fontFamily: 'Exo2-SemiBold',
+    fontSize: 17,
+    color: COLORS.Black,
+    letterSpacing: 0.2,
+    lineHeight: 23.8,
+  },
+  txtChange: {
+    fontFamily: 'Exo2-Regular',
+    fontSize: 17,
+    color: COLORS.MainBlue,
+    letterSpacing: 0.2,
+    lineHeight: 23.8,
   },
 })
