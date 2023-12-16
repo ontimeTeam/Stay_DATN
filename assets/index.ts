@@ -84,4 +84,6 @@ export const ZALOPAY = require('./images/ZaloPay.png');
 export const CARD = require('./images/Card.png');
 export const MASTERCARD = require('./images/MasterCard.png');
 export const SUBTRACT = require('./images/Subtract.png');
-
+export const DECOR = require('./images/decor.png');
+export const LINE = require('./images/Line.png');
+export const ICON_BACK_BLUE = require('./images/Icon_back_blue.png');
