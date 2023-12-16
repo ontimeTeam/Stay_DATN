@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.MainBlue,
         borderRadius: 10,
-        paddingVertical:10,
-        paddingHorizontal:30,
+        paddingVertical: 10,
+        paddingHorizontal: 30,
         backgroundColor: COLORS.MainBlue,
         gap: 10,
     },
@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     iconItem: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
     },
     txtItem: {
         fontSize: 18,

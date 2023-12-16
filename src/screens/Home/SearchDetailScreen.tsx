@@ -6,6 +6,7 @@ import Button from '../../components/button/Button';
 import { IC_BACK } from '../../../assets';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import Header from '../../components/header/Header';
+import CalendarPicker from 'react-native-calendar-picker';
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchScreen'>
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
@@ -42,10 +43,11 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
   const handleContinue = () => {
     // Thêm logic của bạn ở đây để xử lý sự kiện nhấn nút "Continue"
     console.log('Đã nhấn nút "Continue"');
+    navigation.navigate('RoomListScreen')
   };
 
   return (
-    <View style={{flex:1, backgroundColor: "white"}}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       <Header
         styleContainer={{ backgroundColor: COLORS.White }}
         iconLeft={IC_BACK}
@@ -53,7 +55,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
         textLeft='Tìm kiếm theo'
       />
 
-      {/* <CalendarPicker
+      <CalendarPicker
         startFromMonday={true}
         allowRangeSelection={true}
         minDate={minDate}
@@ -67,7 +69,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
         previousTitleStyle={{ fontWeight: '700', fontSize: 20 }}
         nextTitle='>'
         nextTitleStyle={{ fontWeight: '700', fontSize: 20 }}
-      /> */}
+      />
 
 
       <View style={styles.container}>
@@ -102,6 +104,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
         {/* Phan nut tiep tuc */}
         <View style={{ marginTop: 30, alignItems: 'center' }}>
           <Button
+            stylePressable={{ width: "90%" }}
             title='Tiếp tục'
             onPress={handleContinue} />
         </View>

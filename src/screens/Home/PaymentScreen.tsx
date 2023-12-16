@@ -89,7 +89,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
         <View style={styles.viewTimeRoom1}>
           <View style={styles.viewTime1}>
             <Image source={imagePay} style={styles.imgPay} />
-            <Text style={styles.txtNamePay}>{namePay}</Text>
+            <Text style={[styles.txtNamePay, { width: 150 }]} numberOfLines={0.5} ellipsizeMode='tail'>{namePay}</Text>
           </View>
           <Pressable
             onPress={() => setModalVisible(true)}
@@ -107,9 +107,9 @@ const PaymentScreen: React.FC<PropsType> = props => {
       </View>
       <Button
         title="Thanh toán"
-        stylePressable={{ 
-          width: '90%', 
-          alignSelf: 'center', 
+        stylePressable={{
+          width: '90%',
+          alignSelf: 'center',
           marginVertical: 30,
         }}
         onPress={() => {

@@ -21,7 +21,7 @@ const BillScreen: React.FC<PropsType> = props => {
         textLeft='Hóa đơn đặt phòng'
       />
       <ImageBackground source={SUBTRACT} style={{
-        height: Dimensions.get('window').height * 0.8,
+        height: Dimensions.get('window').height * 0.9,
         borderRadius: 40,
         width: '100%',
         padding: 20,
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     height: 175,
     resizeMode: 'cover',
     alignSelf: 'center',
+    marginRight: 20
   },
   txtTitle: {
     fontSize: 24,
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 10,
+    marginRight: 40
   },
   txtContent: {
     fontSize: 18,
@@ -102,6 +104,7 @@ const styles = StyleSheet.create({
     color: "#B4B6B8",
     textAlign: 'center',
     marginBottom: 20,
+    marginRight: 40
   },
   txtPrice: {
     fontSize: 24,
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
     color: COLORS.MainBlue,
     textAlign: 'center',
     marginBottom: 20,
+    marginRight: 40
   },
   imgLine: {
     width: '90%',

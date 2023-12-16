@@ -110,9 +110,9 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
             translucent
           />
           <Header
-            iconLeft={IC_BACK} 
+            iconLeft={IC_BACK}
             eventLeft={() => navigation.goBack()}
-            />
+          />
         </ImageBackground>
         <Text style={styles.titleNameHotel} numberOfLines={1} ellipsizeMode='tail'>
           La Vela SaiGon Hotel
@@ -132,7 +132,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
             keyExtractor={item => item.id.toString()}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
+            scrollEnabled={true}
           />
         </View>
         <Text style={styles.titleImg}>Điểm nổi bật</Text>
