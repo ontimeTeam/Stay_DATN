@@ -36,6 +36,7 @@ const Stack = createNativeStackNavigator<BookStackParamList>();
 
 const BookStack = () => {
     return (
+
         <Stack.Navigator
             initialRouteName="BookScreen"
             screenOptions={{

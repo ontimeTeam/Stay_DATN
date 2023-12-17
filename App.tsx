@@ -8,9 +8,12 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const App = () => {
     return (
-        <AppContextProvider>
-            <AppNavigation />
-        </AppContextProvider>
+        <View style={{ flex: 1 }}>
+            <AppContextProvider>
+                <AppNavigation />
+            </AppContextProvider>
+        </View>
+
         // <Test/>
     )
 }
