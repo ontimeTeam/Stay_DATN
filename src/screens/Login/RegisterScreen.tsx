@@ -54,7 +54,7 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
     phoneNumber: string
   ) => {
     navigation.navigate("OTPScreen", { phoneNumber: valuePhone, type: false });
-    signInWithPhoneNumber('+84 793910944'); //* gọi hàm gửi OTP đến số điện thoại
+    signInWithPhoneNumber('phoneNumber'); //! gọi hàm gửi OTP đến số điện thoại
   };
 
   async function signInWithPhoneNumber(phoneNumber: string) {

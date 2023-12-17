@@ -17,7 +17,7 @@ const PhoneSignIn = () => {
             // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
             // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
         }
-    }
+    };
 
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
@@ -28,7 +28,7 @@ const PhoneSignIn = () => {
     async function signInWithPhoneNumber(phoneNumber: string) {
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
         setConfirm(confirmation);
-    }
+    };
 
     async function confirmCode() {
         try {
@@ -36,13 +36,13 @@ const PhoneSignIn = () => {
         } catch (error) {
             console.log('Invalid code.');
         }
-    }
+    };
 
     if (!confirm) {
         return (
             <Button
                 title="Phone Number Sign In"
-                onPress={() => signInWithPhoneNumber('+1 650-555-3434')}
+                onPress={() => signInWithPhoneNumber('+84 793910944')}
             />
         );
     }
