@@ -80,7 +80,7 @@ const ModalPayment: React.FC<Props> = props => {
                             { borderColor: selected === 'Card' ? 'red' : 'rgba(0, 0, 0, 0.25)' }
                             ]}>
                             <Image source={CARD} style={_styles.image} />
-                            <Text style={_styles.textBold}>Thẻ (MasterCard, Visa/Credit)</Text>
+                            <Text style={_styles.textBold} ellipsizeMode='tail'>Thẻ (MasterCard, Visa)</Text>
                         </Pressable>
                     </View>
                     <View style={_styles.row}>

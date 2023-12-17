@@ -14,7 +14,7 @@ const BillScreen: React.FC<PropsType> = props => {
     navigation.navigate('HomeScreen');
   }
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header
         iconLeft={IC_BACK}
         eventLeft={() => navigation.goBack()}
@@ -29,7 +29,7 @@ const BillScreen: React.FC<PropsType> = props => {
       }}>
         <Image source={DECOR} style={styles.imgDecor} />
         <Text style={styles.txtTitle}>Thanh toán thành công</Text>
-        <Text style={styles.txtContent}>Bạn đã thanh toán thành công phòng{'\n'}Luxury Deluxe Room - 1 King Bed</Text>
+        <Text style={styles.txtContent}>Bạn đã thanh toán thành công phòng Luxury Deluxe Room - 1 King Bed</Text>
         <Text style={styles.txtPrice}>6,181,942 ₫</Text>
         <Image source={LINE} style={styles.imgLine} />
         <View style={styles.itemHotel}>
@@ -188,15 +188,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '90%',
-    paddingHorizontal: 20,
-    marginBottom: 10,
+    paddingHorizontal: 15,
+    marginBottom: 15,
   },
   bottomBottom: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '90%',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   bottomLeft: {
     flexDirection: 'column',

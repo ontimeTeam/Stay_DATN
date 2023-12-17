@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: Dimensions.get('window').height / 2.5,
+    marginTop: Dimensions.get('window').height / 2.6,
     marginBottom: 20,
     alignItems: 'center',
     width: '100%',

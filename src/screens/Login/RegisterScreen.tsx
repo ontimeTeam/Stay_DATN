@@ -8,6 +8,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Header from '../../components/header/Header';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import LinearGradient from 'react-native-linear-gradient';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+
 
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'RegisterScreen'>;
@@ -20,6 +22,8 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
   const [valuePassword, setValuePassword] = useState(""); // valuePassword là giá trị mật khẩu mà người dùng nhập
   const [isActiceEye, setIsActiceEye] = useState(false); // isActiceEye là giá trị boolean để hiện icon mở mắt hoặc đóng mắt
   const [valuePhone, setValuePhone] = useState(""); // value là giá trị số điện thoại mà người dùng nhập
+  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult | null>(null); //*trạng thái trống 
+
 
   const handleIconPress = () => {
     setIsActiceEye(!isActiceEye);
@@ -50,11 +54,17 @@ const RegisterScreen: React.FC<PropsType> = (props) => {
     phoneNumber: string
   ) => {
     navigation.navigate("OTPScreen", { phoneNumber: valuePhone, type: false });
+    signInWithPhoneNumber('+84 793910944'); //* gọi hàm gửi OTP đến số điện thoại
   };
+
+  async function signInWithPhoneNumber(phoneNumber: string) {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
 
   return (
     <Background source={BG_LOGIN}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <Header
           iconLeft={LOGO}
           styleIconLeft={{ width: 80, height: 80, marginTop: 60 }}
@@ -234,7 +244,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: Dimensions.get('window').height / 2.5,
+    marginTop: Dimensions.get('window').height / 6,
     marginBottom: 20,
     alignItems: 'center',
     width: '100%',

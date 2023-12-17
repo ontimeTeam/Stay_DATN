@@ -51,7 +51,7 @@ const ProfileScreen: React.FC<PropsType> = props => {
                 </Pressable>
                 <Pressable style={styles.viewItem} onPress={onPressChinhSach}>
                     <Image source={ICON_BLOG} style={styles.iconItem} />
-                    <Text style={styles.txtItem}>Điều khoản  và chính sách</Text>
+                    <Text style={styles.txtItem}>Điều khoản và chính sách</Text>
                 </Pressable>
                 <Pressable style={styles.viewItem} onPress={onPressDangXuat}>
                     <Image source={ICON_LOGOUT} style={styles.iconItem} />

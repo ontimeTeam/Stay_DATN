@@ -612,7 +612,7 @@ const styles = StyleSheet.create({
     },
     outlineButton: {
         height: 'auto',
-        marginTop: 10,
+        marginVertical: 10,
 
     },
     btn: {

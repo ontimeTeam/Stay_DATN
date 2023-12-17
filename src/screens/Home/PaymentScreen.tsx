@@ -89,7 +89,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
         <View style={styles.viewTimeRoom1}>
           <View style={styles.viewTime1}>
             <Image source={imagePay} style={styles.imgPay} />
-            <Text style={[styles.txtNamePay, { width: 150 }]} numberOfLines={0.5} ellipsizeMode='tail'>{namePay}</Text>
+            <Text style={[styles.txtNamePay, { width: 150 }]} numberOfLines={1} ellipsizeMode='tail'>{namePay}</Text>
           </View>
           <Pressable
             onPress={() => setModalVisible(true)}

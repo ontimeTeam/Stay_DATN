@@ -301,9 +301,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                 />
                 <View
                     style={styles.viewChildren}>
-                    <Text style={styles.txtNameBanner}>
-                        {item.nameHotel}
-                    </Text>
+                    <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                     <View style={styles.viewStar}>
                         <Image
                             source={ICON_STAR}
@@ -337,7 +335,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                         style={styles.imgBanner}
                     />
                     <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner}>{item.nameHotel}</Text>
+                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                         <View style={styles.viewStar}>
                             <Image source={ICON_STAR} style={styles.iconStar} />
                             <Text style={styles.txtStar}>{item.star}</Text>
@@ -368,7 +366,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                         style={styles.imgBanner}
                     />
                     <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner}>{item.nameHotel}</Text>
+                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode="tail">{item.nameHotel}</Text>
                         <View style={styles.viewStar}>
                             <Image source={ICON_STAR} style={styles.iconStar} />
                             <Text style={styles.txtStar}>{item.star}</Text>
@@ -592,9 +590,9 @@ const styles = StyleSheet.create({
     },
     viewStar: {
         position: 'absolute',
-        left: Dimensions.get('screen').width * 0.9 - 70,
+        left: Dimensions.get('screen').width * 0.9 - 80,
         backgroundColor: COLORS.MainBlue,
-        width: 50,
+        width: 'auto',
         height: 30,
         borderRadius: 15,
         gap: 5,
@@ -634,7 +632,7 @@ const styles = StyleSheet.create({
     },
     viewBottomHotelList: {
         position: 'absolute',
-        top: Dimensions.get('screen').width * 0.5 - 50,
+        top: Dimensions.get('screen').width * 0.5 - 60,
         left: 0,
         right: 0,
     },
