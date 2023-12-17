@@ -8,7 +8,8 @@ import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import Header from '../../components/header/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 
-type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchScreen'>
+type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'>
+
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const { navigation } = props;
     const minDate = new Date(); // Today
