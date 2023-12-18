@@ -9,13 +9,13 @@ import PhoneSignIn from './src/screens/PhoneSignIn';
 
 const App = () => {
     return (
-        // <View style={{ flex: 1 }}>
-        //     <AppContextProvider>
-        //         <AppNavigation />
-        //     </AppContextProvider>
-        // </View>
+        <View style={{ flex: 1 }}>
+            <AppContextProvider>
+                <AppNavigation />
+            </AppContextProvider>
+        </View>
 
-        <PhoneSignIn />
+        // <PhoneSignIn />
     )
 }
 

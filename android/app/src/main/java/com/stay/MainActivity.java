@@ -4,9 +4,15 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import android.os.Bundle;
 
 public class MainActivity extends ReactActivity {
+
+  private FirebaseAuth mAuth;
 
   /**
    * Returns the name of the main component registered from JavaScript. This is
