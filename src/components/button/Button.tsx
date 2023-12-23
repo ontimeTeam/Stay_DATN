@@ -27,7 +27,7 @@ export default Button
 
 const styles = StyleSheet.create({
     container: {
-        width: Dimensions.get('window').width - 100,
+        width: '100%',
         height: 55,
         paddingVertical: 14,
         borderRadius: 24,

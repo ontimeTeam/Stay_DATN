@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "1000018430613",
-    "project_id": "stay-26e13",
-    "storage_bucket": "stay-26e13.appspot.com"
+    "project_number": "979002712504",
+    "project_id": "stay-hotel-booking-app",
+    "storage_bucket": "stay-hotel-booking-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1000018430613:android:2c3140a5d51bbbce68699c",
+        "mobilesdk_app_id": "1:979002712504:android:06c93891945a41d3f32f4d",
         "android_client_info": {
           "package_name": "com.stay"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1000018430613-ptapmdpgsdgicg7m3h9c01mkaaq4cgvn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stay",
-            "certificate_hash": "5c0451195f8d708c5e261d2818dd668f12cc27d8"
-          }
-        },
-        {
-          "client_id": "1000018430613-4qqp4j9790167p1nnetur23ldhr54sqq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCq7_wxlhLiQ8lQ9b4c_pSZRWnlu4ScNUU"
+          "current_key": "AIzaSyA62XGYoVoVXBGXrZhPGNFhYdf7pWbvtdw"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1000018430613-4qqp4j9790167p1nnetur23ldhr54sqq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

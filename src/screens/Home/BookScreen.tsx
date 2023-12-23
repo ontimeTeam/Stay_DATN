@@ -165,7 +165,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
     const ItemHotelPopular = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
         const onPressItemPopular = () => {
             console.log(item);
-            navigation.navigate('RoomList');
+            navigation.navigate('RoomListScreen');
         };
         if (item.isCheckPopular === true) {
             return (
@@ -194,7 +194,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
     const ItemHotelTrend = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
         const onPressItemTrend = () => {
             console.log(item);
-            navigation.navigate('RoomList');
+            navigation.navigate('RoomListScreen');
         };
         if (item.isCheckTrend === true) {
             return (

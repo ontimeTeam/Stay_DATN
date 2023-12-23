@@ -22,20 +22,21 @@ type SearchDetailScreenProps = {};
 
 export type BookStackParamList = {
     BookScreen: BookScreenProps | undefined;
-    HotelDetail: HotelDetailScreenProps | undefined;
-    RoomDetail: RoomDetailScreenProps | undefined;
+    HotelDetailScreen: HotelDetailScreenProps | undefined;
+    RoomDetailScreen: RoomDetailScreenProps | undefined;
     RoomListScreen: RoomListScreenProps | undefined;
-    Payment: PaymentScreenProps | undefined;
     HomeScreen: HomeScreenProps | undefined;
-    BillScreen: BillScreenProps | undefined;
     SearchScreen: SearchScreenProps | undefined;
     SearchDetailScreen: SearchDetailScreenProps | undefined;
+    PaymentScreen: PaymentScreenProps | undefined;
+    BillScreen: BillScreenProps | undefined;
 };
 
 const Stack = createNativeStackNavigator<BookStackParamList>();
 
 const BookStack = () => {
     return (
+
         <Stack.Navigator
             initialRouteName="BookScreen"
             screenOptions={{
@@ -43,14 +44,14 @@ const BookStack = () => {
             }}
         >
             <Stack.Screen name="BookScreen" component={BookScreen} />
-            <Stack.Screen name="HotelDetail" component={HotelDetailScreen} />
-            <Stack.Screen name="RoomDetail" component={RoomDetailScreen} />
+            <Stack.Screen name="HotelDetailScreen" component={HotelDetailScreen} />
+            <Stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
             <Stack.Screen name="RoomListScreen" component={RoomListScreen} />
-            <Stack.Screen name="Payment" component={PaymentScreen} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="BillScreen" component={BillScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
             <Stack.Screen name="SearchDetailScreen" component={SearchDetailScreen} />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+            <Stack.Screen name="BillScreen" component={BillScreen} />
         </Stack.Navigator >
     )
 }

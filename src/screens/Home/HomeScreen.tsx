@@ -213,7 +213,7 @@ const HomeScreen: React.FC<PropsType> = props => {
     // khi offsetY > 20 thì header sẽ ẩn đi và ngược lại
     const scrollViewRef = useRef<ScrollView>(null);
     // biến scrollViewRef dùng để scroll đến vị trí mới
-    const ITEM_WIDTH = Dimensions.get('window').width * 0.9 + 30;
+    const ITEM_WIDTH = Dimensions.get('window').width * 0.9 + 15;
     const [currentIndex, setCurrentIndex] = useState(0);
     // biến currentIndex dùng để lấy vị trí hiện tại của item trong list banner
     useEffect(() => {
@@ -301,9 +301,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                 />
                 <View
                     style={styles.viewChildren}>
-                    <Text style={styles.txtNameBanner}>
-                        {item.nameHotel}
-                    </Text>
+                    <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                     <View style={styles.viewStar}>
                         <Image
                             source={ICON_STAR}
@@ -337,7 +335,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                         style={styles.imgBanner}
                     />
                     <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner}>{item.nameHotel}</Text>
+                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                         <View style={styles.viewStar}>
                             <Image source={ICON_STAR} style={styles.iconStar} />
                             <Text style={styles.txtStar}>{item.star}</Text>
@@ -368,7 +366,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                         style={styles.imgBanner}
                     />
                     <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner}>{item.nameHotel}</Text>
+                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode="tail">{item.nameHotel}</Text>
                         <View style={styles.viewStar}>
                             <Image source={ICON_STAR} style={styles.iconStar} />
                             <Text style={styles.txtStar}>{item.star}</Text>
@@ -559,8 +557,8 @@ const styles = StyleSheet.create({
         letterSpacing: 0.2,
     },
     viewContainer: {
-        width: Dimensions.get('screen').width * 0.9 + 15,
-        height: Dimensions.get('screen').width * 0.5 + 15,
+        width: Dimensions.get('screen').width * 0.9,
+        height: Dimensions.get('screen').width * 0.5,
         borderRadius: 12,
         marginEnd: 15,
         overflow: 'hidden',
@@ -576,8 +574,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     imgBanner: {
-        width: Dimensions.get('screen').width * 0.9 + 15,
-        height: Dimensions.get('screen').width * 0.5 + 15,
+        width: Dimensions.get('screen').width * 0.9,
+        height: Dimensions.get('screen').width * 0.5,
         flex: 1,
         resizeMode: 'stretch', // sử dụng resizeMode: 'stretch' để kéo dãn ảnh
         // resizeMode: 'cover', // sử dụng resizeMode: 'cover' để ảnh không bị kéo dãn
@@ -592,9 +590,9 @@ const styles = StyleSheet.create({
     },
     viewStar: {
         position: 'absolute',
-        left: Dimensions.get('screen').width * 0.9 - 60,
+        left: Dimensions.get('screen').width * 0.9 - 80,
         backgroundColor: COLORS.MainBlue,
-        width: 50,
+        width: 'auto',
         height: 30,
         borderRadius: 15,
         gap: 5,
@@ -634,7 +632,7 @@ const styles = StyleSheet.create({
     },
     viewBottomHotelList: {
         position: 'absolute',
-        top: Dimensions.get('screen').width * 0.5 - 50,
+        top: Dimensions.get('screen').width * 0.5 - 60,
         left: 0,
         right: 0,
     },
