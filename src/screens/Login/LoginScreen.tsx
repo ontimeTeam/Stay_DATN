@@ -8,14 +8,19 @@ import Header from '../../components/header/Header';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppContext } from '../../resources/context/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Axios } from 'axios';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'LoginScreen'>;
 
 const LoginScreen: React.FC<PropsType> = (props) => {
   const { navigation } = props;
+  const [sdt, setsdt] = useState("");
   const [valuePassword, setValuePassword] = useState(""); // valuePassword là giá trị mật khẩu mà người dùng nhập
   const [isActiceEye, setIsActiceEye] = useState(false); // isActiceEye là giá trị boolean để hiện icon mở mắt hoặc đóng mắt
   const { isLoggedIn, setLoggedIn } = useContext(AppContext);
+  
   const goHome = async () => {
     setLoggedIn(true);
     console.log('goHome');
@@ -26,6 +31,49 @@ const LoginScreen: React.FC<PropsType> = (props) => {
   const handleInputChangePassword = (textPass: string) => {
     setValuePassword(textPass);
   }
+
+  // const LoginAPI = async () => {
+  //   try {
+  //     const response = fetch('https://newapihtbk-production.up.railway.app/api/auth/login/', {
+  //       method: 'POST',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         phone: sdt,
+  //         password: valuePassword
+  //       })
+  //     });
+  //     console.log('API Response:', response);
+  //     //console.log(sdt, valuePassword);
+  //   } catch (error) {
+      
+  //   }
+  // };
+
+  const LoginAPI = async () => {
+    try {
+      const response = await axios.post('https://newapihtbk-production.up.railway.app/api/auth/login/', {
+        phone: sdt,
+        password: valuePassword
+      }, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      console.log('API Response:', response.data);
+  
+      // Trả về dữ liệu từ API nếu cần
+      return response.data;
+    } catch (error) {
+      // Xử lý lỗi nếu cần
+      throw error;
+    }
+  };
+
   return (
     <Background source={BG_LOGIN}>
       <ScrollView style={styles.container}>
@@ -40,13 +88,15 @@ const LoginScreen: React.FC<PropsType> = (props) => {
             style={styles.input}
             placeholder="Nhập số điện thoại"
             keyboardType="numeric"
+            onChangeText={setsdt}
           />
           <Text style={styles.titleMini}>Mật khẩu</Text>
           <View style={styles.viewOld}>
             <TextInput
               style={styles.input}
               placeholder="Nhập mật khẩu"
-              onChangeText={(valuePassword) => handleInputChangePassword(valuePassword)}
+              // onChangeText={(valuePassword) => handleInputChangePassword(valuePassword)}
+              onChangeText={setValuePassword}
               value={valuePassword}
               secureTextEntry={!isActiceEye} // khi isActiceEye = true thì hiện mật khẩu, false thì ẩn mật khẩu
             />
@@ -62,7 +112,7 @@ const LoginScreen: React.FC<PropsType> = (props) => {
             style={styles.btnLinear}
           >
             <Pressable
-              onPress={() => goHome()}>
+              onPress={() => LoginAPI()}>
               <Text style={styles.titlebtn}>Đăng Nhập</Text>
             </Pressable>
           </LinearGradient>
