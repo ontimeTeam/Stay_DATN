@@ -5,12 +5,10 @@ import { BookStackParamList } from '../../navigation/BookStack'
 import Header from '../../components/header/Header'
 import { IC_BACK, IMG_ROOM_1, IMG_ROOM_2, IMG_ROOM_3, IMG_ROOM_4 } from '../../../assets'
 import { COLORS } from '../../themes/theme'
-import AxiosIntance from '../../components/utils/AxiosIntance'
-import { useRoute } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Axios } from 'axios';
-import Loading from '../../components/loading/Loading'
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
+
 
 
 interface ListRoomHotel {
@@ -20,9 +18,18 @@ interface ListRoomHotel {
     roomImage: string; // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
     // roomImage: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
+// data start, end, people in SearchDetailScreen
+type RoomListScreenNavigationParams = {
+    startDate: string;
+    endDate: string;
+    people: number;
+};
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
 const RoomListScreen: React.FC<PropsType> = props => {
+    const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
+    const { startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
+
     const { navigation } = props;
     const [roomList, setRoomList] = useState<ListRoomHotel[]>([]);
     const [numberOfRooms, setNumberOfRooms] = useState(0);
@@ -43,6 +50,8 @@ const RoomListScreen: React.FC<PropsType> = props => {
         }
     };
 
+
+
     useEffect(() => {
         getRoomsAPI();
         setNumberOfRooms(roomList.length);
@@ -52,16 +61,24 @@ const RoomListScreen: React.FC<PropsType> = props => {
     const formatNumber: FormattingFunction = (num) => {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
+    // const { selectedStartDate, selectedEndDate, people, roomPrice } = route.params;
 
     const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
         const onPressSelectRoom = () => {
             console.log(item);
-            navigation.navigate('PaymentScreen')
+            console.log(startDate, endDate, people);
+            navigation.navigate('PaymentScreen',
+                {
+                    startDate: startDate,
+                    endDate: endDate,
+                    people: people,
+                    roomPrice: item.roomPrice
+                });
         }
 
         const onPressItemAll = () => {
             console.log(item);
-            navigation.navigate('RoomDetailScreen')
+            navigation.navigate('RoomDetailScreen');
         }
 
         return (

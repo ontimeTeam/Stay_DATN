@@ -5,10 +5,29 @@ import { BookStackParamList } from '../../navigation/BookStack';
 import { COLORS } from '../../themes/theme';
 import Header from '../../components/header/Header';
 import { DECOR, ICON_BACK_BLUE, ICON_STAR_TRON, IC_BACK, LINE, ROOM_1, SUBTRACT } from '../../../assets';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 
+type RoomPriceParams = {
+  roomPrice: number;
+};
+
+type RoomListScreenNavigationParams = {
+  startDate: Date;
+  endDate: Date;
+  people: number;
+  totalAmount: number
+};
+
+type FormattingFunction = (num: number) => string;
+const formatNumber: FormattingFunction = (num) => {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+};
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BillScreen'>
 const BillScreen: React.FC<PropsType> = props => {
+  const route = useRoute<RouteProp<BookStackParamList, 'BillScreen'>>();
+  const { startDate, endDate, people, roomPrice, totalAmount } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
   const { navigation } = props;
   const goHome = () => {
     navigation.navigate('HomeScreen');
@@ -30,7 +49,7 @@ const BillScreen: React.FC<PropsType> = props => {
         <Image source={DECOR} style={styles.imgDecor} />
         <Text style={styles.txtTitle}>Thanh toán thành công</Text>
         <Text style={styles.txtContent}>Bạn đã thanh toán thành công phòng Luxury Deluxe Room - 1 King Bed</Text>
-        <Text style={styles.txtPrice}>6,181,942 ₫</Text>
+        <Text style={styles.txtPrice}>{formatNumber(totalAmount)} ₫</Text>
         <Image source={LINE} style={styles.imgLine} />
         <View style={styles.itemHotel}>
           <Image source={ROOM_1} style={styles.imgHotel} />
@@ -48,11 +67,11 @@ const BillScreen: React.FC<PropsType> = props => {
           <View style={styles.bottomTop}>
             <View style={styles.bottomLeft}>
               <Text style={styles.txtName}>Ngày nhận phòng</Text>
-              <Text style={styles.txtValue}>03/08/2023</Text>
+              <Text style={styles.txtValue}>{String(startDate)}</Text>
             </View>
             <View style={styles.bottomRight}>
               <Text style={styles.txtName}>Ngày trả phòng</Text>
-              <Text style={styles.txtValue}>05/08/2023</Text>
+              <Text style={styles.txtValue}>{String(endDate)}</Text>
             </View>
           </View>
           <View style={styles.bottomBottom}>

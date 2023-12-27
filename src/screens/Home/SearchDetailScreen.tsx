@@ -8,8 +8,13 @@ import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import Header from '../../components/header/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 
-type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'>
+type RoomListScreenNavigationParams = {
+    selectedStartDate: string;
+    selectedEndDate: string;
+    people: number;
+};
 
+type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'>
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const { navigation } = props;
     const minDate = new Date(); // Today
@@ -17,6 +22,8 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY');
     const [selectedEndDate, setSelectedEndDate] = useState('DD/MM/YYYY');
     const [people, setPeople] = useState(1);
+
+
 
     const onDateChange = (date: any, type: string) => {
         console.log(JSON.stringify(date));
@@ -44,7 +51,11 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const handleContinue = () => {
         // Thêm logic của bạn ở đây để xử lý sự kiện nhấn nút "Continue"
         console.log('Đã nhấn nút "Continue"');
-        navigation.navigate('RoomListScreen')
+        navigation.navigate('RoomListScreen', {
+            startDate: selectedStartDate,
+            endDate: selectedEndDate,
+            people: people,
+        });
     };
 
     return (
