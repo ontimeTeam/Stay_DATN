@@ -16,6 +16,7 @@ type RoomListScreenNavigationParams = {
     hotelAddress: string,
     hotelImage: string,
     hotelRates: string,
+    hotelViews: number,
     selectedStartDate: string;
     selectedEndDate: string;
     people: number;
@@ -25,7 +26,7 @@ type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const { navigation } = props;
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates } = route.params as RoomListScreenNavigationParams;
+    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews } = route.params as RoomListScreenNavigationParams;
 
     const minDate = new Date(); // Today
     const maxDate = new Date(2026, 6, 3);
@@ -66,6 +67,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
             hotelAddress: hotelAddress,
             hotelImage: hotelImage,
             hotelRates: hotelRates,
+            hotelViews: hotelViews,
             startDate: selectedStartDate,
             endDate: selectedEndDate,
             people: people,

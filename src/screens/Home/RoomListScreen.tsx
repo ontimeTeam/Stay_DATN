@@ -13,7 +13,8 @@ interface ListRoomHotel {
     _id: Object,
     roomType: string,
     roomImage: string,
-    roomPrice: number
+    roomPrice: number,
+    isFinished: string
     // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
     // roomImage: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
@@ -25,6 +26,7 @@ type RoomListScreenNavigationParams = {
     hotelAddress: string,
     hotelImage: string,
     hotelRates: string,
+    hotelViews: number,
     startDate: string;
     endDate: string;
     people: number;
@@ -33,7 +35,7 @@ type RoomListScreenNavigationParams = {
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
 const RoomListScreen: React.FC<PropsType> = props => {
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
+    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews, startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
     const { navigation } = props;
     const [roomList, setRoomList] = useState<ListRoomHotel[]>([]);
     const [numberOfRooms, setNumberOfRooms] = useState(0);
@@ -65,19 +67,20 @@ const RoomListScreen: React.FC<PropsType> = props => {
     const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
         const onPressSelectRoom = () => {
             console.log(item);
-            console.log(startDate, endDate, people);
             navigation.navigate('PaymentScreen',
                 {
                     hotelName: hotelName,
                     hotelAddress: hotelAddress,
                     hotelImage: hotelImage,
                     hotelRates: hotelRates,
+                    hotelViews: hotelViews,
                     startDate: startDate,
                     endDate: endDate,
                     people: people,
                     roomType: item.roomType,
                     roomImages: item.roomImage,
                     roomPrice: item.roomPrice,
+                    isFinished: item.isFinished,
                 });
         }
 

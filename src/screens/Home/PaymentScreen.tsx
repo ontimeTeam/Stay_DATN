@@ -16,7 +16,8 @@ import { useRoute } from '@react-navigation/native';
 type RoomPriceParams = {
     roomPrice: number;
     roomType: string,
-    roomImage: string
+    roomImage: string,
+    isFinished: string
 };
 
 type RoomListScreenNavigationParams = {
@@ -24,6 +25,7 @@ type RoomListScreenNavigationParams = {
     hotelAddress: string,
     hotelImage: string,
     hotelRates: string,
+    hotelViews: number,
     startDate: Date;
     endDate: Date;
     people: number;
@@ -35,8 +37,9 @@ type PropsType = NativeStackScreenProps<BookStackParamList, 'PaymentScreen'>
 const PaymentScreen: React.FC<PropsType> = props => {
     const route = useRoute<RouteProp<BookStackParamList, 'PaymentScreen'>>();
     const { navigation } = props;
-    const { startDate, endDate, people, hotelName, hotelAddress, hotelImage, hotelRates, roomPrice, roomType, roomImage } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
+    const { startDate, endDate, people, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews, roomPrice, roomType, roomImage, isFinished } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
     const navigate = useNavigation();
+    const [isFinish, setIsFinish] = useState('');
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { pay } = React.useContext(AppContext);
     const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
@@ -166,6 +169,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
                         hotelAddress: hotelAddress,
                         hotelImage: hotelImage,
                         hotelRates: hotelRates,
+                        hotelViews: hotelViews,
                         startDate: startDate,
                         endDate: endDate,
                         people: people,
