@@ -9,17 +9,22 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 
-
-
 interface ListRoomHotel {
-    _id: Object;
-    roomType: string;
-    roomPrice: number;
-    roomImage: string; // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
+    _id: Object,
+    roomType: string,
+    roomImage: string,
+    roomPrice: number
+    // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
     // roomImage: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
+
 // data start, end, people in SearchDetailScreen
 type RoomListScreenNavigationParams = {
+    hotelID: string,
+    hotelName: string,
+    hotelAddress: string,
+    hotelImage: string,
+    hotelRates: string,
     startDate: string;
     endDate: string;
     people: number;
@@ -28,32 +33,26 @@ type RoomListScreenNavigationParams = {
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
 const RoomListScreen: React.FC<PropsType> = props => {
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    const { startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
-
+    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
     const { navigation } = props;
     const [roomList, setRoomList] = useState<ListRoomHotel[]>([]);
     const [numberOfRooms, setNumberOfRooms] = useState(0);
-    const [loading, setLoading] = useState(true);
 
-
-    const getRoomsAPI = async () => {
+    const getRoomsAPI = async (hotelID: string) => {
         try {
-            setLoading(true);
-            const response = await axios.get('https://stayapi-production.up.railway.app/api/room/rooms');
+            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
             const data: ListRoomHotel[] = response.data;
             setRoomList(data);
-            // console.log(data);
+            // console.log(response);
         } catch (error) {
             console.log('Error fetching room data: ', error);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     };
 
-
-
     useEffect(() => {
-        getRoomsAPI();
+        getRoomsAPI(hotelID);
         setNumberOfRooms(roomList.length);
     }, [roomList]);
 
@@ -69,10 +68,16 @@ const RoomListScreen: React.FC<PropsType> = props => {
             console.log(startDate, endDate, people);
             navigation.navigate('PaymentScreen',
                 {
+                    hotelName: hotelName,
+                    hotelAddress: hotelAddress,
+                    hotelImage: hotelImage,
+                    hotelRates: hotelRates,
                     startDate: startDate,
                     endDate: endDate,
                     people: people,
-                    roomPrice: item.roomPrice
+                    roomType: item.roomType,
+                    roomImages: item.roomImage,
+                    roomPrice: item.roomPrice,
                 });
         }
 
@@ -85,7 +90,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
             <Pressable onPress={onPressItemAll} style={styles.containerItemRoom}>
                 <Image source={{ uri: item.roomImage }} style={styles.imageRoom} />
                 <View style={styles.containerTextRoom}>
-                    <Text style={styles.nameRoom} numberOfLines={1} ellipsizeMode='tail'>{item.roomType}</Text>
+                    <Text style={styles.nameRoom} numberOfLines={2} ellipsizeMode='tail'>{item.roomType}</Text>
                     <View style={styles.containerCenter}>
                         <Text style={styles.priceRoom}>{formatNumber(item.roomPrice)} ₫</Text>
                         <Pressable style={styles.btnSeclect} onPress={onPressSelectRoom}>
@@ -94,6 +99,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
                     </View>
                     <Text style={styles.textBottom}>Chưa bao gồm thuế và các loại phí</Text>
                 </View>
+
             </Pressable>
         );
 
@@ -106,23 +112,19 @@ const RoomListScreen: React.FC<PropsType> = props => {
                 eventLeft={() => navigation.goBack()}
                 isCheck={true} // truyền true nếu muốn hiển thị textCenter
                 textCenter='Danh sách phòng'
-                textCenterMini='La Vela SaiGon Hotel' // truyền vào nameHotel
+                textCenterMini={hotelName} // truyền vào nameHotel
                 styleContainer={{ backgroundColor: COLORS.White }}
             />
 
             <View style={styles.containerChildren}>
                 <Text style={styles.textRoom}>Gồm {roomList.length} loại phòng</Text>
                 {/* nếu có numberRoom thì thay bằng numberRoom */}
-                {/* {loading ? (
-                    <ActivityIndicator size="large" color='#4461f2' />
-                ) : ( */}
                 <FlatList
                     data={roomList}
                     renderItem={ItemRoomHotel}
                     keyExtractor={(item) => item._id.toString()}
                     showsVerticalScrollIndicator={false}
                 />
-                {/* )} */}
             </View>
         </View>
     );

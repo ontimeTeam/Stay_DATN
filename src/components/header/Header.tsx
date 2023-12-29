@@ -136,10 +136,12 @@ const _styles = StyleSheet.create({
     opacity: 0, // Ẩn phần tử
   },
   centerHeaderContainer: {
+    width: 'auto',
     flex: 1,
     alignItems: 'center',
   },
   textCenterHeader: {
+    width: 'auto',
     fontFamily: 'Exo2-Bold',
     fontSize: 24,
     color: '#202020',
@@ -177,12 +179,14 @@ const _styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
+    width: 'auto'
   },
   textCenterHeaderMini: {
     fontFamily: 'Exo2-Regular',
     fontSize: 16,
     color: COLORS.Black,
     textAlign: 'center',
+    width: 'auto'
   },
 });
 export default Header;

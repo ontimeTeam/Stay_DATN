@@ -1,109 +1,143 @@
 import { StyleSheet, Text, View, TextInput, Image, ScrollView, Pressable, FlatList, ImageSourcePropType } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { COLORS } from '../../themes/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BookStackParamList } from '../../navigation/BookStack';
 import { ICON_SEARCH, ICON_STAR, ICON_STAR_TRON, IMG_HOTEL_7, IMG_HOTEL_8, IMG_HOTEL_9 } from '../../../assets';
+import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 
-type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 interface ListHotel {
-    id: number;
-    // imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-    imageHotel: ImageSourcePropType;
-    nameHotel: string;
-    star: string;
-    view: string;  // số lượt xem
-    price: string; // giá
-    isCheckPopular: boolean; // biến isCheckPopular dùng để kiểm tra xem item có phải là phổ biến hay không
-    isCheckTrend: boolean; // biến isCheckTrend dùng để kiểm tra xem item có phải là xu hướng hay không
+    _id: Object;
+    hotelName: string;
+    hotelAddress: string,
+    hotelDetail: {
+        hotelImage: string;
+    };
+    hotelRates: number;
+    view: number;
+    rooms: {
+        roomPrice: number;
+        roomType: string;
+        roomImage: string;
+    }[];
 }
-const DATAHOTEL: ListHotel[] = ([
-    {
-        id: 1,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 2,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 3,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 4,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 5,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 6,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 7,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 8,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-])
 
+type RoomListScreenNavigationParams = {
+    startDate: string;
+    endDate: string;
+    people: number;
+};
+// const DATAHOTEL: ListHotel[] = ([
+//     {
+//         id: 1,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 2,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 3,
+//         imageHotel: IMG_HOTEL_9,
+//         nameHotel: 'Imperial Hotel & Spa',
+//         star: '5.0',
+//         view: '1420',
+//         price: '1.428.918',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 4,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 5,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 6,
+//         imageHotel: IMG_HOTEL_9,
+//         nameHotel: 'Imperial Hotel & Spa',
+//         star: '5.0',
+//         view: '1420',
+//         price: '1.428.918',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 7,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 8,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+// ])
+type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 const BookScreen: React.FC<PropsType> = (props) => {
+    const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
+    // const { startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
     const { navigation } = props;
     const [text, setText] = React.useState('');
     const [activeTab, setActiveTab] = useState('Tất cả')
+    const [hotels, setHotels] = useState<ListHotel[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const getHotelsAPI = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht');
+            const data: ListHotel[] = response.data;
+            setHotels(data);
+            console.log(data);
+        } catch (error) {
+            console.log('Error fetching hotel data: ', error);
+        } finally {
+            setLoading(false);
+        };
+    };
+    useEffect(() => {
+        getHotelsAPI();
+    }, []);
+
     // biến activeTab dùng để kiểm tra xem tab nào đang được chọn mặc định là 'Tất cả'
     const handleTabPress = (tab: string) => {
         setActiveTab(tab)
@@ -136,24 +170,54 @@ const BookScreen: React.FC<PropsType> = (props) => {
         );
     };
     const ItemHotelAll = ({ item }: { item: ListHotel }) => {
+        const minPrice = Math.min(...item.rooms.map(room => room.roomPrice));
+
+
         const onPressItemAll = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
+            console.log(item._id);
+            navigation.navigate('SearchDetailScreen', {
+                hotelID: item._id.toString(),
+                hotelAddress: item.hotelAddress,
+                hotelImage: item.hotelDetail.hotelImage,
+                hotelName: item.hotelName,
+                hotelRates: item.hotelRates,
+            });
         }
+        type FormattingFunction = (num: number) => string;
+        const formatNumber: FormattingFunction = (num) => {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        };
+
+        function getMinRoomPrice(rooms: Array<{ roomPrice: number }>): number {
+            if (rooms.length === 0) {
+                return 0;
+            }
+            let minPrice = rooms[0].roomPrice;
+            for (let i = 1; i < rooms.length; i++) {
+                if (rooms[i].roomPrice < minPrice) {
+                    minPrice = rooms[i].roomPrice;
+                }
+            }
+            return minPrice;
+        };
+
+        // const minRoomPrice = getMinRoomPrice(rooms);
+
+
         return (
             <Pressable style={styles.containerItem} onPress={onPressItemAll}>
-                <Image source={item.imageHotel} style={styles.imageHotel} />
+                <Image source={{ uri: item.hotelDetail.hotelImage }} style={styles.imageHotel} />
                 <View style={styles.containerInfo}>
-                    <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
+                    <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.hotelName}</Text>
                     <View style={styles.containerCenter}>
                         <View style={styles.containerStar}>
                             <Image source={ICON_STAR_TRON} style={styles.iconStar} />
-                            <Text style={styles.star}>{item.star}</Text>
+                            <Text style={styles.star}>{item.hotelRates}</Text>
                         </View>
                         <Text style={styles.view}>({item.view} Lượt xem)</Text>
                     </View>
                     <View style={styles.containerBottom}>
-                        <Text style={styles.price}>Từ {item.price} ₫</Text>
+                        <Text style={styles.price}>Từ {formatNumber(minPrice)} ₫</Text>
                         <Pressable style={styles.btnBook} onPress={onPressItemAll}>
                             <Text style={styles.textBook}>Chọn Phòng</Text>
                         </Pressable>
@@ -162,101 +226,103 @@ const BookScreen: React.FC<PropsType> = (props) => {
             </Pressable>
         );
     };
-    const ItemHotelPopular = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
-        const onPressItemPopular = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
-        };
-        if (item.isCheckPopular === true) {
-            return (
-                <Pressable style={styles.containerItem} onPress={onPressItemPopular}>
-                    <Image source={item.imageHotel} style={styles.imageHotel} />
-                    <View style={styles.containerInfo}>
-                        <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
-                        <View style={styles.containerCenter}>
-                            <View style={styles.containerStar}>
-                                <Image source={ICON_STAR_TRON} style={styles.iconStar} />
-                                <Text style={styles.star}>{item.star}</Text>
-                            </View>
-                            <Text style={styles.view}>({item.view} Lượt xem)</Text>
-                        </View>
-                        <View style={styles.containerBottom}>
-                            <Text style={styles.price}>Từ {item.price} ₫</Text>
-                            <Pressable style={styles.btnBook} onPress={onPressItemPopular}>
-                                <Text style={styles.textBook}>Chọn Phòng</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Pressable>
-            );
-        }
-    };
-    const ItemHotelTrend = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
-        const onPressItemTrend = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
-        };
-        if (item.isCheckTrend === true) {
-            return (
-                <Pressable style={styles.containerItem} onPress={onPressItemTrend}>
-                    <Image source={item.imageHotel} style={styles.imageHotel} />
-                    <View style={styles.containerInfo}>
-                        <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
-                        <View style={styles.containerCenter}>
-                            <View style={styles.containerStar}>
-                                <Image source={ICON_STAR_TRON} style={styles.iconStar} />
-                                <Text style={styles.star}>{item.star}</Text>
-                            </View>
-                            <Text style={styles.view}>({item.view} Lượt xem)</Text>
-                        </View>
-                        <View style={styles.containerBottom}>
-                            <Text style={styles.price}>Từ {item.price} ₫</Text>
-                            <Pressable style={styles.btnBook} onPress={onPressItemTrend}>
-                                <Text style={styles.textBook}>Chọn Phòng</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Pressable>
-            );
-        }
-    };
+
+
+
+    // const ItemHotelPopular = ({item, navigation}: {item: ListHotel; navigation: any }) => {
+    //     const onPressItemPopular = () => {
+    //         console.log(item);
+    //         navigation.navigate('RoomListScreen');
+    //     };
+    //     if (item.isCheckPopular === true) {
+    //         return (
+    //             <Pressable style={styles.containerItem} onPress={onPressItemPopular}>
+    //                 <Image source={item.imageHotel} style={styles.imageHotel} />
+    //                 <View style={styles.containerInfo}>
+    //                     <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
+    //                     <View style={styles.containerCenter}>
+    //                         <View style={styles.containerStar}>
+    //                             <Image source={ICON_STAR_TRON} style={styles.iconStar} />
+    //                             <Text style={styles.star}>{item.star}</Text>
+    //                         </View>
+    //                         <Text style={styles.view}>({item.view} Lượt xem)</Text>
+    //                     </View>
+    //                     <View style={styles.containerBottom}>
+    //                         <Text style={styles.price}>Từ {item.price} ₫</Text>
+    //                         <Pressable style={styles.btnBook} onPress={onPressItemPopular}>
+    //                             <Text style={styles.textBook}>Chọn Phòng</Text>
+    //                         </Pressable>
+    //                     </View>
+    //                 </View>
+    //             </Pressable>
+    //         );
+    //     }
+    // };
+    // const ItemHotelTrend = ({item, navigation}: {item: ListHotel; navigation: any }) => {
+    //     const onPressItemTrend = () => {
+    //         console.log(item);
+    //         navigation.navigate('RoomListScreen');
+    //     };
+    //     if (item.isCheckTrend === true) {
+    //         return (
+    //             <Pressable style={styles.containerItem} onPress={onPressItemTrend}>
+    //                 <Image source={item.imageHotel} style={styles.imageHotel} />
+    //                 <View style={styles.containerInfo}>
+    //                     <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
+    //                     <View style={styles.containerCenter}>
+    //                         <View style={styles.containerStar}>
+    //                             <Image source={ICON_STAR_TRON} style={styles.iconStar} />
+    //                             <Text style={styles.star}>{item.star}</Text>
+    //                         </View>
+    //                         <Text style={styles.view}>({item.view} Lượt xem)</Text>
+    //                     </View>
+    //                     <View style={styles.containerBottom}>
+    //                         <Text style={styles.price}>Từ {item.price} ₫</Text>
+    //                         <Pressable style={styles.btnBook} onPress={onPressItemTrend}>
+    //                             <Text style={styles.textBook}>Chọn Phòng</Text>
+    //                         </Pressable>
+    //                     </View>
+    //                 </View>
+    //             </Pressable>
+    //         );
+    //     }
+    // };
     const renderList = () => {
         switch (activeTab) {
             case 'Tất cả':
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={hotels}
                             renderItem={ItemHotelAll}
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item._id.toString()}
                             showsVerticalScrollIndicator={false}
                         />
                     </View>
                 );
-            case 'Phổ biến':
-                return (
-                    <View style={styles.viewFlatList}>
-                        <FlatList
-                            data={DATAHOTEL}
-                            renderItem={(props) => <ItemHotelPopular {...props} navigation={navigation} />}
-                            keyExtractor={(item) => item.id.toString()}
-                            showsVerticalScrollIndicator={false}
-                        />
-                    </View>
-                );
-            case 'Xu hướng':
-                return (
-                    <View style={styles.viewFlatList}>
-                        <FlatList
-                            data={DATAHOTEL}
-                            renderItem={(props) => <ItemHotelTrend {...props} navigation={navigation} />}
-                            keyExtractor={(item) => item.id.toString()}
-                            showsVerticalScrollIndicator={false}
-                        />
-                    </View>
-                );
-            default:
-                return null;
+            // case 'Phổ biến':
+            //     return (
+            //         <View style={styles.viewFlatList}>
+            //             <FlatList
+            //                 data={DATAHOTEL}
+            //                 renderItem={(props) => <ItemHotelPopular {...props} navigation={navigation} />}
+            //                 keyExtractor={(item) => item.id.toString()}
+            //                 showsVerticalScrollIndicator={false}
+            //             />
+            //         </View>
+            //     );
+            // case 'Xu hướng':
+            // return (
+            //     <View style={styles.viewFlatList}>
+            //         <FlatList
+            //             data={DATAHOTEL}
+            //             renderItem={(props) => <ItemHotelTrend {...props} navigation={navigation} />}
+            //             keyExtractor={(item) => item.id.toString()}
+            //             showsVerticalScrollIndicator={false}
+            //         />
+            //     </View>
+            // );
+            default: return null;
         }
     };
     const onPressSearch = () => {
@@ -383,6 +449,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 16,
     },
     containerInfo: {
+        marginTop: 12,
         flex: 1,
         flexDirection: 'column',
         paddingHorizontal: 20,

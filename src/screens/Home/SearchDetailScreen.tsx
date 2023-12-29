@@ -7,8 +7,15 @@ import { IC_BACK } from '../../../assets';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import Header from '../../components/header/Header';
 import CalendarPicker from 'react-native-calendar-picker';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 
 type RoomListScreenNavigationParams = {
+    hotelID: string,
+    hotelName: string,
+    hotelAddress: string,
+    hotelImage: string,
+    hotelRates: string,
     selectedStartDate: string;
     selectedEndDate: string;
     people: number;
@@ -17,12 +24,14 @@ type RoomListScreenNavigationParams = {
 type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'>
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
     const { navigation } = props;
+    const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
+    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates } = route.params as RoomListScreenNavigationParams;
+
     const minDate = new Date(); // Today
     const maxDate = new Date(2026, 6, 3);
     const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY');
     const [selectedEndDate, setSelectedEndDate] = useState('DD/MM/YYYY');
     const [people, setPeople] = useState(1);
-
 
 
     const onDateChange = (date: any, type: string) => {
@@ -50,8 +59,13 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
 
     const handleContinue = () => {
         // Thêm logic của bạn ở đây để xử lý sự kiện nhấn nút "Continue"
-        console.log('Đã nhấn nút "Continue"');
+        console.log('Đã nhấn nút "Continue"', hotelID);
         navigation.navigate('RoomListScreen', {
+            hotelID: hotelID,
+            hotelName: hotelName,
+            hotelAddress: hotelAddress,
+            hotelImage: hotelImage,
+            hotelRates: hotelRates,
             startDate: selectedStartDate,
             endDate: selectedEndDate,
             people: people,

@@ -15,9 +15,15 @@ import { useRoute } from '@react-navigation/native';
 
 type RoomPriceParams = {
     roomPrice: number;
+    roomType: string,
+    roomImage: string
 };
 
 type RoomListScreenNavigationParams = {
+    hotelName: string,
+    hotelAddress: string,
+    hotelImage: string,
+    hotelRates: string,
     startDate: Date;
     endDate: Date;
     people: number;
@@ -29,7 +35,7 @@ type PropsType = NativeStackScreenProps<BookStackParamList, 'PaymentScreen'>
 const PaymentScreen: React.FC<PropsType> = props => {
     const route = useRoute<RouteProp<BookStackParamList, 'PaymentScreen'>>();
     const { navigation } = props;
-    const { startDate, endDate, people, roomPrice } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
+    const { startDate, endDate, people, hotelName, hotelAddress, hotelImage, hotelRates, roomPrice, roomType, roomImage } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
     const navigate = useNavigation();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { pay } = React.useContext(AppContext);
@@ -85,17 +91,17 @@ const PaymentScreen: React.FC<PropsType> = props => {
                 textLeft='Thanh toán'
             />
             <View style={styles.viewContainer}>
-                <Image source={ROOM_1} style={styles.imgBanner} />
+                <Image source={{ uri: hotelImage }} style={styles.imgBanner} />
                 <View
                     style={styles.viewChildren}>
-                    <Text style={styles.txtNameBanner}>La Vela SaiGon Hotel</Text>
+                    <Text style={styles.txtNameBanner}>{hotelName}</Text>
                     <View style={styles.viewStar}>
                         <Image source={ICON_STAR} style={styles.iconStar} />
-                        <Text style={styles.txtStar}>5.0</Text>
+                        <Text style={styles.txtStar}>{hotelRates}</Text>
                     </View>
                     <View style={styles.viewBottomHotelList}>
                         <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode='tail'>
-                            Luxury Deluxe Room - 1 King Bed
+                            {roomType}
                         </Text>
                     </View>
                 </View>
@@ -156,10 +162,15 @@ const PaymentScreen: React.FC<PropsType> = props => {
                 }}
                 onPress={() => {
                     navigation.navigate('BillScreen', {
+                        hotelName: hotelName,
+                        hotelAddress: hotelAddress,
+                        hotelImage: hotelImage,
+                        hotelRates: hotelRates,
                         startDate: startDate,
                         endDate: endDate,
                         people: people,
                         roomPrice: roomPrice,
+                        roomType: roomType,
                         totalAmount: totalAmount
                     });
                 }}
@@ -194,9 +205,9 @@ const styles = StyleSheet.create({
     },
     imgBanner: {
         width: Dimensions.get('screen').width * 0.9,
-        height: Dimensions.get('screen').width * 0.5 + 15,
+        height: Dimensions.get('screen').width * 0.5,
         flex: 1,
-        resizeMode: 'stretch', // sử dụng resizeMode: 'stretch' để kéo dãn ảnh
+        // resizeMode: 'stretch', // sử dụng resizeMode: 'stretch' để kéo dãn ảnh
         // resizeMode: 'cover', // sử dụng resizeMode: 'cover' để ảnh không bị kéo dãn
         // dùng kiểu nào tùy vào thiết kế nha
         borderRadius: 20,
@@ -204,16 +215,16 @@ const styles = StyleSheet.create({
     txtNameBanner: {
         color: COLORS.White,
         fontFamily: 'Exo2-Bold',
-        fontSize: 24,
+        fontSize: 22,
     },
     viewStar: {
         position: 'absolute',
-        left: Dimensions.get('screen').width * 0.9 - 90,
+        left: Dimensions.get('screen').width * 0.9 - 85,
         backgroundColor: COLORS.MainBlue,
-        width: 50,
+        width: 'auto',
         height: 30,
         borderRadius: 15,
-        gap: 5,
+        gap: 6,
         paddingHorizontal: 5,
         paddingVertical: 3,
         flex: 1,
@@ -239,8 +250,8 @@ const styles = StyleSheet.create({
     },
     txtNameHotelList: {
         color: COLORS.White,
-        fontFamily: 'Exo2-SemiBold',
-        fontSize: 22,
+        fontFamily: 'Exo2-Medium',
+        fontSize: 20,
     },
     viewTimeRoom: {
         backgroundColor: COLORS.White,
