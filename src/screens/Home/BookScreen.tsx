@@ -181,11 +181,15 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 hotelImage: item.hotelDetail.hotelImage,
                 hotelName: item.hotelName,
                 hotelRates: item.hotelRates,
+                hotelViews: getRandomView(),
             });
         }
         type FormattingFunction = (num: number) => string;
         const formatNumber: FormattingFunction = (num) => {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        };
+        function getRandomView() {
+            return Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
         };
 
         function getMinRoomPrice(rooms: Array<{ roomPrice: number }>): number {
@@ -214,7 +218,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                             <Image source={ICON_STAR_TRON} style={styles.iconStar} />
                             <Text style={styles.star}>{item.hotelRates}</Text>
                         </View>
-                        <Text style={styles.view}>({item.view} Lượt xem)</Text>
+                        <Text style={styles.view}>({formatNumber(getRandomView())} lượt xem)</Text>
                     </View>
                     <View style={styles.containerBottom}>
                         <Text style={styles.price}>Từ {formatNumber(minPrice)} ₫</Text>
