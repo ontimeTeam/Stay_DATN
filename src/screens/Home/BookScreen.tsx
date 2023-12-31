@@ -14,6 +14,7 @@ interface ListHotel {
     hotelAddress: string,
     hotelDetail: {
         hotelImage: string;
+        hotelDescription: string;
     };
     hotelRates: number;
     view: number;
@@ -25,96 +26,16 @@ interface ListHotel {
 }
 
 type RoomListScreenNavigationParams = {
-    startDate: string;
-    endDate: string;
-    people: number;
+    hotelID: string,
+    // startDate: string;
+    // endDate: string;
+    // people: number;
 };
-// const DATAHOTEL: ListHotel[] = ([
-//     {
-//         id: 1,
-//         imageHotel: IMG_HOTEL_7,
-//         nameHotel: 'Park Hyatt Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '7.200.000',
-//         isCheckPopular: true,
-//         isCheckTrend: false,
-//     },
-//     {
-//         id: 2,
-//         imageHotel: IMG_HOTEL_8,
-//         nameHotel: 'Fusion Original Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '4.043.904',
-//         isCheckPopular: false,
-//         isCheckTrend: true,
-//     },
-//     {
-//         id: 3,
-//         imageHotel: IMG_HOTEL_9,
-//         nameHotel: 'Imperial Hotel & Spa',
-//         star: '5.0',
-//         view: '1420',
-//         price: '1.428.918',
-//         isCheckPopular: true,
-//         isCheckTrend: false,
-//     },
-//     {
-//         id: 4,
-//         imageHotel: IMG_HOTEL_7,
-//         nameHotel: 'Park Hyatt Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '7.200.000',
-//         isCheckPopular: true,
-//         isCheckTrend: false,
-//     },
-//     {
-//         id: 5,
-//         imageHotel: IMG_HOTEL_8,
-//         nameHotel: 'Fusion Original Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '4.043.904',
-//         isCheckPopular: false,
-//         isCheckTrend: true,
-//     },
-//     {
-//         id: 6,
-//         imageHotel: IMG_HOTEL_9,
-//         nameHotel: 'Imperial Hotel & Spa',
-//         star: '5.0',
-//         view: '1420',
-//         price: '1.428.918',
-//         isCheckPopular: true,
-//         isCheckTrend: false,
-//     },
-//     {
-//         id: 7,
-//         imageHotel: IMG_HOTEL_7,
-//         nameHotel: 'Park Hyatt Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '7.200.000',
-//         isCheckPopular: true,
-//         isCheckTrend: false,
-//     },
-//     {
-//         id: 8,
-//         imageHotel: IMG_HOTEL_8,
-//         nameHotel: 'Fusion Original Saigon',
-//         star: '5.0',
-//         view: '1420',
-//         price: '4.043.904',
-//         isCheckPopular: false,
-//         isCheckTrend: true,
-//     },
-// ])
+
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 const BookScreen: React.FC<PropsType> = (props) => {
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    // const { startDate, endDate, people } = route.params as RoomListScreenNavigationParams;
+    // const { hotelID } = route.params as RoomListScreenNavigationParams;
     const { navigation } = props;
     const [text, setText] = React.useState('');
     const [activeTab, setActiveTab] = useState('Tất cả')
@@ -175,6 +96,19 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
         const onPressItemAll = () => {
             console.log(item._id);
+            navigation.navigate('HotelDetailScreen', {
+                hotelID: item._id.toString(),
+                hotelAddress: item.hotelAddress,
+                hotelImage: item.hotelDetail.hotelImage,
+                hotelDescription: item.hotelDetail.hotelDescription,
+                hotelName: item.hotelName,
+                hotelViews: randomHotelView,
+                roomPrice: minPrice,
+            });
+        };
+
+        const onPressSelect = () => {
+            console.log(item._id);
             navigation.navigate('SearchDetailScreen', {
                 hotelID: item._id.toString(),
                 hotelAddress: item.hotelAddress,
@@ -183,7 +117,8 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 hotelRates: item.hotelRates,
                 hotelViews: randomHotelView,
             });
-        }
+        };
+
         type FormattingFunction = (num: number) => string;
         const formatNumber: FormattingFunction = (num) => {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -216,7 +151,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                     </View>
                     <View style={styles.containerBottom}>
                         <Text style={styles.price}>Từ {formatNumber(minPrice)} ₫</Text>
-                        <Pressable style={styles.btnBook} onPress={onPressItemAll}>
+                        <Pressable style={styles.btnBook} onPress={onPressSelect}>
                             <Text style={styles.textBook}>Chọn Phòng</Text>
                         </Pressable>
                     </View>
@@ -516,3 +451,85 @@ const styles = StyleSheet.create({
     },
 
 });
+// const DATAHOTEL: ListHotel[] = ([
+//     {
+//         id: 1,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 2,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 3,
+//         imageHotel: IMG_HOTEL_9,
+//         nameHotel: 'Imperial Hotel & Spa',
+//         star: '5.0',
+//         view: '1420',
+//         price: '1.428.918',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 4,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 5,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 6,
+//         imageHotel: IMG_HOTEL_9,
+//         nameHotel: 'Imperial Hotel & Spa',
+//         star: '5.0',
+//         view: '1420',
+//         price: '1.428.918',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 7,
+//         imageHotel: IMG_HOTEL_7,
+//         nameHotel: 'Park Hyatt Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '7.200.000',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 8,
+//         imageHotel: IMG_HOTEL_8,
+//         nameHotel: 'Fusion Original Saigon',
+//         star: '5.0',
+//         view: '1420',
+//         price: '4.043.904',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+// ])
