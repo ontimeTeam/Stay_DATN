@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, TextInput, Image, ScrollView, Pressable, FlatList, ImageSourcePropType } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { COLORS } from '../../themes/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BookStackParamList } from '../../navigation/BookStack';
 import { ICON_SEARCH, ICON_STAR, ICON_STAR_TRON, IMG_HOTEL_7, IMG_HOTEL_8, IMG_HOTEL_9 } from '../../../assets';
+import axios from 'axios';
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 interface ListHotel {
@@ -24,80 +25,11 @@ const DATAHOTEL: ListHotel[] = ([
         nameHotel: 'Park Hyatt Saigon',
         star: '5.0',
         view: '1420',
-        price: '7.200.000',
+        price: '7.100.000',
         isCheckPopular: true,
         isCheckTrend: false,
     },
-    {
-        id: 2,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 3,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 4,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 5,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 6,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 7,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 8,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
+    
 ])
 
 const BookScreen: React.FC<PropsType> = (props) => {
@@ -105,6 +37,69 @@ const BookScreen: React.FC<PropsType> = (props) => {
     const [text, setText] = React.useState('');
     const [activeTab, setActiveTab] = useState('Tất cả')
     // biến activeTab dùng để kiểm tra xem tab nào đang được chọn mặc định là 'Tất cả'
+
+    const [apiData, setApiData] = useState<ListHotel[]>([]);
+
+    const [searchResults, setSearchResults] = useState<ListHotel[]>([]);
+
+    useEffect(() => {
+        const fetchHotelData = async () => {
+          try {
+            const response = await axios.get(
+              'https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht'
+            );
+                
+            console.log("aaa", response);
+
+            const newData = response.data.map((item: any) => ({
+                id: item._id,
+                imageHotel: { uri: item.rooms[0]?.roomImage },
+                nameHotel: item.hotelName,
+                star: item.hotelRates.toFixed(1), // Map hotelRates to star with one decimal place
+                view: '1420', // Replace with the actual view data from the API
+                price: item.rooms[0]?.roomPrice.toString(), // Map roomPrice to price as a string
+                isCheckPopular: true, // Replace with the actual isCheckPopular data from the API
+                isCheckTrend: false, // Replace with the actual isCheckTrend data from the API
+              }));
+    
+            setApiData(newData);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            // Handle error cases
+          }
+        };
+    
+        fetchHotelData();
+      }, []); // Empty dependency array ensures the effect runs only once
+    
+
+      const onPressSearchs = async () => {
+        try {
+            const response = await axios.get(
+                `https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht?queryType=hotelName&value=${text}`
+            );
+    
+            console.log("Search result:", response);
+    
+            const searchData = response.data.map((item: any) => ({
+                id: item._id,
+                imageHotel: { uri: item.rooms[0]?.roomImage },
+                nameHotel: item.hotelName,
+                star: item.hotelRates.toFixed(1),
+                view: '1420',
+                price: item.rooms[0]?.roomPrice.toString(),
+                isCheckPopular: true,
+                isCheckTrend: false,
+            }));
+    
+            setSearchResults(searchData);
+        } catch (error) {
+            console.error('Error searching:', error);
+            // Handle error cases
+        }
+    };
+    
+
     const handleTabPress = (tab: string) => {
         setActiveTab(tab)
     }
@@ -226,7 +221,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={text ? searchResults : apiData}
                             renderItem={ItemHotelAll}
                             keyExtractor={(item) => item.id.toString()}
                             showsVerticalScrollIndicator={false}
@@ -237,7 +232,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={text ? searchResults : apiData}
                             renderItem={(props) => <ItemHotelPopular {...props} navigation={navigation} />}
                             keyExtractor={(item) => item.id.toString()}
                             showsVerticalScrollIndicator={false}
@@ -248,7 +243,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={text ? searchResults : apiData}
                             renderItem={(props) => <ItemHotelTrend {...props} navigation={navigation} />}
                             keyExtractor={(item) => item.id.toString()}
                             showsVerticalScrollIndicator={false}
@@ -280,8 +275,8 @@ const BookScreen: React.FC<PropsType> = (props) => {
                             color: text ? COLORS.Black : "#C4C4C4",
                         },
                     ]}
-                    onChangeText={text => setText(text)}
-
+                    //onChangeText={text => setText(text)}
+                    onChangeText={(inputText) => setText(inputText)}
                 />
             </View>
             <View style={styles.containerChidren}>

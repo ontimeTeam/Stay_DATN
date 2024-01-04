@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Pressable, ScrollView, Image, ImageSourcePropType, FlatList, ListRenderItemInfo } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3 } from '../../../assets';
 import Header from '../../components/header/Header';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripStackParamList } from '../../navigation/TripStack';
+import axios from 'axios';
 
 export interface Item {
     id: number;
@@ -23,6 +24,7 @@ const TripScreen: React.FC<PropsType> = props => {
     // biến selectedItemId dùng để lưu id của item được chọn, mặc định là null
     const [keyExtractorUpdateCount, setKeyExtractorUpdateCount] = useState(0);
     // biến keyExtractorUpdateCount dùng để cập nhật keyExtractor của FlatList, mặc định là 0
+   //...
     const [data, setData] = useState<Item[]>([
         {
             id: 1,
@@ -151,7 +153,8 @@ const TripScreen: React.FC<PropsType> = props => {
             roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
         },
 
-    ]);
+     ]);
+
     const initialLayout = { width: Dimensions.get('window').width };
 
     const [index, setIndex] = useState(0);

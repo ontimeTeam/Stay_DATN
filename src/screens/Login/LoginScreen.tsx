@@ -11,6 +11,7 @@ import { AppContext } from '../../resources/context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Axios } from 'axios';
+import { HomeStackParamList } from '../../navigation/HomeStack';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'LoginScreen'>;
 
@@ -28,49 +29,36 @@ const LoginScreen: React.FC<PropsType> = (props) => {
   const handleIconPress = () => {
     setIsActiceEye(!isActiceEye);
   }
+  
   const handleInputChangePassword = (textPass: string) => {
     setValuePassword(textPass);
   }
 
-  // const LoginAPI = async () => {
-  //   try {
-  //     const response = fetch('https://newapihtbk-production.up.railway.app/api/auth/login/', {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         phone: sdt,
-  //         password: valuePassword
-  //       })
-  //     });
-  //     console.log('API Response:', response);
-  //     //console.log(sdt, valuePassword);
-  //   } catch (error) {
-      
-  //   }
-  // };
-
   const LoginAPI = async () => {
     try {
-      const response = await axios.post('https://newapihtbk-production.up.railway.app/api/auth/login/', {
-        phone: sdt,
-        password: valuePassword
-      }, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+      const response = await axios.post(
+        'https://newapihtbk-production.up.railway.app/api/auth/login/',
+        {
+          phone: sdt,
+          password: valuePassword,
+        },
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
         }
-      });
+      );
   
       console.log('API Response:', response.data);
   
+      setLoggedIn(false);
+      console.log('goHome');
       // Trả về dữ liệu từ API nếu cần
       return response.data;
     } catch (error) {
       // Xử lý lỗi nếu cần
-      throw error;
+      Alert.alert("tài khoản hoặc mật khẩu không chính xác");
     }
   };
 

@@ -9,8 +9,7 @@ const AppNavigation = () => {
     return (
       <NavigationContainer>
         {/* {isLoggedIn ? <BottomNavigation /> : <LoginStack />} */}
-        {/* {isLoggedIn ? <LoginStack /> : <BottomNavigation />} */}
-        <LoginStack/>
+        {isLoggedIn ? <LoginStack /> : <BottomNavigation />}
       </NavigationContainer>
     );
 }

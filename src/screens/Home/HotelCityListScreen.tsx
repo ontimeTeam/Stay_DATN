@@ -21,7 +21,7 @@ const DATAHOTEL: ListHotel[] = ([
     nameHotel: 'Park Hyatt Saigon',
     star: '5.0',
     view: '1420',
-    price: '7.200.000',
+    price: '7.100.000',
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const DATAHOTEL: ListHotel[] = ([
     nameHotel: 'Park Hyatt Saigon',
     star: '5.0',
     view: '1420',
-    price: '7.200.000',
+    price: '5.200.000',
   },
   {
     id: 5,
