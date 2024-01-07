@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, ImageBackground, StatusBar, Image, FlatList, ImageSourcePropType, Pressable } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, ScrollView, ImageBackground, StatusBar, Image, FlatList, ImageSourcePropType, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { BookStackParamList } from '../../navigation/BookStack'
@@ -14,6 +14,7 @@ interface HotelDetail {
     _id: Object,
     hotelImage: string,
     hotelDescription: string,
+    roomImage: string
 };
 type RoomListScreenNavigationParams = {
     hotelID: string,
@@ -35,28 +36,32 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
     const { hotelID, hotelName, hotelAddress, hotelDescription, hotelImage, hotelRates, hotelViews, roomPrice } = route.params as RoomListScreenNavigationParams;
 
-    const [hotelDetailImage, setHotelImage] = useState<ListImg[]>([]);
+    const [hotelDetailImage, setHotelImage] = useState<HotelDetail[]>([]);
 
-    const getRoomImage = async (hotelID: string) => {
+    const getRoomsAPI = async (hotelID: string) => {
         try {
-            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/${hotelID}/roomImage`);
-            const data: ListImg[] = response.data;
+            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
+            const data: HotelDetail[] = response.data;
             setHotelImage(data);
+            // console.log(response);
         } catch (error) {
-            console.error('Error fetching hotel details:', error);
+            console.log('Error fetching room data: ', error);
+        } finally {
+            // setLoading(false);
         }
     };
+
     useEffect(() => {
-        getRoomImage(hotelID);
+        getRoomsAPI(hotelID);
     }, []);
 
     type FormattingFunction = (num: number) => string;
     const formatNumber: FormattingFunction = (num) => {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
-    // const renderItemImg = ({ item }: { item: ListImg }) => (
-    //     <Image source={item.uri} style={styles.imagePhoto} />
-    // );
+    const renderItemImg = ({ item }: { item: HotelDetail }) => (
+        <Image source={{ uri: item.roomImage }} style={styles.imagePhoto} />
+    );
     return (
         <View style={styles.containerAll}>
             <ScrollView
@@ -86,49 +91,55 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
                 <View style={styles.line}></View>
                 <Text style={styles.titleImg}>Ảnh chụp</Text>
                 <View style={{ paddingStart: 20, borderTopStartRadius: 12, borderBottomStartRadius: 12, marginBottom: 20 }}>
-                    {/* <FlatList
+                    <FlatList
                         data={hotelDetailImage}
                         renderItem={renderItemImg}
                         keyExtractor={item => item._id.toString()}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         scrollEnabled={true}
-                    /> */}
+                    />
                 </View>
                 <Text style={styles.titleImg}>Điểm nổi bật</Text>
                 <View style={styles.viewPopularTop}>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_LIKE} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_like.png?alt=media&token=257beba5-0a7e-43cb-a074-9d77b7c62b94' }} style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Thích hợp cho{'\n'}các hoạt động</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_SWIMMIMG_POOL} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Swimming_pool.png?alt=media&token=df2e52e9-d146-4652-bb6a-c68ebcfd69b1' }} style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Bể bơi{'\n'}tuyệt vời</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_FOREST} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Forest.png?alt=media&token=44068950-9dda-4aec-8a3a-67bb4923320c' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Quang cảnh{'\n'}thành phố</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_CLEAR} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Clear.png?alt=media&token=270853e9-f64a-43c8-9107-727eab9921a6' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Sạch sẽ{'\n'}vệ sinh</Text>
                     </View>
                 </View>
                 <View style={[styles.viewPopularTop, { marginBottom: 20 }]}>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_BED} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Bed.png?alt=media&token=0fe91f9e-c218-4b8b-a64c-295303d8fdf7' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Dịch vụ chất{'\n'}lượng cao</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_TABLE_24H} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Table_24_7.png?alt=media&token=ef8dc9c0-c463-426a-8e19-2c62d8b7a999' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Bàn tiếp tân{'\n'}24H</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_TRANSFER} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Transfer.png?alt=media&token=27240286-561a-45d8-ab51-1ff27a3dc5a1' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Đưa đón{'\n'}sây bay</Text>
                     </View>
                     <View style={styles.viewPopular}>
-                        <Image source={ICON_GOLF} style={styles.imagePopular} />
+                        <Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/stay-hotel-booking-app.appspot.com/o/hotel%2FIcon_Goft.png?alt=media&token=a1b6df17-ccea-4998-bd8d-4a48447326fc' }}
+                            style={styles.imagePopular} />
                         <Text style={styles.textPopular}>Sân golf</Text>
                     </View>
                 </View>
@@ -216,6 +227,7 @@ const styles = StyleSheet.create({
         color: COLORS.Black,
         lineHeight: 19.6,
         letterSpacing: 0.2,
+        width: Dimensions.get('screen').width * 0.8,
     },
     line: {
         width: '90%',
