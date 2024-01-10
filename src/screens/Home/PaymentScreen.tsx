@@ -8,15 +8,48 @@ import { COLORS } from '../../themes/theme';
 import { AppContext } from '../../resources/context/AppContext';
 import ModalPayment from '../../components/modal/ModalPayment';
 import Button from '../../components/button/Button';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { differenceInDays } from 'date-fns';
+
+type RoomApiResponse = {
+  hotel: any;
+  room: {
+    _id: string;
+    roomType: string;
+    roomPrice: string;
+    roomImage: string;
+    // Add other properties as needed
+  };
+};
+
+type ListRoomHotel = {
+  id: string;
+  nameHotel: string;
+  nameRoom: string;
+  price: string;
+  start: number;
+  imageRoom: ImageSourcePropType;
+};
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'PaymentScreen'>
 const PaymentScreen: React.FC<PropsType> = props => {
-  const { navigation } = props;
+
+  const [dataRoomHotel, setDataRoomHotel] = useState<ListRoomHotel[]>([]);
+  const { navigation, route } = props;
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { pay } = React.useContext(AppContext);
   const [imagePay, setImagePay] = useState<ImageSourcePropType>(MOMO);
   const [namePay, setNamePay] = useState<string>('Ví MoMo');
+
+  const [hotelData, setHotelData] = useState<any>(null);
+  const [roomData, setRoomData] = useState<any>(null);
+
+  const [numberOfDays, setNumberOfDays] = useState<number>(0);
+  const [taxAndFees, setTaxAndFees] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+
+  const { hotelId, selectedStartDate, selectedEndDate, people , roomId } = route.params;
 
   useEffect(() => {
     if (pay === 'Momo') {
@@ -31,8 +64,77 @@ const PaymentScreen: React.FC<PropsType> = props => {
     }
   }, [pay]);
 
+  useEffect(() => {
+    // Calculate tax and fees (10% of the price) if dataRoomHotel is not empty
+    if (dataRoomHotel.length > 0) {
+      const roomPrice = parseInt(dataRoomHotel[0].price);
+      const taxAndFeesValue = roomPrice * 0.1 || 0;
+      setTaxAndFees(taxAndFeesValue);
+
+      // Calculate total amount
+      const calculatedTotalAmount = roomPrice * numberOfDays + taxAndFeesValue;
+      setTotalAmount(calculatedTotalAmount);
+    }
+  }, [dataRoomHotel, numberOfDays]);
+
+  useEffect(() => {
+    const fetchHotelRooms = async () => {
+      try {
+        const response = await fetch(`https://newapihtbk-production.up.railway.app/api/hotel/hotelandroom/${hotelId}/${roomId}`);
+        if (!response.ok) {
+          console.error('Error fetching hotel rooms. Status:', response.status);
+          return;
+        }
+  
+        const responseData: RoomApiResponse = await response.json();
+  
+        const startDateParts = selectedStartDate.split('/');
+        const endDateParts = selectedEndDate.split('/');
+  
+        const startDate = new Date(
+          `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`
+        );
+        const endDate = new Date(
+          `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`
+        );
+  
+        const daysDifference = differenceInDays(endDate, startDate);
+  
+        console.log('Hotel data:', responseData.hotel);
+        console.log('Rooms data:', responseData.hotel.rooms); // Access 'rooms' inside 'hotel'
+  
+        setHotelData(responseData.hotel);
+        setNumberOfDays(daysDifference);
+  
+        const mappedData: ListRoomHotel[] = [{
+          id: responseData.room._id,
+          nameHotel: responseData.hotel.hotelName,
+          nameRoom: responseData.room.roomType,
+          price: responseData.room.roomPrice.toString(),
+          start: responseData.hotel?.hotelRates || 0,
+          imageRoom: { uri: responseData.room.roomImage },
+        }];
+  
+        setDataRoomHotel(mappedData);
+        console.log('Selected Start Date:', startDate);
+        console.log('Selected End Date:', endDate);
+        console.log('Days Difference:', daysDifference);
+  
+      } catch (error) {
+        console.error('Error fetching hotel rooms:', error);
+      }
+    };
+  
+    fetchHotelRooms();
+  }, [hotelId, selectedStartDate, selectedEndDate, roomId]);    
+
   const onPress = () => {
     setModalVisible(false);
+  };
+
+  const formatPrice = (price: string) => {
+    // Add your formatting logic here, if needed
+    return price;
   };
 
   return (
@@ -43,48 +145,67 @@ const PaymentScreen: React.FC<PropsType> = props => {
         textLeft='Thanh toán'
       />
       <View style={styles.viewContainer}>
-        <Image source={ROOM_1} style={styles.imgBanner} />
-        <View
-          style={styles.viewChildren}>
-          <Text style={styles.txtNameBanner}>La Vela SaiGon Hotel</Text>
+      <Image source={dataRoomHotel.length > 0 ? dataRoomHotel[0].imageRoom : ROOM_1} style={styles.imgBanner} />
+        <View style={styles.viewChildren}>
+          <Text style={styles.txtNameBanner}>{hotelData?.hotelName}</Text>
           <View style={styles.viewStar}>
             <Image source={ICON_STAR} style={styles.iconStar} />
-            <Text style={styles.txtStar}>5.0</Text>
+            <Text style={styles.txtStar}>{hotelData?.hotelRates}</Text>
           </View>
           <View style={styles.viewBottomHotelList}>
-            <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode='tail'>
-              Luxury Deluxe Room - 1 King Bed
-            </Text>
+          <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode='tail'>
+            {dataRoomHotel.length > 0 ? dataRoomHotel[0].nameRoom : ''}
+          </Text>
           </View>
         </View>
+
       </View>
       <View style={styles.viewTimeRoom}>
         <View style={styles.viewTime}>
           <Text style={styles.txtTitleTime}>Ngày nhận phòng</Text>
-          <Text style={styles.txtTime}>03/08/2023</Text>
+          <Text style={styles.txtTime}>{selectedStartDate}</Text>
         </View>
         <View style={styles.viewTime}>
           <Text style={styles.txtTitleTime}>Ngày trả phòng</Text>
-          <Text style={styles.txtTime}>05/08/2023</Text>
+          <Text style={styles.txtTime}>{selectedEndDate}</Text>
         </View>
         <View style={styles.viewTime}>
           <Text style={styles.txtTitleTime}>Số khách</Text>
-          <Text style={styles.txtTime}>2</Text>
+          <Text style={styles.txtTime}>{people}</Text>
         </View>
       </View>
       <View style={styles.viewTimeRoom}>
-        <View style={styles.viewTime}>
-          <Text style={styles.txtTitleTime}>2 đêm</Text>
-          <Text style={styles.txtTime}>5,619,948 ₫</Text>
-        </View>
+      <View style={styles.viewTime}>
+        <Text style={styles.txtTitleTime}>{numberOfDays} đêm</Text>
+        {dataRoomHotel.length > 0 && dataRoomHotel[0] && (
+          <Text style={styles.txtTime}>
+            {formatPrice(
+              (parseInt(dataRoomHotel[0].price) * numberOfDays).toString()
+            )} ₫
+          </Text>
+        )}
+      </View>
         <View style={styles.viewTime}>
           <Text style={styles.txtTitleTime}>Thuế và Phí (10%)</Text>
-          <Text style={styles.txtTime}>561, 994 ₫</Text>
+          {dataRoomHotel.length > 0 && (
+          <Text style={styles.txtTime}>
+            {formatPrice(
+              (parseInt(dataRoomHotel[0].price) * numberOfDays * 0.1).toString()
+            )} ₫
+          </Text>
+          )}
         </View>
         <View style={styles.line}></View>
         <View style={styles.viewTime}>
           <Text style={styles.txtTitleTime}>Tổng cộng</Text>
-          <Text style={styles.txtTime}>6,181,942 ₫</Text>
+          {dataRoomHotel.length > 0 && dataRoomHotel[0] && (
+            <Text style={styles.txtTime}>
+              {formatPrice(
+                (parseInt(dataRoomHotel[0].price) * numberOfDays +
+                parseInt(dataRoomHotel[0].price) * numberOfDays * 0.1).toString()
+              )} ₫
+            </Text>
+          )}
         </View>
         <View style={styles.viewTimeRoom1}>
           <View style={styles.viewTime1}>
@@ -113,7 +234,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
           marginVertical: 30,
         }}
         onPress={() => {
-          navigation.navigate('BillScreen');
+          navigation.navigate('BillScreen', { totalAmount,hotelId, selectedStartDate, selectedEndDate,roomId});
         }}
       />
     </ScrollView>

@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BookStackParamList } from '../../navigation/BookStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../../components/button/Button';
@@ -10,41 +10,57 @@ import CalendarPicker from 'react-native-calendar-picker';
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchScreen'>
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
   const minDate = new Date(); // Today
   const maxDate = new Date(2026, 6, 3);
   const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY');
   const [selectedEndDate, setSelectedEndDate] = useState('DD/MM/YYYY');
   const [people, setPeople] = useState(1);
 
-  const onDateChange = (date: any, type: string) => {
-    console.log(JSON.stringify(date));
-    const newDate = JSON.stringify(date);
-    const newDate1 = newDate.substring(1, newDate.length - 1);
-    const dates = newDate1.split('T');
-    const date1 = dates[0].split('-');
-    const day = date1[2];
-    const month = date1[1];
-    const year = date1[0];
-    console.log(day + '/' + month + '/' + year);
+  const hotelId = route.params?.hotelID;
+  const roomId = route.params;
 
-    if (type === 'END_DATE') {
-      if (day === undefined) {
-        setSelectedEndDate('DD/MM/YYYY');
-      } else {
-        setSelectedEndDate(day + '/' + month + '/' + year);
-      }
-    } else {
-      setSelectedStartDate(day + '/' + month + '/' + year);
-      setSelectedEndDate('DD/MM/YYYY');
-    }
-  };
+//   const onDateChange = (date: any, type: string) => {
+//     console.log(JSON.stringify(date));
+//   const newDate = new Date(date);
+//   const formattedDate = newDate.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+//   // const dates = formattedDate.split('/');
+//   // const day = dates[0];
+//   // const month = dates[1];
+//   // const year = dates[2];
+//   // console.log(day + '/' + month + '/' + year);
 
-  const handleContinue = () => {
-    // Thêm logic của bạn ở đây để xử lý sự kiện nhấn nút "Continue"
-    console.log('Đã nhấn nút "Continue"');
-    navigation.navigate('RoomListScreen')
-  };
+//   if (type === 'END_DATE') {
+//     setSelectedEndDate(formattedDate);
+//   } else {
+//     setSelectedStartDate(formattedDate);
+//     setSelectedEndDate('DD/MM/YYYY');
+//   }
+
+// };
+const onDateChange = (date: any, type: string) => {
+  const newDate = new Date(date);
+  const day = String(newDate.getDate()).padStart(2, '0');
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const year = newDate.getFullYear();
+  const formattedDate = `${day}/${month}/${year}`;
+
+  console.log('Selected Start Date:', selectedStartDate);
+  console.log('Selected End Date:', selectedEndDate);
+
+  if (type === 'END_DATE') {
+    setSelectedEndDate(formattedDate);
+  } else {
+    setSelectedStartDate(formattedDate);
+    setSelectedEndDate('DD/MM/YYYY');
+  }
+};
+
+const handleContinue = () => {
+  // Your existing logic to navigate to the next screen
+  console.log('Đã nhấn nút "Continue"');
+  navigation.navigate('RoomListScreen', { hotelId, selectedStartDate, selectedEndDate, people,roomId });
+};
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -75,7 +91,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.date}>{'Nhận Phòng'}</Text>
-          <Text style={styles.date}>{'Trả Phòng '}</Text>
+          <Text style={styles.date}>{'Trả Phòng'}</Text>
         </View>
 
         <View style={styles.header}>

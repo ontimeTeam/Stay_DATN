@@ -9,31 +9,32 @@ import axios from 'axios';
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 interface ListHotel {
     id: number;
-    // imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
+    //imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
     imageHotel: ImageSourcePropType;
     nameHotel: string;
-    star: string;
+    star: string;   
     view: string;  // số lượt xem
     price: string; // giá
     isCheckPopular: boolean; // biến isCheckPopular dùng để kiểm tra xem item có phải là phổ biến hay không
-    isCheckTrend: boolean; // biến isCheckTrend dùng để kiểm tra xem item có phải là xu hướng hay không
+    isCheckTrend: boolean;
+    roomId?: number; // biến isCheckTrend dùng để kiểm tra xem item có phải là xu hướng hay không
 }
 const DATAHOTEL: ListHotel[] = ([
-    {
-        id: 1,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.100.000',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
+    // {
+    //     id: 1,
+    //     imageHotel: IMG_HOTEL_7,
+    //     nameHotel: 'Park Hyatt Saigon',
+    //     star: '5.0',
+    //     view: '1420',
+    //     price: '7.100.000',
+    //     isCheckPopular: true,
+    //     isCheckTrend: false,
+    // },
     
 ])
 
 const BookScreen: React.FC<PropsType> = (props) => {
-    const { navigation } = props;
+    const { navigation, route } = props;
     const [text, setText] = React.useState('');
     const [activeTab, setActiveTab] = useState('Tất cả')
     // biến activeTab dùng để kiểm tra xem tab nào đang được chọn mặc định là 'Tất cả'
@@ -42,6 +43,40 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
     const [searchResults, setSearchResults] = useState<ListHotel[]>([]);
 
+    const onPressSearchs = async () => {
+        try {
+            // Show loading indicator here if needed
+    
+            const response = await axios.get(
+                `https://newapihtbk-production.up.railway.app/api/hotel/search?queryType=hotelName&value=${text}`
+            );
+    
+            const newData = response.data.map((item: any) => {
+    
+                return {
+                    id: item._id,
+                    imageHotel: { uri: item.rooms[0]?.roomImage },
+                    nameHotel: item.hotelName,
+                    star: item.hotelRates.toFixed(1),
+                    view: '1420',
+                    price: item.rooms[0]?.roomPrice,
+                    isCheckPopular: true,
+                    isCheckTrend: false,
+                };
+            });
+    
+            console.log("Search result:", newData);
+    
+            // Update the search results state
+            setSearchResults(newData);
+        } catch (error) {
+            console.error('Error searching:', error);
+            // Handle error cases, show an error message, or log it as needed
+        } finally {
+            // Hide loading indicator here if needed
+        }
+    };
+    
     useEffect(() => {
         const fetchHotelData = async () => {
           try {
@@ -49,7 +84,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
               'https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht'
             );
                 
-            console.log("aaa", response);
+            //console.log("aaa", response);
 
             const newData = response.data.map((item: any) => ({
                 id: item._id,
@@ -60,6 +95,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 price: item.rooms[0]?.roomPrice.toString(), // Map roomPrice to price as a string
                 isCheckPopular: true, // Replace with the actual isCheckPopular data from the API
                 isCheckTrend: false, // Replace with the actual isCheckTrend data from the API
+                roomId: item.rooms[0]?._id,
               }));
     
             setApiData(newData);
@@ -72,34 +108,6 @@ const BookScreen: React.FC<PropsType> = (props) => {
         fetchHotelData();
       }, []); // Empty dependency array ensures the effect runs only once
     
-
-      const onPressSearchs = async () => {
-        try {
-            const response = await axios.get(
-                `https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht?queryType=hotelName&value=${text}`
-            );
-    
-            console.log("Search result:", response);
-    
-            const searchData = response.data.map((item: any) => ({
-                id: item._id,
-                imageHotel: { uri: item.rooms[0]?.roomImage },
-                nameHotel: item.hotelName,
-                star: item.hotelRates.toFixed(1),
-                view: '1420',
-                price: item.rooms[0]?.roomPrice.toString(),
-                isCheckPopular: true,
-                isCheckTrend: false,
-            }));
-    
-            setSearchResults(searchData);
-        } catch (error) {
-            console.error('Error searching:', error);
-            // Handle error cases
-        }
-    };
-    
-
     const handleTabPress = (tab: string) => {
         setActiveTab(tab)
     }
@@ -131,9 +139,15 @@ const BookScreen: React.FC<PropsType> = (props) => {
         );
     };
     const ItemHotelAll = ({ item }: { item: ListHotel }) => {
+        //console.log("ItemHotelAll", item);
+        
         const onPressItemAll = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
+            const hotelID = item.id;
+            console.log(hotelID);
+            const roomId = item.roomId;
+            console.log(roomId);
+            // navigation.navigate('RoomListScreen');
+            navigation.navigate('SearchDetailScreen', { hotelID: item.id, roomId });
         }
         return (
             <Pressable style={styles.containerItem} onPress={onPressItemAll}>
@@ -159,8 +173,12 @@ const BookScreen: React.FC<PropsType> = (props) => {
     };
     const ItemHotelPopular = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
         const onPressItemPopular = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
+            // navigation.navigate('RoomListScreen');
+            // console.log(item);
+            const hotelID = item.id;
+            const roomId = item.roomId; // Assuming you have a roomId property in your data
+            console.log(hotelID, roomId);
+            navigation.navigate('RoomListScreen', { hotelID, roomId });
         };
         if (item.isCheckPopular === true) {
             return (
@@ -188,8 +206,12 @@ const BookScreen: React.FC<PropsType> = (props) => {
     };
     const ItemHotelTrend = ({ item, navigation }: { item: ListHotel; navigation: any }) => {
         const onPressItemTrend = () => {
-            console.log(item);
-            navigation.navigate('RoomListScreen');
+            // console.log(item);
+            // navigation.navigate('RoomListScreen');
+            const roomId = item.roomId;
+            navigation.navigate('RoomListScreen', { hotelId: item.id, roomId });
+            console.log(item.id);
+            console.log(roomId);
         };
         if (item.isCheckTrend === true) {
             return (
@@ -220,12 +242,12 @@ const BookScreen: React.FC<PropsType> = (props) => {
             case 'Tất cả':
                 return (
                     <View style={styles.viewFlatList}>
-                        <FlatList
-                            data={text ? searchResults : apiData}
-                            renderItem={ItemHotelAll}
-                            keyExtractor={(item) => item.id.toString()}
-                            showsVerticalScrollIndicator={false}
-                        />
+                    <FlatList
+                        data={text ? searchResults : apiData}
+                        renderItem={ItemHotelAll}
+                        keyExtractor={(item) => item.id.toString()}
+                        showsVerticalScrollIndicator={false}
+                    />
                     </View>
                 );
             case 'Phổ biến':
@@ -254,14 +276,14 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 return null;
         }
     };
-    const onPressSearch = () => {
-        console.log("Search result: " + text)
-        navigation.navigate('SearchScreen');
-    };
+    // const onPressSearch = () => {
+    //     console.log("Search result: " + text)
+    //     navigation.navigate('SearchScreen');
+    // };
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
-                <Pressable onPress={onPressSearch}>
+                <Pressable onPress={onPressSearchs}>
                     <Image source={ICON_SEARCH} style={styles.iconSearch} />
                 </Pressable>
                 <TextInput

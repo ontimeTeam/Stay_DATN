@@ -1,58 +1,108 @@
 import { StyleSheet, Text, View, Image, FlatList, ImageSourcePropType, Pressable } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { BookStackParamList } from '../../navigation/BookStack'
 import Header from '../../components/header/Header'
 import { IC_BACK, IMG_ROOM_1, IMG_ROOM_2, IMG_ROOM_3, IMG_ROOM_4 } from '../../../assets'
 import { COLORS } from '../../themes/theme'
+import { useEffect } from 'react';
 
 interface ListRoomHotel {
-  id: number;
+  id: string;
   nameRoom: string;
   price: string;
   // imageRoom: string; // nếu là string thì truyền vào bằng source={{uri: item.imageRoom}}
-  imageRoom: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
+  imageRoom: ImageSourcePropType;
+  roomId?: number; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
 const DATAROOMHOTEL: ListRoomHotel[] = ([
   {
-    id: 1,
+    id: "1",
     nameRoom: 'Deluxe Double Room',
     price: '1.851.637',
     imageRoom: IMG_ROOM_1,
   },
-  {
-    id: 2,
-    nameRoom: 'Luxury Deluxe Room - 1 King Bed',
-    price: '2.809.974',
-    imageRoom: IMG_ROOM_2,
-  },
-  {
-    id: 3,
-    nameRoom: 'Luxury Room with Balcony',
-    price: '2.975.390',
-    imageRoom: IMG_ROOM_3,
-  },
-  {
-    id: 4,
-    nameRoom: 'Club Lounge Presidential Suite - Club Benefits Included',
-    price: '15.360.210',
-    imageRoom: IMG_ROOM_4,
-  }
+  // {
+  //   id: 2,
+  //   nameRoom: 'Luxury Deluxe Room - 1 King Bed',
+  //   price: '2.809.974',
+  //   imageRoom: IMG_ROOM_2,
+  // },
+  // {
+  //   id: 3,
+  //   nameRoom: 'Luxury Room with Balcony',
+  //   price: '2.975.390',
+  //   imageRoom: IMG_ROOM_3,
+  // },
+  // {
+  //   id: 4,
+  //   nameRoom: 'Club Lounge Presidential Suite - Club Benefits Included',
+  //   price: '15.360.210',
+  //   imageRoom: IMG_ROOM_4,
+  // }
 ])
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'RoomListScreen'>
+
 const RoomListScreen: React.FC<PropsType> = props => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+
+  const { hotelId, selectedStartDate, selectedEndDate, people, roomId } = route.params;
+
+  console.log('hotelID from params:', hotelId);
+
+  const [dataRoomHotel, setDataRoomHotel] = useState<ListRoomHotel[]>([]);
+
+  useEffect(() => {
+    const fetchHotelRooms = async () => {
+      try {
+        const response = await fetch(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelId}/rooms`);
+        if (!response.ok) {
+          console.error('Error fetching hotel rooms. Status:', response.status);
+          return;
+        }
   
-  const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
+        const newData = await response.json();
+  
+        // Check if newData is an array or needs to be extracted from the response
+        const roomsArray = newData.rooms || newData; // Adjust the property name based on the API response structure
+  
+        // Check if the extracted data is an array before using map
+        if (Array.isArray(roomsArray)) {
+          const mappedData: ListRoomHotel[] = roomsArray.map((room: any) => ({
+            id: room._id,
+            nameRoom: room.roomType,
+            price: room.roomPrice.toString(),
+            imageRoom: { uri: room.roomImage },
+          }));
+  
+          // Update the state with the fetched data
+          setDataRoomHotel(mappedData);
+        } else {
+          console.error('Fetched data is not an array:', roomsArray);
+  
+          // Log the entire response to help diagnose the issue
+          // console.log('Full response:', newData);
+        }
+      } catch (error) {
+        console.error('Error fetching hotel rooms:', error);
+      }
+    };
+  
+    fetchHotelRooms();
+  }, [hotelId]);
+  
+   const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
     const onPressSelectRoom = () => {
-      console.log(item);
-      navigation.navigate('PaymentScreen')
+      // console.log(item);
+      console.log('Selected roomId:', item.id);
+      navigation.navigate('PaymentScreen', {hotelId, selectedStartDate, selectedEndDate, people, roomId: item.id})
     }
     const onPressItemAll = () => {
       console.log(item);
       navigation.navigate('RoomDetailScreen')
     }
+
     return (
       <Pressable onPress={onPressItemAll} style={styles.containerItemRoom}>
         <Image source={item.imageRoom} style={styles.imageRoom} />
@@ -80,12 +130,13 @@ const RoomListScreen: React.FC<PropsType> = props => {
         styleContainer={{ backgroundColor: COLORS.White}}
       />
       <View style={styles.containerChildren}>
-        <Text style={styles.textRoom}>Gồm 4 loại phòng</Text>
+        <Text style={styles.textRoom}>Gồm {dataRoomHotel.length} loại phòng</Text>
         {/* nếu có numberRoom thì thay bằng numberRoom */}
         <FlatList
-          data={DATAROOMHOTEL}
+          data={dataRoomHotel}
           renderItem={ItemRoomHotel}
-          keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id?.toString() || item.nameRoom}
           showsVerticalScrollIndicator={false}
         />
       </View>

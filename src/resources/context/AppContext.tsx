@@ -27,6 +27,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   // const [isLoggedIn, setLoggedIn] = useState(false);
   // false: LoginScreen, true: BottomNavigation
   const [pay, setPay] = useState<string>('Momo');
+  
+  const [userData, setUserData] = useState(null);
 
   const appContextValue: AppContextProps = {
     isLoggedIn,

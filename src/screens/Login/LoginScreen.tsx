@@ -10,8 +10,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { AppContext } from '../../resources/context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Axios } from 'axios';
-import { HomeStackParamList } from '../../navigation/HomeStack';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'LoginScreen'>;
 
@@ -54,6 +52,7 @@ const LoginScreen: React.FC<PropsType> = (props) => {
   
       setLoggedIn(false);
       console.log('goHome');
+
       // Trả về dữ liệu từ API nếu cần
       return response.data;
     } catch (error) {

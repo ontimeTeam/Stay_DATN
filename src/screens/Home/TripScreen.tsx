@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Pressable, ScrollView, Image, ImageSourcePropType, FlatList, ListRenderItemInfo } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3 } from '../../../assets';
+import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3, } from '../../../assets';
 import Header from '../../components/header/Header';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TripStackParamList } from '../../navigation/TripStack';
-import axios from 'axios';
 
 export interface Item {
     id: number;
@@ -24,37 +23,36 @@ const TripScreen: React.FC<PropsType> = props => {
     // biến selectedItemId dùng để lưu id của item được chọn, mặc định là null
     const [keyExtractorUpdateCount, setKeyExtractorUpdateCount] = useState(0);
     // biến keyExtractorUpdateCount dùng để cập nhật keyExtractor của FlatList, mặc định là 0
-   //...
     const [data, setData] = useState<Item[]>([
-        {
-            id: 1,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Deluxe Room - 1 King Bed',
-        },
-        {
-            id: 2,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Deluxe Room - 1 King Bed',
-        },
-        {
-            id: 3,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Deluxe Room - 1 King Bed',
-        },
-        {
-            id: 4,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Deluxe Room - 1 King Bed',
-        },
+        // {
+        //     id: 1,
+        //     image: IMG_ROOM,
+        //     nameHotel: 'Fusion Original Saigon',
+        //     roomName: 'Luxury Deluxe Room - 1 King Bed',
+        // },
+        // {
+        //     id: 2,
+        //     image: IMG_ROOM_PLAN1,
+        //     nameHotel: 'Majestic SaiGon Hotel',
+        //     roomName: 'Colonial Suite',
+        // },
+        // {
+        //     id: 3,
+        //     image: IMG_ROOM_PLAN2,
+        //     nameHotel: 'Superior Queen',
+        //     roomName: 'Luxury Deluxe Room - 1 King Bed',
+        // },
+        // {
+        //     id: 4,
+        //     image: IMG_ROOM_PLAN3,
+        //     nameHotel: 'Rex Hotel Saigon',
+        //     roomName: 'Governor Suite',
+        // },
         {
             id: 5,
             image: IMG_ROOM,
             nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Deluxe Room - 1 King Bed',
+            roomName: 'Executive Premium ( Double/Twin )',
         },
     ]);
     const [dataConfirm, setdataConfirm] = useState<Item[]>([
@@ -90,36 +88,36 @@ const TripScreen: React.FC<PropsType> = props => {
         },
     ]);
     const [dataComplete, setdataComplete] = useState<Item[]>([
-        {
-            id: 1,
-            image: IMG_ROOM2,
-            nameHotel: 'Park Hyatt Saigon ',
-            roomName: 'Deluxe Double Room',
-        },
-        {
-            id: 2,
-            image: IMG_ROOM2,
-            nameHotel: 'Park Hyatt Saigon ',
-            roomName: 'Deluxe Double Room',
-        },
-        {
-            id: 3,
-            image: IMG_ROOM2,
-            nameHotel: 'Park Hyatt Saigon ',
-            roomName: 'Deluxe Double Room',
-        },
-        {
-            id: 4,
-            image: IMG_ROOM2,
-            nameHotel: 'Park Hyatt Saigon ',
-            roomName: 'Deluxe Double Room',
-        },
-        {
-            id: 5,
-            image: IMG_ROOM2,
-            nameHotel: 'Park Hyatt Saigon ',
-            roomName: 'Deluxe Double Room',
-        },
+            // {
+            //     id: 1,
+            //     image: IMG_ROOM2,
+            //     nameHotel: 'Hotel Grand Saigon',
+            //     roomName: 'Deluxe Double Room',
+            // },
+            // {
+            //     id: 2,
+            //     image: IMG_DONE2,
+            //     nameHotel: 'Hotel Grand Saigon',
+            //     roomName: 'Premium Deluxe King',
+            // },
+            // {
+            //     id: 3,
+            //     image: IMG_DONE3,
+            //     nameHotel: 'The Reverie Saigon',
+            //     roomName: 'Senior Deluxe',
+            // },
+            // {
+            //     id: 4,
+            //     image: IMG_DONE4,
+            //     nameHotel: 'Park Hyatt Saigon ',
+            //     roomName: 'Grand Deluxe Twin',
+            // },
+            // {
+            //     id: 5,
+            //     image: IMG_DONE1,
+            //     nameHotel: 'Park Hyatt Saigon ',
+            //     roomName: 'Deluxe Double Room',
+            // },
     ]);
     const [dataCancel, setdataCancel] = useState<Item[]>([
         {
@@ -134,27 +132,26 @@ const TripScreen: React.FC<PropsType> = props => {
             nameHotel: 'Pullman Hanoi Hotel ',
             roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
         },
-        {
-            id: 3,
-            image: IMG_ROOM3,
-            nameHotel: 'Pullman Hanoi Hotel ',
-            roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        },
-        {
-            id: 4,
-            image: IMG_ROOM3,
-            nameHotel: 'Pullman Hanoi Hotel ',
-            roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        },
-        {
-            id: 5,
-            image: IMG_ROOM3,
-            nameHotel: 'Pullman Hanoi Hotel ',
-            roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        },
+        // {
+        //     id: 3,
+        //     image: IMG_ROOM3,
+        //     nameHotel: 'Pullman Hanoi Hotel ',
+        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
+        // },
+        // {
+        //     id: 4,
+        //     image: IMG_ROOM3,
+        //     nameHotel: 'Pullman Hanoi Hotel ',
+        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
+        // },
+        // {
+        //     id: 5,
+        //     image: IMG_ROOM3,
+        //     nameHotel: 'Pullman Hanoi Hotel ',
+        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
+        // },
 
-     ]);
-
+    ]);
     const initialLayout = { width: Dimensions.get('window').width };
 
     const [index, setIndex] = useState(0);
@@ -238,9 +235,8 @@ const TripScreen: React.FC<PropsType> = props => {
                             {item.roomName}
                         </Text>
                         <View style={styles.tag}>
-                            <Image source={ICON_PLANE} style={{ width: 14, height: 14, marginRight: 5 }} />
                             <Text style={styles.textTag}>
-                                Muốn đến
+                                Đã đặt
                             </Text>
                         </View>
                     </View>
@@ -248,10 +244,10 @@ const TripScreen: React.FC<PropsType> = props => {
                 <View style={{ borderBottomColor: 'rgba(0, 0, 0, 0.25)', borderBottomWidth: 1, marginVertical: 20 }}>
                 </View>
                 <Pressable style={styles.viewbtnTag}
-                    onPress={() => { navigation.navigate('RoomListScreen') }}
+                    onPress={() => { navigation.navigate('BillScreen') }}
                 >
                     <Text style={styles.textbtnTag}>
-                        Đặt phòng ngay!
+                        Xem hóa đơn
                     </Text>
                 </Pressable>
             </View>
@@ -313,13 +309,13 @@ const TripScreen: React.FC<PropsType> = props => {
                             Hủy đặt phòng
                         </Text>
                     </Pressable>
-                    <Pressable style={styles.viewbtnTag}
+                    {/* <Pressable style={styles.viewbtnTag}
                         onPress={() => { navigation.navigate('BillScreen') }}
                     >
                         <Text style={styles.textbtnTag}>
                             Xem hóa đơn
                         </Text>
-                    </Pressable>
+                    </Pressable> */}
                 </View>
             </View>
         );
@@ -497,7 +493,7 @@ const TripScreen: React.FC<PropsType> = props => {
                         paddingHorizontal: 20,
                     }}
                 >
-                    {renderTabButton('Muốn đến', 'Muốn đến')}
+                    {renderTabButton('Muốn đến', 'Đã đặt')}
                     {renderTabButton('Chờ xác nhận', 'Chờ xác nhận')}
                 </ScrollView>
             </View>
@@ -615,7 +611,7 @@ const styles = StyleSheet.create({
     },
     outlineButton: {
         height: 'auto',
-        marginTop: 10,
+        marginVertical: 10,
 
     },
     btn: {
