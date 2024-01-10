@@ -57,7 +57,7 @@ const LoginScreen: React.FC<PropsType> = (props) => {
       return response.data;
     } catch (error) {
       // Xử lý lỗi nếu cần
-      Alert.alert("tài khoản hoặc mật khẩu không chính xác");
+      Alert.alert("Tài khoản hoặc mật khẩu không chính xác!!");
     }
   };
 

@@ -88,7 +88,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
             const newData = response.data.map((item: any) => ({
                 id: item._id,
-                imageHotel: { uri: item.rooms[0]?.roomImage },
+                imageHotel: { uri: item.hotelDetail.hotelImage },
                 nameHotel: item.hotelName,
                 star: item.hotelRates.toFixed(1), // Map hotelRates to star with one decimal place
                 view: '1420', // Replace with the actual view data from the API
