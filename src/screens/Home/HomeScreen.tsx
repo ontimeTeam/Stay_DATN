@@ -1,11 +1,15 @@
-import { StyleSheet, ScrollView, View, Dimensions, Pressable, Image, ImageSourcePropType, Text, FlatList } from 'react-native'
+import { StyleSheet, ScrollView, View, Dimensions, Pressable, Image, ImageSourcePropType, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useState, useRef, useEffect } from 'react'
 import { COLORS } from '../../themes/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParamList } from '../../navigation/HomeStack';
 import Header from '../../components/header/Header';
 import { AVATAR, ICON_PLANE, ICON_PLANE_WHITE, ICON_STAR, IMG_DN, IMG_HCM, IMG_HN, IMG_HOTEL_1, IMG_HOTEL_2, IMG_HOTEL_3, IMG_HOTEL_4, IMG_HOTEL_5, IMG_HOTEL_6, IMG_VT, LOGO } from '../../../assets';
-
+import axios from 'axios';
+import { useSelector } from 'react-redux'
+import { RootState } from 'src/share-state/redux/stores';
+import { dataUser } from 'src/share-state/redux/reducers/userReducer';
+import { useAppDispatch } from 'src/share-state/redux/stores';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeScreen'>;
 interface Banner {
@@ -16,14 +20,20 @@ interface Banner {
     star: string;
 }
 interface ListHotel {
-    id: number;
-    // imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-    imageHotel: ImageSourcePropType;
-    nameHotel: string;
-    nameRoom: string;
-    star: string;
-    isCheckPopular: boolean; // biến isCheckPopular dùng để kiểm tra xem item có phải là phổ biến hay không
-    isCheckTrend: boolean; // biến isCheckTrend dùng để kiểm tra xem item có phải là xu hướng hay không
+    _id: Object;
+    hotelName: string;
+    hotelAddress: string,
+    hotelDetail: {
+        hotelImage: string;
+        hotelDescription: string;
+    };
+    hotelRates: number;
+    view: number;
+    rooms: {
+        roomPrice: number;
+        roomType: string;
+        roomImage: string;
+    }[];
 }
 interface ListLocation {
     id: number;
@@ -69,62 +79,62 @@ const DATABANNER: Banner[] = [
         star: '5.0',
     },
 ];
-const DATAHOTEL: ListHotel[] = ([
-    {
-        id: 1,
-        imageHotel: IMG_HOTEL_1,
-        nameHotel: 'Majestic SaiGon Hotel',
-        nameRoom: 'Deluxe Double Room',
-        star: '5.0',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 2,
-        imageHotel: IMG_HOTEL_2,
-        nameHotel: 'Au Lac Charner Hotel',
-        nameRoom: 'Deluxe Double Room',
-        star: '5.0',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 3,
-        imageHotel: IMG_HOTEL_3,
-        nameHotel: 'Bong Sen Hotel Saigon',
-        nameRoom: 'Luxury Room with Balcony',
-        star: '5.0',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 4,
-        imageHotel: IMG_HOTEL_4,
-        nameHotel: 'Caravelle Saigon Hotel',
-        nameRoom: 'Deluxe Double Room',
-        star: '5.0',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-    {
-        id: 5,
-        imageHotel: IMG_HOTEL_5,
-        nameHotel: 'La Siesta Premium',
-        nameRoom: 'Luxury Deluxe Room - 1 King Bed',
-        star: '5.0',
-        isCheckPopular: true,
-        isCheckTrend: false,
-    },
-    {
-        id: 6,
-        imageHotel: IMG_HOTEL_6,
-        nameHotel: 'Triple E Hotel Metro',
-        nameRoom: 'Club Lounge Presidential Suite - Club Benefits Included',
-        star: '5.0',
-        isCheckPopular: false,
-        isCheckTrend: true,
-    },
-]);
+// const DATAHOTEL: ListHotel[] = ([
+//     {
+//         id: 1,
+//         imageHotel: IMG_HOTEL_1,
+//         nameHotel: 'Majestic SaiGon Hotel',
+//         nameRoom: 'Deluxe Double Room',
+//         star: '5.0',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 2,
+//         imageHotel: IMG_HOTEL_2,
+//         nameHotel: 'Au Lac Charner Hotel',
+//         nameRoom: 'Deluxe Double Room',
+//         star: '5.0',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 3,
+//         imageHotel: IMG_HOTEL_3,
+//         nameHotel: 'Bong Sen Hotel Saigon',
+//         nameRoom: 'Luxury Room with Balcony',
+//         star: '5.0',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 4,
+//         imageHotel: IMG_HOTEL_4,
+//         nameHotel: 'Caravelle Saigon Hotel',
+//         nameRoom: 'Deluxe Double Room',
+//         star: '5.0',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+//     {
+//         id: 5,
+//         imageHotel: IMG_HOTEL_5,
+//         nameHotel: 'La Siesta Premium',
+//         nameRoom: 'Luxury Deluxe Room - 1 King Bed',
+//         star: '5.0',
+//         isCheckPopular: true,
+//         isCheckTrend: false,
+//     },
+//     {
+//         id: 6,
+//         imageHotel: IMG_HOTEL_6,
+//         nameHotel: 'Triple E Hotel Metro',
+//         nameRoom: 'Club Lounge Presidential Suite - Club Benefits Included',
+//         star: '5.0',
+//         isCheckPopular: false,
+//         isCheckTrend: true,
+//     },
+// ]);
 const DATALOCATION: ListLocation[] = ([
     {
         id: 1,
@@ -148,7 +158,7 @@ const DATALOCATION: ListLocation[] = ([
     }
 ]);
 const ItemBanner = ({ item, onPress }: {
-    item: Banner;
+    item: ListHotel;
     onPress: () => void;
 }) => {
     const [placeIcon, setPlaceIcon] = useState(ICON_PLANE_WHITE);
@@ -171,13 +181,13 @@ const ItemBanner = ({ item, onPress }: {
         <Pressable style={styles.viewContainer} onPress={onPress}>
             <Image
                 // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-                source={item.imageHotel}
+                source={{ uri: item.hotelDetail.hotelImage }}
                 style={styles.imgBanner}
             />
             <View
                 style={styles.viewChildren}>
                 <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>
-                    {item.nameHotel}
+                    {item.hotelName}
                 </Text>
                 <View style={styles.viewStar}>
                     <Image
@@ -185,16 +195,16 @@ const ItemBanner = ({ item, onPress }: {
                         style={styles.iconStar}
                     />
                     <Text style={styles.txtStar}>
-                        {item.star}
+                        {item.hotelRates}
                     </Text>
                 </View>
                 <View style={styles.viewBottomBanner}>
-                    <Pressable onPress={toggleCheckIconplace}>
+                    {/* <Pressable onPress={toggleCheckIconplace}>
                         <Image
                             source={placeIcon}
                             style={styles.iconPlace}
                         />
-                    </Pressable>
+                    </Pressable> */}
                 </View>
             </View>
         </Pressable>
@@ -202,8 +212,14 @@ const ItemBanner = ({ item, onPress }: {
 };
 const HomeScreen: React.FC<PropsType> = props => {
     const { navigation } = props;
-    const [hideElement, setHideElement] = useState(false);
-    // biến hideElement dùng để ẩn hiện header khi scroll
+    const [hideElement, setHideElement] = useState(false);    // biến hideElement dùng để ẩn hiện header khi scroll
+
+    const [hotels, setHotels] = useState<ListHotel[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const dispatch = useAppDispatch();
+    const dataUser = useSelector((state: RootState) => state.user.dataUser);
+
     const handleScroll = (event: any) => {
         const offsetY = event.nativeEvent.contentOffset.y + 10;
         setHideElement(offsetY > 20);
@@ -235,21 +251,42 @@ const HomeScreen: React.FC<PropsType> = props => {
         });
     }, [currentIndex]);
 
-    const handleToListTourBanner = () => {
-        navigation.navigate('HotelDetailScreen');
+    const getHotelsAPI = async () => {
+        try {
+            const response = await axios.get('https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht');
+            const data: ListHotel[] = response.data;
+            setHotels(data);
+            setLoading(false);
+        } catch (error) {
+            console.log('Error fetching hotel data: ', error);
+        };
     };
+    useEffect(() => {
+        getHotelsAPI();
+    }, []);
+
+    const randomHotelView = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
     const renderItemBanner = React.useMemo(
         () =>
-            ({ item }: { item: Banner }) => {
+            ({ item, userID }: { item: ListHotel, userID: string | undefined }) => {
                 return (
                     <ItemBanner
                         onPress={() => {
-                            console.log(item);
-                            handleToListTourBanner();
+                            console.log(item._id);
+                            navigation.navigate('HotelDetailScreen', {
+                                hotelID: item._id.toString(),
+                                hotelAddress: item.hotelAddress,
+                                hotelImage: item.hotelDetail.hotelImage,
+                                hotelName: item.hotelName,
+                                hotelRates: item.hotelRates,
+                                hotelViews: randomHotelView,
+                                roomPrice: item.rooms[0].roomPrice,
+                                userID: userID
+                            });
                         }}
                         item={item}
-                        key={item.id}
+                        key={item._id.toString()}
                     />
                 );
             },
@@ -293,31 +330,40 @@ const HomeScreen: React.FC<PropsType> = props => {
             navigation.navigate('RoomDetailScreen');
         }
         return (
-            <Pressable style={styles.viewContainer} onPress={onPressItemAll}>
-                <Image
-                    // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-                    source={item.imageHotel}
-                    style={styles.imgBanner}
-                />
-                <View
-                    style={styles.viewChildren}>
-                    <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
-                    <View style={styles.viewStar}>
-                        <Image
-                            source={ICON_STAR}
-                            style={styles.iconStar}
-                        />
-                        <Text style={styles.txtStar}>
-                            {item.star}
-                        </Text>
-                    </View>
-                    <View style={styles.viewBottomHotelList}>
-                        <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode='tail'>
-                            {item.nameRoom}
-                        </Text>
-                    </View>
-                </View>
-            </Pressable>
+
+            <View>
+                {
+                    loading ? (
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    ) : (
+                        <Pressable style={styles.viewContainer} onPress={onPressItemAll}>
+                            <Image
+                                // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
+                                source={{ uri: item.rooms[0].roomImage }}
+                                style={styles.imgBanner}
+                            />
+                            <View
+                                style={styles.viewChildren}>
+                                <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.hotelName}</Text>
+                                <View style={styles.viewStar}>
+                                    <Image
+                                        source={ICON_STAR}
+                                        style={styles.iconStar}
+                                    />
+                                    <Text style={styles.txtStar}>
+                                        {item.hotelRates}
+                                    </Text>
+                                </View>
+                                <View style={styles.viewBottomHotelList}>
+                                    <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode='tail'>
+                                        {item.rooms[0].roomType}
+                                    </Text>
+                                </View>
+                            </View>
+                        </Pressable>
+                    )}
+            </View>
+
         );
     };
     const ItemHotelPopular = ({ item }: { item: ListHotel }) => {
@@ -326,30 +372,29 @@ const HomeScreen: React.FC<PropsType> = props => {
             navigation.navigate('RoomDetailScreen');
         };
 
-        if (item.isCheckPopular === true) {
-            return (
-                <Pressable style={styles.viewContainer} onPress={onPressItemPopular}>
-                    <Image
-                        // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-                        source={item.imageHotel}
-                        style={styles.imgBanner}
-                    />
-                    <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
-                        <View style={styles.viewStar}>
-                            <Image source={ICON_STAR} style={styles.iconStar} />
-                            <Text style={styles.txtStar}>{item.star}</Text>
-                        </View>
-                        <View style={styles.viewBottomHotelList}>
-                            <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode="tail">
-                                {item.nameRoom}
-                            </Text>
-                        </View>
+        // if (item.isCheckPopular === true) {
+        return (
+            <Pressable style={styles.viewContainer} onPress={onPressItemPopular}>
+                <Image
+                    // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
+                    source={{ uri: item.rooms[0].roomImage }}
+                    style={styles.imgBanner}
+                />
+                <View style={styles.viewChildren}>
+                    <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode='tail'>{item.hotelName}</Text>
+                    <View style={styles.viewStar}>
+                        <Image source={ICON_STAR} style={styles.iconStar} />
+                        <Text style={styles.txtStar}>{item.hotelRates}</Text>
                     </View>
-                </Pressable>
-            );
-        }
-        return null;
+                    <View style={styles.viewBottomHotelList}>
+                        <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode="tail">
+                            {item.rooms[0].roomType}
+                        </Text>
+                    </View>
+                </View>
+            </Pressable>
+        );
+        // }
     };
     const ItemHotelTrend = ({ item }: { item: ListHotel }) => {
         const onPressItemTrend = () => {
@@ -357,29 +402,29 @@ const HomeScreen: React.FC<PropsType> = props => {
             navigation.navigate('RoomDetailScreen');
         };
 
-        if (item.isCheckTrend === true) {
-            return (
-                <Pressable style={styles.viewContainer} onPress={onPressItemTrend}>
-                    <Image
-                        // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-                        source={item.imageHotel}
-                        style={styles.imgBanner}
-                    />
-                    <View style={styles.viewChildren}>
-                        <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode="tail">{item.nameHotel}</Text>
-                        <View style={styles.viewStar}>
-                            <Image source={ICON_STAR} style={styles.iconStar} />
-                            <Text style={styles.txtStar}>{item.star}</Text>
-                        </View>
-                        <View style={styles.viewBottomHotelList}>
-                            <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode="tail">
-                                {item.nameRoom}
-                            </Text>
-                        </View>
+        // if (item.isCheckTrend === true) {
+        return (
+            <Pressable style={styles.viewContainer} onPress={onPressItemTrend}>
+                <Image
+                    source={{ uri: item.rooms[0].roomImage }}     // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
+                    // source={item.imageHotel}
+                    style={styles.imgBanner}
+                />
+                <View style={styles.viewChildren}>
+                    <Text style={styles.txtNameBanner} numberOfLines={1} ellipsizeMode="tail">{item.hotelName}</Text>
+                    <View style={styles.viewStar}>
+                        <Image source={ICON_STAR} style={styles.iconStar} />
+                        <Text style={styles.txtStar}>{item.hotelRates}</Text>
                     </View>
-                </Pressable>
-            );
-        }
+                    <View style={styles.viewBottomHotelList}>
+                        <Text style={styles.txtNameHotelList} numberOfLines={1} ellipsizeMode="tail">
+                            {item.rooms[0].roomType}
+                        </Text>
+                    </View>
+                </View>
+            </Pressable>
+        );
+        // }
         return null;
     };
     const renderList = () => {
@@ -388,9 +433,9 @@ const HomeScreen: React.FC<PropsType> = props => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={hotels}
                             renderItem={ItemHotelAll}
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item._id.toString()}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                         />
@@ -400,9 +445,9 @@ const HomeScreen: React.FC<PropsType> = props => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={hotels}
                             renderItem={ItemHotelPopular}
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item._id.toString()}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                         />
@@ -412,9 +457,9 @@ const HomeScreen: React.FC<PropsType> = props => {
                 return (
                     <View style={styles.viewFlatList}>
                         <FlatList
-                            data={DATAHOTEL}
+                            data={hotels}
                             renderItem={ItemHotelTrend}
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item._id.toString()}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                         />
@@ -451,7 +496,7 @@ const HomeScreen: React.FC<PropsType> = props => {
             <Header
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={LOGO}
-                iconRight={AVATAR}
+                iconRight={{ uri: dataUser?.img }}
                 styleIconLeft={{ width: 60, height: 60 }}
                 styleIconRight={{ width: 40, height: 40 }}
                 eventLeft={() => navigation.navigate('HomeScreen')}
@@ -482,7 +527,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                             setCurrentIndex(index);
                         }}>
                         <View style={{ flexDirection: 'row' }}>
-                            {DATABANNER.map((item, index) => renderItemBanner({ item }))}
+                            {hotels.map((item, index) => renderItemBanner({ item, userID: undefined }))}
                         </View>
                     </ScrollView>
                 </View>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import LoginStack from './LoginStack';
 import BottomNavigation from './BottomNavigation';
-import { AppContext } from '../resources/context/AppContext';
+import { AppContext } from '../share-state/context/AppContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { View } from 'react-native';
 

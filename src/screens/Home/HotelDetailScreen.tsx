@@ -26,9 +26,6 @@ type RoomListScreenNavigationParams = {
     hotelViews: number,
     roomPrice: number
 };
-interface ListImg {
-    uri?: string | undefined;
-};
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'HotelDetailScreen'>
 const HotelDetailScreen: React.FC<PropsType> = (props) => {
@@ -40,7 +37,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
 
     const getRoomsAPI = async (hotelID: string) => {
         try {
-            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
+            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/${hotelID}/rooms`);
             const data: HotelDetail[] = response.data;
             setHotelImage(data);
             // console.log(response);
@@ -79,7 +76,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
                         eventLeft={() => navigation.goBack()}
                     />
                 </ImageBackground>
-                <Text style={styles.titleNameHotel} numberOfLines={1} ellipsizeMode='tail'>
+                <Text style={styles.titleNameHotel} numberOfLines={2} ellipsizeMode='tail'>
                     {hotelName}
                 </Text>
                 <View style={styles.viewLocation}>

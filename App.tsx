@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AppContextProvider } from './src/resources/context/AppContext';
+import { AppContextProvider } from './src/share-state/context/AppContext';
 import AppNavigation from './src/navigation/AppNavigation';
 // import Test from './src/container/Test';
 import RuleScreen from './src/screens/Home/RuleScreen';

@@ -59,8 +59,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
     };
 
     const handleContinue = () => {
-        // Thêm logic của bạn ở đây để xử lý sự kiện nhấn nút "Continue"
-        console.log('Đã nhấn nút "Continue"', hotelID);
+            console.log('Đã nhấn nút "Continue"', hotelID);
         navigation.navigate('RoomListScreen', {
             hotelID: hotelID,
             hotelName: hotelName,
@@ -80,11 +79,11 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={IC_BACK}
                 eventLeft={() => navigation.goBack()}
-                textLeft='Tìm kiếm theo'
+                textLeft='Chọn ngày'
             />
-            <View style={{ flex: 1 }}>
+            <View style={{marginTop: 20, flex: 1, height: 100 }}>
                 <CalendarPicker
-                    startFromMonday={true}
+                                    startFromMonday={true}
                     allowRangeSelection={true}
                     minDate={minDate}
                     maxDate={maxDate}
@@ -107,8 +106,8 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
                 </View>
 
                 <View style={styles.header}>
-                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular }}>{selectedStartDate}</Text>
-                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular }}>{selectedEndDate}</Text>
+                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular, fontSize: 18, padding: 10, borderWidth: 1, borderColor: COLORS.MediumGray, borderRadius: 10 }}>{selectedStartDate}</Text>
+                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular, fontSize: 18, padding: 10, borderWidth: 1, borderColor: COLORS.MediumGray, borderRadius: 10 }}>{selectedEndDate}</Text>
                 </View>
 
                 {/* Them luong nguoi */}
@@ -156,7 +155,7 @@ const styles = StyleSheet.create({
         color: COLORS.Black,
         marginTop: 10,
         // marginLeft:15,
-        marginBottom: 20,
+        marginBottom: 15,
     },
     date: {
         marginBottom: 5,
@@ -193,7 +192,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.MainBlue,
         padding: 10,
         borderRadius: 25,
-        marginTop: 30,
+        marginTop: 20,
         alignItems: 'center',
         width: 320,
     },

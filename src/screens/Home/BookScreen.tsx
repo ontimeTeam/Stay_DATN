@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, ScrollView, Pressable, FlatList, ImageSourcePropType } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, ScrollView, Pressable, FlatList, ImageSourcePropType, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { COLORS } from '../../themes/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -17,7 +17,7 @@ interface ListHotel {
         hotelDescription: string;
     };
     hotelRates: number;
-    view: number;
+    hotelViews: number;
     rooms: {
         roomPrice: number;
         roomType: string;
@@ -26,7 +26,8 @@ interface ListHotel {
 }
 
 type RoomListScreenNavigationParams = {
-    hotelID: string,
+    hotelID: string;
+    // randomHotelViews: number[];
     // startDate: string;
     // endDate: string;
     // people: number;
@@ -35,29 +36,48 @@ type RoomListScreenNavigationParams = {
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BookScreen'>
 const BookScreen: React.FC<PropsType> = (props) => {
     const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    // const { hotelID } = route.params as RoomListScreenNavigationParams;
+    // const { randomHotelViews } = route.params as RoomListScreenNavigationParams;
     const { navigation } = props;
     const [text, setText] = React.useState('');
     const [activeTab, setActiveTab] = useState('Tất cả')
     const [hotels, setHotels] = useState<ListHotel[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchResults, setSearchResults] = useState<ListHotel[]>([]);
+    const [randomHotelView, setRandomHotelView] = useState<number>(0);
+
+    // const [hotelViews, setHotelViews] = useState(randomHotelView(data.length));
+
 
     const getHotelsAPI = async () => {
         try {
             setLoading(true);
             const response = await axios.get('https://newapihtbk-production.up.railway.app/api/hotel/rooms/chitietht');
             const data: ListHotel[] = response.data;
+            console.log("Hotel data: ", data);
             setHotels(data);
-            console.log(data);
         } catch (error) {
             console.log('Error fetching hotel data: ', error);
         } finally {
             setLoading(false);
         };
     };
+    const searchHotelByName = async () => {
+        try {
+            setIsSearching(true);
+            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/search?queryType=hotelName&value=${text}`);
+            const data: ListHotel[] = response.data;
+            console.log("Search result:", response);
+            setSearchResults(data);
+        } catch (error) {
+            console.error('Error searching:', error);
+            // Handle error cases
+        }
+    };
+
     useEffect(() => {
         getHotelsAPI();
-    }, []);
+    }, [searchResults]);
 
     // biến activeTab dùng để kiểm tra xem tab nào đang được chọn mặc định là 'Tất cả'
     const handleTabPress = (tab: string) => {
@@ -92,7 +112,6 @@ const BookScreen: React.FC<PropsType> = (props) => {
     };
     const ItemHotelAll = ({ item }: { item: ListHotel }) => {
         const minPrice = Math.min(...item.rooms.map(room => room.roomPrice));
-        const randomHotelView = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
         const onPressItemAll = () => {
             console.log(item._id);
@@ -118,7 +137,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                 hotelViews: randomHotelView,
             });
         };
-
+        // format number: 1,000,000
         type FormattingFunction = (num: number) => string;
         const formatNumber: FormattingFunction = (num) => {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -136,12 +155,15 @@ const BookScreen: React.FC<PropsType> = (props) => {
             }
             return minPrice;
         };
+        const randomHotelView = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
         return (
-            <Pressable style={styles.containerItem} onPress={onPressItemAll}>
+            <Pressable onPress={onPressItemAll} style={styles.containerItem}>
                 <Image source={{ uri: item.hotelDetail.hotelImage }} style={styles.imageHotel} />
                 <View style={styles.containerInfo}>
-                    <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.hotelName}</Text>
+                    <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode="tail">
+                        {item.hotelName}
+                    </Text>
                     <View style={styles.containerCenter}>
                         <View style={styles.containerStar}>
                             <Image source={ICON_STAR_TRON} style={styles.iconStar} />
@@ -159,7 +181,6 @@ const BookScreen: React.FC<PropsType> = (props) => {
             </Pressable>
         );
     };
-
 
 
     // const ItemHotelPopular = ({item, navigation}: {item: ListHotel; navigation: any }) => {
@@ -223,16 +244,32 @@ const BookScreen: React.FC<PropsType> = (props) => {
     const renderList = () => {
         switch (activeTab) {
             case 'Tất cả':
-                return (
-                    <View style={styles.viewFlatList}>
-                        <FlatList
-                            data={hotels}
-                            renderItem={ItemHotelAll}
-                            keyExtractor={(item) => item._id.toString()}
-                            showsVerticalScrollIndicator={false}
-                        />
-                    </View>
-                );
+                if (isSearching) {
+                    return (
+                        <View style={styles.viewFlatList}>
+                            <Text style={{ marginVertical: 5, fontFamily: 'Exo2-Regular', fontSize: 14, color: "#777E90" }}>
+                                Có {countSearchResults(searchResults)} kết quả tìm kiếm
+                            </Text>
+                            <FlatList
+                                data={searchResults}
+                                renderItem={ItemHotelAll}
+                                keyExtractor={(item) => item._id.toString()}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
+                    );
+                } else {
+                    return (
+                        <View style={styles.viewFlatList}>
+                            <FlatList
+                                data={hotels}
+                                renderItem={ItemHotelAll}
+                                keyExtractor={(item) => item._id.toString()}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
+                    );
+                }
             // case 'Phổ biến':
             //     return (
             //         <View style={styles.viewFlatList}>
@@ -258,30 +295,48 @@ const BookScreen: React.FC<PropsType> = (props) => {
             default: return null;
         }
     };
-    const onPressSearch = () => {
-        console.log("Search result: " + text)
-        navigation.navigate('SearchScreen');
+
+    const data: ListHotel[] = [
+        // list hotel data goes here
+    ];
+
+    const handleSearch = async () => {
+        if (text === '') {
+            <View style={styles.viewFlatList}>
+                <FlatList
+                    data={hotels}
+                    renderItem={ItemHotelAll}
+                    keyExtractor={(item) => item._id.toString()}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
+        } else {
+            searchHotelByName();
+        }
+
     };
+
+    const countSearchResults = (results: ListHotel[]): number => {
+        return results.length;
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
-                <Pressable onPress={onPressSearch}>
-                    <Image source={ICON_SEARCH} style={styles.iconSearch} />
-                </Pressable>
                 <TextInput
                     value={text}
+                    onChangeText={setText}
                     placeholder="Tìm kiếm"
                     style={[
-                        styles.input,
-                        {
-                            fontFamily: text ? 'Exo2-Regular' : 'Exo2-Bold',
-                            fontSize: text ? 14 : 16,
-                            color: text ? COLORS.Black : "#C4C4C4",
-                        },
-                    ]}
-                    onChangeText={text => setText(text)}
-
+                        styles.input, {
+                            fontFamily: searchResults.length > 0 ? 'Exo2-Regular' : 'Exo2-Bold',
+                            fontSize: searchResults.length > 0 ? 14 : 16,
+                            color: searchResults.length > 0 ? COLORS.Black : "#C4C4C4",
+                        }]}
                 />
+                <TouchableOpacity onPress={handleSearch}>
+                    <Image source={ICON_SEARCH} style={styles.iconSearch} />
+                </TouchableOpacity>
             </View>
             <View style={styles.containerChidren}>
                 <View style={styles.outlineButton}>
@@ -300,6 +355,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
                         {renderTabButton('Phổ biến', 'Phổ biến')}
                         {renderTabButton('Xu hướng', 'Xu hướng')}
                     </ScrollView>
+
                 </View>
                 {renderList()}
             </View>

@@ -42,7 +42,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
 
     const getRoomsAPI = async (hotelID: string) => {
         try {
-            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
+            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/${hotelID}/rooms`);
             const data: ListRoomHotel[] = response.data;
             setRoomList(data);
             // console.log(response);
