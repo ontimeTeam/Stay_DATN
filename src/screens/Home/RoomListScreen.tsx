@@ -135,8 +135,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
         <FlatList
           data={dataRoomHotel}
           renderItem={ItemRoomHotel}
-          // keyExtractor={(item) => item.id.toString()}
-          keyExtractor={(item) => item.id?.toString() || item.nameRoom}
+          keyExtractor={(item, index) => item.id || index.toString()}
           showsVerticalScrollIndicator={false}
         />
       </View>

@@ -81,10 +81,12 @@ const BillScreen: React.FC<PropsType> = props => {
             billMonney: totalAmount.toString(),
             imageHotelBill: room.roomImage,
             billInfo: room.roomType,
-            startbill: formattedStartDate, // Updated this line
+            startbill: formattedStartDate,
             hotelcitybill: hotelData?.hotel?.hotelAddress,
             dateCheckin: formattedStartDate,
             dateCheckout: formattedEndDate,
+            hotelId: hotelId, // Include hotelId in the request payload
+            roomId: room._id, // Include roomId in the request payload
           });
   
           const response = await axios.post('https://newapihtbk-production.up.railway.app/api/bill/create/bill/', {
@@ -96,8 +98,14 @@ const BillScreen: React.FC<PropsType> = props => {
             hotelcitybill: hotelData?.hotel?.hotelAddress,
             dateCheckin: formattedStartDate,
             dateCheckout: formattedEndDate,
+            hotelId: hotelId,
+            roomId: room._id,
           });
   
+          // Update room status after creating the bill
+          await updateRoomStatus(room._id);
+  
+          console.log('Bill created successfully:', response.data);
         } catch (error) {
           handleCreateBillError(room, error);
         }
@@ -126,6 +134,25 @@ const BillScreen: React.FC<PropsType> = props => {
 
     // Handle specific errors or provide user-friendly messages here
   };
+
+  const updateRoomStatus = async (roomId: string) => {
+    try {
+      // Use correct parameter names: hotel._id and room._id
+      const response = await axios.put(`https://newapihtbk-production.up.railway.app/api/hotel/updateroomstatus/${hotelId}/${roomId}`);
+      console.log('Room status updated successfully:', response.data);
+    } catch (error) {
+      console.error('Error updating room status:', error);
+      // Handle the error as needed
+    }
+  };  
+
+  useEffect(() => {
+    // Call the updateRoomStatus API when navigating away
+    if (hotelId && roomId) {
+      updateRoomStatus(roomId);
+    }
+  }, [hotelId, roomId]);
+  
 
   return (
     <ScrollView style={styles.container}>
