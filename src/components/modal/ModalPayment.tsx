@@ -1,6 +1,6 @@
 import { Dimensions, Image, ImageSourcePropType, Modal, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { AppContext } from '../../resources/context/AppContext';
+import { AppContext } from '../../share-state/context/AppContext';
 import { CARD, MOMO, ZALOPAY } from '../../../assets';
 import Button from '../button/Button';
 import { COLORS } from '../../themes/theme';

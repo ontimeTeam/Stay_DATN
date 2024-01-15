@@ -8,7 +8,7 @@ import { BookStackParamList } from '../../navigation/BookStack';
 import Header from '../../components/header/Header';
 import { CARD, ICON_STAR, IC_BACK, MOMO, ROOM_1, ZALOPAY } from '../../../assets';
 import { COLORS } from '../../themes/theme';
-import { AppContext } from '../../resources/context/AppContext';
+import { AppContext } from '../../share-state/context/AppContext';
 import ModalPayment from '../../components/modal/ModalPayment';
 import Button from '../../components/button/Button';
 import { useRoute } from '@react-navigation/native';

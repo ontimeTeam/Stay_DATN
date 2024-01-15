@@ -37,7 +37,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
 
     const getRoomsAPI = async (hotelID: string) => {
         try {
-            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/${hotelID}/rooms`);
+            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
             const data: HotelDetail[] = response.data;
             setHotelImage(data);
             // console.log(response);
@@ -161,11 +161,11 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
             </ScrollView >
             <View style={styles.fixedView}>
                 <View style={styles.viewBottom}>
-                    <Text style={styles.textBottom}>Giá từ</Text>
+                    <Text style={styles.textBottom}>Giá chỉ từ</Text>
                     <Text style={styles.textBottomPrice}>{formatNumber(roomPrice)} ₫</Text>
                 </View>
                 <Button
-                    stylePressable={{ width: 150, height: 50 }}
+                    stylePressable={{ width: 150, height: 'auto' }}
                     onPress={() => navigation.navigate('SearchDetailScreen', {
                         hotelID: hotelID,
                         hotelAddress: hotelAddress,

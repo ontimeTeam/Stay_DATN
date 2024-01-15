@@ -1,17 +1,17 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { COLORS } from '../../themes/theme';
 import { AVATAR, AVATAR2, ICON_BLOG, ICON_CARD, ICON_DOIMATKHAU, ICON_LOGOUT, ICON_PEN, IC_BACK } from '../../../assets';
 import Header from '../../components/header/Header';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
-import { AppContext } from '../../resources/context/AppContext';
+import { AppContext } from '../../share-state/context/AppContext';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'ProfileScreen'>;
 const ProfileScreen: React.FC<PropsType> = props => {
     const { navigation } = props;
     const { isLoggedIn, setLoggedIn } = React.useContext(AppContext);
-
+    const { user } = useContext(AppContext);
     const onPressDoiMatKhau = () => {
         navigation.navigate('ForgotPassword');
     };
@@ -34,8 +34,8 @@ const ProfileScreen: React.FC<PropsType> = props => {
                 eventLeft={() => navigation.goBack()}
             />
             <View style={styles.containerChildren} >
-                <Image source={AVATAR2} style={styles.imgAvatar} />
-                <Text style={styles.txtName}>Rimuru Tempest</Text>
+                <Image source={{uri: user?.img}} style={styles.imgAvatar} />
+                <Text style={styles.txtName}>{user?.username}</Text>
                 <Pressable style={styles.btn} onPress={() => navigation.navigate('EditProfile')}>
                     <Image source={ICON_PEN} style={styles.iconBtn} />
                     <Text style={styles.txtBtn}>Chỉnh sửa</Text>

@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
 import Header from '../../components/header/Header';
 import { COLORS } from '../../themes/theme';
-import { ICON_ADD, ICON_ARROW, ICON_CHECK_GREEN, ICON_TRASH, IC_BACK, MASTERCARD_1, NOCARD, VISA } from '../../../assets';
+import { ICON_ADD, ICON_ARROW, ICON_CHECK_GREEN, ICON_TRASH, IC_BACK, MASTERCARD_1, VISA, NO_CARD } from '../../../assets';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'MyCardScreen'>;
@@ -103,7 +103,7 @@ const MyCardScreen: React.FC<PropsType> = props => {
             />
             {listData.length === 0 ?
                 <View style={styles.nocard}>
-                    <Image source={NOCARD} style={{
+                    <Image source={NO_CARD} style={{
                         width: 250,
                         height: 100,
                         resizeMode: 'contain',

@@ -1,5 +1,5 @@
 import { StyleSheet, ScrollView, View, Dimensions, Pressable, Image, ImageSourcePropType, Text, FlatList, ActivityIndicator } from 'react-native'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext, } from 'react'
 import { COLORS } from '../../themes/theme';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParamList } from '../../navigation/HomeStack';
@@ -7,9 +7,9 @@ import Header from '../../components/header/Header';
 import { AVATAR, ICON_PLANE, ICON_PLANE_WHITE, ICON_STAR, IMG_DN, IMG_HCM, IMG_HN, IMG_HOTEL_1, IMG_HOTEL_2, IMG_HOTEL_3, IMG_HOTEL_4, IMG_HOTEL_5, IMG_HOTEL_6, IMG_VT, LOGO } from '../../../assets';
 import axios from 'axios';
 import { useSelector } from 'react-redux'
-import { RootState } from 'src/share-state/redux/stores';
-import { dataUser } from 'src/share-state/redux/reducers/userReducer';
-import { useAppDispatch } from 'src/share-state/redux/stores';
+import { selectUserData } from '../../share-state/redux/selectors/userSelector';
+import { UserState } from '../../share-state/redux/reducers/userReducer';
+import { AppContext } from '../../share-state/context/AppContext';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeScreen'>;
 interface Banner {
@@ -217,8 +217,8 @@ const HomeScreen: React.FC<PropsType> = props => {
     const [hotels, setHotels] = useState<ListHotel[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const dispatch = useAppDispatch();
-    const dataUser = useSelector((state: RootState) => state.user.dataUser);
+    const { user } = useContext(AppContext);
+    // console.log('User data:', dataUser)
 
     const handleScroll = (event: any) => {
         const offsetY = event.nativeEvent.contentOffset.y + 10;
@@ -278,6 +278,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                                 hotelID: item._id.toString(),
                                 hotelAddress: item.hotelAddress,
                                 hotelImage: item.hotelDetail.hotelImage,
+                                hotelDescription: item.hotelDetail.hotelDescription,
                                 hotelName: item.hotelName,
                                 hotelRates: item.hotelRates,
                                 hotelViews: randomHotelView,
@@ -407,7 +408,6 @@ const HomeScreen: React.FC<PropsType> = props => {
             <Pressable style={styles.viewContainer} onPress={onPressItemTrend}>
                 <Image
                     source={{ uri: item.rooms[0].roomImage }}     // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-                    // source={item.imageHotel}
                     style={styles.imgBanner}
                 />
                 <View style={styles.viewChildren}>
@@ -496,9 +496,10 @@ const HomeScreen: React.FC<PropsType> = props => {
             <Header
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={LOGO}
-                iconRight={{ uri: dataUser?.img }}
+                textCenter={user?.username}
+                iconRight={user?.img}
                 styleIconLeft={{ width: 60, height: 60 }}
-                styleIconRight={{ width: 40, height: 40 }}
+                styleIconRight={{ width: 40, height: 40, borderRadius: 40 / 2, borderColor: COLORS.MainBlue, borderWidth: 2 }}
                 eventLeft={() => navigation.navigate('HomeScreen')}
                 eventRight={() => navigation.navigate('ProfileScreen')}
             />
