@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, ImageBackground, Image, Dimensions, Pressable } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BookStackParamList } from '../../navigation/BookStack';
 import { COLORS } from '../../themes/theme';
@@ -7,6 +7,7 @@ import Header from '../../components/header/Header';
 import { DECOR, ICON_BACK_BLUE, ICON_STAR_TRON, IC_BACK, LINE, ROOM_1, SUBTRACT } from '../../../assets';
 import { useRoute } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
+import { AppContext } from '../../share-state/context/AppContext';
 
 type RoomPriceParams = {
     roomPrice: number;
@@ -35,6 +36,7 @@ const BillScreen: React.FC<PropsType> = props => {
     const route = useRoute<RouteProp<BookStackParamList, 'BillScreen'>>();
     const { hotelName, hotelAddress, hotelImage, hotelRates, hotelViews, startDate, endDate, people, roomPrice, totalAmount, roomType } = route.params as RoomPriceParams & RoomListScreenNavigationParams;
     const { navigation } = props;
+    const { user } = useContext(AppContext);
     const goHome = () => {
         navigation.navigate('HomeScreen');
     }
@@ -88,7 +90,7 @@ const BillScreen: React.FC<PropsType> = props => {
                         </View>
                         <View style={styles.bottomRight}>
                             <Text style={styles.txtName}>Tên khách hàng</Text>
-                            <Text style={styles.txtValue}>Bảo Ngọc</Text>
+                            <Text style={styles.txtValue}>{user?.username}</Text>
                         </View>
                     </View>
                 </View>
