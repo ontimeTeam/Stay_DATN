@@ -1,6 +1,6 @@
 import { ColorValue } from "react-native";
 
-interface Spacing{
+interface Spacing {
     space_2: number;
     space_4: number;
     space_8: number;
@@ -15,7 +15,7 @@ interface Spacing{
     space_32: number;
     space_36: number;
 }
-export const SPACING : Spacing = {
+export const SPACING: Spacing = {
     space_2: 2,
     space_4: 4,
     space_8: 8,
@@ -31,7 +31,7 @@ export const SPACING : Spacing = {
     space_36: 36,
 }
 
-interface Color{
+interface Color {
     Black: ColorValue;
     MainBlue: ColorValue;
     BlueWish: ColorValue;
@@ -51,12 +51,12 @@ interface Color{
     White: ColorValue;
 }
 
-export const COLORS : Color = {
+export const COLORS: Color = {
     Black: '#000000',
-    MainBlue : '#4461F2',
+    MainBlue: '#4461F2',
     BlueWish: '#008C95',
     BluePaid: '#008C95',
-    Blue_BG : "#F5F8FF",
+    Blue_BG: "#F5F8FF",
     BlueWish_BG: "#CDF9FF",
     Blue_btn: '#E2E7FF',
     RedButton: '#E14058',
@@ -65,7 +65,7 @@ export const COLORS : Color = {
     OrangeWait: '#FF9A03',
     OrangeWait_BG: '#FFECCF',
     LightGray: "#C0C0C0",
-    MediumGray:'#595959',
+    MediumGray: '#595959',
     DarkGrey: '#0b0b0b',
     Yellow: "E14058 ",
     White: "#FFFFFF",
@@ -82,7 +82,7 @@ interface FontFamily {
     exo2_thin: string;
 }
 
-export const FONT_FAMILY : FontFamily = {
+export const FONT_FAMILY: FontFamily = {
     exo2_bold: 'Exo2-Bold',
     exo2_extrabold: 'Exo2-ExtraBold',
     exo2_light: 'Exo2-Light',
@@ -106,7 +106,7 @@ interface FontSize {
 
 }
 
-export const FONT_SIZE : FontSize = {
+export const FONT_SIZE: FontSize = {
     size_8: 8,
     size_10: 10,
     size_12: 12,
@@ -127,7 +127,7 @@ interface BoderRadius {
     radius_25: number;
 }
 
-export const BORDER_RADIUS : BoderRadius = {
+export const BORDER_RADIUS: BoderRadius = {
     radius_4: 4,
     radius_8: 8,
     radius_10: 10,

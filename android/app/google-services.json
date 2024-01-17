@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "979002712504",
+    "project_id": "stay-hotel-booking-app",
+    "storage_bucket": "stay-hotel-booking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979002712504:android:06c93891945a41d3f32f4d",
+        "android_client_info": {
+          "package_name": "com.stay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA62XGYoVoVXBGXrZhPGNFhYdf7pWbvtdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
