@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BookStackParamList } from '../../navigation/BookStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Button from '../../components/button/Button';
@@ -20,56 +20,66 @@ type RoomListScreenNavigationParams = {
     selectedStartDate: string;
     selectedEndDate: string;
     people: number;
+    roomID: string
 };
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'SearchDetailScreen'>
 const SearchDetailScreen: React.FC<PropsType> = (props) => {
-    const { navigation } = props;
-    const route = useRoute<RouteProp<BookStackParamList, 'RoomListScreen'>>();
-    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews } = route.params as RoomListScreenNavigationParams;
-
+    const { navigation, route } = props;
     const minDate = new Date(); // Today
     const maxDate = new Date(2026, 6, 3);
     const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY');
     const [selectedEndDate, setSelectedEndDate] = useState('DD/MM/YYYY');
     const [people, setPeople] = useState(1);
 
+    // const hotelId = route.params?.hotelID;
+    // const roomId = route.params;
 
+    // const onDateChange = (date: any, type: string) => {
+    //     console.log(JSON.stringify(date));
+    //     const newDate = new Date(date);
+    //     const formattedDate = newDate.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+    //     // const dates = formattedDate.split('/');
+    //     // const day = dates[0];
+    //     // const month = dates[1];
+    //     // const year = dates[2];
+    //     // console.log(day + '/' + month + '/' + year);
+
+    //     if (type === 'END_DATE') {
+    //         setSelectedEndDate(formattedDate);
+    //     } else {
+    //         setSelectedStartDate(formattedDate);
+    //         setSelectedEndDate('DD/MM/YYYY');
+    //     }
+
+    // };
     const onDateChange = (date: any, type: string) => {
-        console.log(JSON.stringify(date));
-        const newDate = JSON.stringify(date);
-        const newDate1 = newDate.substring(1, newDate.length - 1);
-        const dates = newDate1.split('T');
-        const date1 = dates[0].split('-');
-        const day = date1[2];
-        const month = date1[1];
-        const year = date1[0];
-        console.log(day + '/' + month + '/' + year);
+        const newDate = new Date(date);
+        const day = String(newDate.getDate()).padStart(2, '0');
+        const month = String(newDate.getMonth() + 1).padStart(2, '0');
+        const year = newDate.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+
+        console.log('Selected Start Date:', selectedStartDate);
+        console.log('Selected End Date:', selectedEndDate);
 
         if (type === 'END_DATE') {
-            if (day === undefined) {
-                setSelectedEndDate('DD/MM/YYYY');
-            } else {
-                setSelectedEndDate(day + '/' + month + '/' + year);
-            }
+            setSelectedEndDate(formattedDate);
         } else {
-            setSelectedStartDate(day + '/' + month + '/' + year);
+            setSelectedStartDate(formattedDate);
             setSelectedEndDate('DD/MM/YYYY');
         }
     };
 
-    const handleContinue = () => {
-            console.log('Đã nhấn nút "Continue"', hotelID);
+    const handleContinue = ({ item }: { item: RoomListScreenNavigationParams }) => {
+        // Your existing logic to navigate to the next screen
+        console.log('Đã nhấn nút "Continue"');
         navigation.navigate('RoomListScreen', {
-            hotelID: hotelID,
-            hotelName: hotelName,
-            hotelAddress: hotelAddress,
-            hotelImage: hotelImage,
-            hotelRates: hotelRates,
-            hotelViews: hotelViews,
-            startDate: selectedStartDate,
-            endDate: selectedEndDate,
-            people: people,
+            hotelID: item.hotelID,
+            selectedStartDate,
+            selectedEndDate,
+            people,
+            roomID: item.roomID
         });
     };
 
@@ -79,64 +89,37 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={IC_BACK}
                 eventLeft={() => navigation.goBack()}
-                textLeft='Chọn ngày'
+                textLeft='Tìm kiếm theo'
             />
-            <View style={{marginTop: 20, flex: 1, height: 100 }}>
-                <CalendarPicker
-                                    startFromMonday={true}
-                    allowRangeSelection={true}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    todayBackgroundColor='#879BFF'
-                    selectedDayColor='#D5DCFE'
-                    selectedDayTextColor='#000000'
-                    onDateChange={onDateChange}
-                    textStyle={{ fontFamily: FONT_FAMILY.exo2_regular, }}
-                    previousTitle='<'
-                    previousTitleStyle={{ fontWeight: '700', fontSize: 20 }}
-                    nextTitle='>'
-                    nextTitleStyle={{ fontWeight: '700', fontSize: 20 }}
-                />
-            </View>
+
+            <CalendarPicker
+                startFromMonday={true}
+                allowRangeSelection={true}
+                minDate={minDate}
+                maxDate={maxDate}
+                todayBackgroundColor='#879BFF'
+                selectedDayColor='#D5DCFE'
+                selectedDayTextColor='#000000'
+                onDateChange={onDateChange}
+                textStyle={{ fontFamily: FONT_FAMILY.exo2_regular, }}
+                previousTitle='<'
+                previousTitleStyle={{ fontWeight: '700', fontSize: 20 }}
+                nextTitle='>'
+                nextTitleStyle={{ fontWeight: '700', fontSize: 20 }}
+            />
+
 
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.date}>{'Nhận Phòng'}</Text>
-                    <Text style={styles.date}>{'Trả Phòng '}</Text>
-                </View>
-
-                <View style={styles.header}>
-                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular, fontSize: 18, padding: 10, borderWidth: 1, borderColor: COLORS.MediumGray, borderRadius: 10 }}>{selectedStartDate}</Text>
-                    <Text style={{ fontFamily: FONT_FAMILY.exo2_regular, fontSize: 18, padding: 10, borderWidth: 1, borderColor: COLORS.MediumGray, borderRadius: 10 }}>{selectedEndDate}</Text>
-                </View>
-
-                {/* Them luong nguoi */}
-                <View style={[styles.numberContainer, { backgroundColor: 'white' }]}>
-                    <View style={styles.numberRow}>
-                        <Text style={styles.numberText}>Số người:</Text>
-
-                        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}
-                            onPress={() => (people > 1 ? setPeople(people - 1) : setPeople(1))}>
-                            <Text style={styles.plusMinusButton}>-</Text>
-                        </TouchableOpacity>
-
-                        <Text style={{ fontFamily: FONT_FAMILY.exo2_medium, fontSize: 18, color: COLORS.Black }}>{people}</Text>
-
-                        <TouchableOpacity onPress={() => setPeople(people + 1)}>
-                            <Text style={styles.plusMinusButton}>+</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                {/* Phan nut tiep tuc */}
-                <View style={{ marginTop: 30, alignItems: 'center' }}>
-                    <Button
-                        stylePressable={{ width: "90%" }}
-                        title='Tiếp tục'
-                        onPress={handleContinue} />
+                    <Text style={styles.date}>{'Trả Phòng'}</Text>
                 </View>
             </View>
+            <Button
+                title='Continue'
+                onPress={() => handleContinue} />
         </View>
+
     )
 }
 

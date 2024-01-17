@@ -8,61 +8,61 @@ import { ICON_STAR_TRON, IC_BACK, IMG_HOTEL_7, IMG_HOTEL_8, IMG_HOTEL_9 } from '
 interface ListHotel {
     id: number;
     // imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-    imageHotel: ImageSourcePropType;
+    imageHotel: string;
     nameHotel: string;
     star: string;
     view: string;  // số lượt xem
     price: string; // giá
 }
 const DATAHOTEL: ListHotel[] = ([
-    {
-        id: 1,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-    },
-    {
-        id: 2,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-    },
-    {
-        id: 3,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-    },
-    {
-        id: 4,
-        imageHotel: IMG_HOTEL_7,
-        nameHotel: 'Park Hyatt Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '7.200.000',
-    },
-    {
-        id: 5,
-        imageHotel: IMG_HOTEL_8,
-        nameHotel: 'Fusion Original Saigon',
-        star: '5.0',
-        view: '1420',
-        price: '4.043.904',
-    },
-    {
-        id: 6,
-        imageHotel: IMG_HOTEL_9,
-        nameHotel: 'Imperial Hotel & Spa',
-        star: '5.0',
-        view: '1420',
-        price: '1.428.918',
-    },
+  {
+    id: 1,
+    imageHotel: IMG_HOTEL_7,
+    nameHotel: 'Park Hyatt Saigon',
+    star: '5.0',
+    view: '1420',
+    price: '7.100.000',
+  },
+  {
+    id: 2,
+    imageHotel: IMG_HOTEL_8,
+    nameHotel: 'Fusion Original Saigon',
+    star: '5.0',
+    view: '1420',
+    price: '4.043.904',
+  },
+  {
+    id: 3,
+    imageHotel: IMG_HOTEL_9,
+    nameHotel: 'Imperial Hotel & Spa',
+    star: '5.0',
+    view: '1420',
+    price: '1.428.918',
+  },
+  {
+    id: 4,
+    imageHotel: IMG_HOTEL_7,
+    nameHotel: 'Park Hyatt Saigon',
+    star: '5.0',
+    view: '1420',
+    price: '5.200.000',
+  },
+  {
+    id: 5,
+    imageHotel: IMG_HOTEL_8,
+    nameHotel: 'Fusion Original Saigon',
+    star: '5.0',
+    view: '1420',
+    price: '4.043.904',
+  },
+  {
+    id: 6,
+    imageHotel: IMG_HOTEL_9,
+    nameHotel: 'Imperial Hotel & Spa',
+    star: '5.0',
+    view: '1420',
+    price: '1.428.918',
+  },
 ]);
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HotelCityListScreen'>;
 const HotelCityListScreen: React.FC<PropsType> = props => {
@@ -78,7 +78,7 @@ const HotelCityListScreen: React.FC<PropsType> = props => {
         }
         return (
             <Pressable style={styles.containerItem} onPress={onPressItemAll}>
-                <Image source={item.imageHotel} style={styles.imageHotel} />
+                <Image source={{uri: item.imageHotel}} style={styles.imageHotel} />
                 <View style={styles.containerInfo}>
                     <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                     <View style={styles.containerCenter}>

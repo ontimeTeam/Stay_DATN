@@ -8,8 +8,9 @@ import Header from '../../components/header/Header';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppContext, useAppContext } from '../../share-state/context/AppContext';
-
 import { User } from '../../domain';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 type PropsType = NativeStackScreenProps<LoginStackParamList, 'LoginScreen'>;
 
