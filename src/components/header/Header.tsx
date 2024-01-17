@@ -17,7 +17,7 @@ interface HeaderProps {
   textCenter?: string;
   textCenterMini?: string;
   iconCenter?: ImageSourcePropType;
-  iconRight?: string;
+  iconRight?: ImageSourcePropType;
   eventLeft?: () => void;
   eventRight?: () => void;
   eventCenter?: () => void;
@@ -91,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({
     if (iconRight) {
       return (
         <Pressable onPress={eventRight}>
-          <Image source={{ uri: iconRight }} style={[_styles.iconRight, styleIconRight]} />
+          <Image source={iconRight} style={[_styles.iconRight, styleIconRight]} />
         </Pressable>
       );
     }

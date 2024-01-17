@@ -45,9 +45,10 @@ const LoginScreen: React.FC<PropsType> = (props) => {
 
             if (response.ok) {
                 // If the login is successful, save the user data in the component state and context
-                const userData = await response.json()
-                setUser(userData)
-                setLoggedIn(true)
+                const userData = await response.json();
+                setUser(userData);
+                setLoggedIn(true);
+                console.log('Login Success', userData);
             } else {
                 Alert.alert('Error', 'Invalid phone or password')
             }

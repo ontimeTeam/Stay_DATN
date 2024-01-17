@@ -9,12 +9,14 @@ import Button from '../../components/button/Button'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image'
 
 interface HotelDetail {
     _id: Object,
     hotelImage: string,
     hotelDescription: string,
     roomImage: string
+
 };
 type RoomListScreenNavigationParams = {
     hotelID: string,
@@ -37,7 +39,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
 
     const getRoomsAPI = async (hotelID: string) => {
         try {
-            const response = await axios.get(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelID}/rooms`);
+            const response = await axios.get(`https://stayapi-production.up.railway.app/api/hotel/${hotelID}/rooms`);
             const data: HotelDetail[] = response.data;
             setHotelImage(data);
             // console.log(response);
@@ -57,7 +59,7 @@ const HotelDetailScreen: React.FC<PropsType> = (props) => {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     };
     const renderItemImg = ({ item }: { item: HotelDetail }) => (
-        <Image source={{ uri: item.roomImage }} style={styles.imagePhoto} />
+        <FastImage source={{ uri: item.roomImage }} style={styles.imagePhoto} />
     );
     return (
         <View style={styles.containerAll}>

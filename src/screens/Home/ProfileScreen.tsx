@@ -6,6 +6,7 @@ import Header from '../../components/header/Header';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
 import { AppContext } from '../../share-state/context/AppContext';
+import FastImage from 'react-native-fast-image';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'ProfileScreen'>;
 const ProfileScreen: React.FC<PropsType> = props => {
@@ -34,7 +35,8 @@ const ProfileScreen: React.FC<PropsType> = props => {
                 eventLeft={() => navigation.goBack()}
             />
             <View style={styles.containerChildren} >
-                <Image source={{uri: user?.img}} style={styles.imgAvatar} />
+                <Image
+                    source={{ uri: user?.img }} style={styles.imgAvatar} />
                 <Text style={styles.txtName}>{user?.username}</Text>
                 <Pressable style={styles.btn} onPress={() => navigation.navigate('EditProfile')}>
                     <Image source={ICON_PEN} style={styles.iconBtn} />

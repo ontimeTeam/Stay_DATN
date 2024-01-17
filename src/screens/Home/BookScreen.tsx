@@ -7,6 +7,7 @@ import { ICON_SEARCH, ICON_STAR, ICON_STAR_TRON, IMG_HOTEL_7, IMG_HOTEL_8, IMG_H
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 // interface ListHotel {
 //     _id: Object;
@@ -44,7 +45,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
     interface ListHotel {
         id: string;
         //imageHotel: string; // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
-        imageHotel: ImageSourcePropType;
+        imageHotel: string;
         nameHotel: string;
         addressHotel: string,
         star: string;
@@ -53,6 +54,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
         isCheckPopular: boolean; // biến isCheckPopular dùng để kiểm tra xem item có phải là phổ biến hay không
         isCheckTrend: boolean;
         roomId?: number; // biến isCheckTrend dùng để kiểm tra xem item có phải là xu hướng hay không
+        hotelDescription: string
     }
 
     // const BookScreen: React.FC<PropsType> = (props) => {
@@ -116,7 +118,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
                 return {
                     id: item._id,
-                    imageHotel: { uri: item.rooms[0]?.roomImage },
+                    imageHotel: item.hotelDetail.hotelImage,
                     nameHotel: item.hotelName,
                     star: item.hotelRates.toFixed(1),
                     view: '1420',
@@ -149,7 +151,8 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
                 const newData = response.data.map((item: any) => ({
                     id: item._id,
-                    imageHotel: { uri: item.hotelDetail.hotelImage },
+                    imageHotel: item.hotelDetail.hotelImage,
+                    hotelDescription: item.hotelDetail.hotelDescription,
                     nameHotel: item.hotelName,
                     addressHotel: item.hotelAddress,
                     star: item.hotelRates.toFixed(1), // Map hotelRates to star with one decimal place
@@ -217,12 +220,12 @@ const BookScreen: React.FC<PropsType> = (props) => {
         // };
 
         const onPressSelect = () => {
-            console.log(item.id);
+            console.log(item.id, item.nameHotel, item.imageHotel);
             navigation.navigate('SearchDetailScreen', {
                 hotelID: item.id.toString(),
+                hotelName: item.nameHotel,
                 hotelAddress: item.addressHotel,
                 hotelImage: item.imageHotel,
-                hotelName: item.nameHotel,
                 hotelRates: item.star,
                 hotelViews: randomHotelView,
             });
@@ -251,15 +254,24 @@ const BookScreen: React.FC<PropsType> = (props) => {
 
         const onPressItemAll = () => {
             const hotelID = item.id;
-            console.log(hotelID);
+            console.log(hotelID, item.nameHotel);
             const roomId = item.roomId;
             console.log(roomId);
             // navigation.navigate('RoomListScreen');
-            navigation.navigate('SearchDetailScreen', { hotelID: item.id, roomId });
+            navigation.navigate('HotelDetailScreen', {
+                hotelID: item.id,
+                roomId,
+                roomPrice: item.price,
+                hotelImage: item.imageHotel,
+                hotelName: item.nameHotel,
+                hotelAddress: item.addressHotel,
+                hotelDescription: item.hotelDescription,
+                hoteViews: randomHotelView
+            });
         }
         return (
             <Pressable onPress={onPressItemAll} style={styles.containerItem}>
-                <Image source={item.imageHotel} style={styles.imageHotel} />
+                <FastImage source={{ uri: item.imageHotel }} style={styles.imageHotel} />
                 <View style={styles.containerInfo}>
                     <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode="tail">
                         {item.nameHotel}
@@ -293,7 +305,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
         if (item.isCheckPopular === true) {
             return (
                 <Pressable style={styles.containerItem} onPress={onPressItemPopular}>
-                    <Image source={item.imageHotel} style={styles.imageHotel} />
+                    <Image source={{ uri: item.imageHotel }} style={styles.imageHotel} />
                     <View style={styles.containerInfo}>
                         <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                         <View style={styles.containerCenter}>
@@ -326,7 +338,7 @@ const BookScreen: React.FC<PropsType> = (props) => {
         if (item.isCheckTrend === true) {
             return (
                 <Pressable style={styles.containerItem} onPress={onPressItemTrend}>
-                    <Image source={item.imageHotel} style={styles.imageHotel} />
+                    <Image source={{ uri: item.imageHotel }} style={styles.imageHotel} />
                     <View style={styles.containerInfo}>
                         <Text style={styles.nameHotel} numberOfLines={1} ellipsizeMode='tail'>{item.nameHotel}</Text>
                         <View style={styles.containerCenter}>

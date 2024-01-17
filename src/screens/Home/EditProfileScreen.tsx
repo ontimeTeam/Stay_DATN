@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, Button, TextInput, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Header from '../../components/header/Header';
 import { AVATAR_UP, ICON_CHECK_WHITE, ICON_PEN, IC_BACK } from '../../../assets';
 import { COLORS, FONT_FAMILY } from '../../themes/theme';
+import { AppContext } from '../../share-state/context/AppContext';
+import FastImage from 'react-native-fast-image';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'EditProfile'>;
 const EditProfileScreen: React.FC<PropsType> = props => {
     const { navigation } = props;
+    const { user } = useContext(AppContext);
     return (
         <View style={styles.container}>
             <View style={{ paddingVertical: -20, paddingHorizontal: -20 }}>
@@ -20,15 +23,15 @@ const EditProfileScreen: React.FC<PropsType> = props => {
             </View>
 
             <View style={styles.imageContainer}>
-                <Image source={AVATAR_UP} style={styles.circleImage} />
+                <FastImage source={{uri: user?.img}} style={styles.circleImage} />
             </View>
 
             <View style={{ paddingHorizontal: 15 }}>
                 <Text style={styles.FontName}>Tên</Text>
-                <TextInput style={styles.input} placeholder="Rimuru Tempest" />
+                <TextInput style={styles.input} placeholder={user?.username} />
                 <View style={styles.inputContainer}>
                     <Text style={styles.FontName}>Email</Text>
-                    <TextInput style={styles.input} placeholder="rimuru@gmail.com" keyboardType='email-address' />
+                    <TextInput style={styles.input} placeholder={user?.email} keyboardType='email-address' />
                 </View>
                 <Text style={styles.FontName}>Ngày, tháng, năm sinh</Text>
                 <TextInput style={styles.input} placeholder="03/08/2003" />

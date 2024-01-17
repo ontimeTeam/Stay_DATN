@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { ProfileStackParamList } from '../../navigation/ProfileStack';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Header from '../../components/header/Header';
@@ -7,6 +7,7 @@ import { AVATAR2, ICON_CLOCK, ICON_LOCK, ICON_SWIMMIMG_POOL, IC_BACK } from '../
 import { COLORS } from '../../themes/theme';
 import { Pressable } from 'react-native';
 import Button from '../../components/button/Button';
+import { AppContext } from '../../share-state/context/AppContext';
 
 type PropsType = NativeStackScreenProps<ProfileStackParamList, 'ForgotPassword'>;
 const ForgotPasswordScreen: React.FC<PropsType> = props => {
@@ -14,6 +15,7 @@ const ForgotPasswordScreen: React.FC<PropsType> = props => {
   const [text, setText] = React.useState('');
   const [text1, setText1] = React.useState('');
   const [text2, setText2] = React.useState('');
+  const { user } = useContext(AppContext);
   return (
     <ScrollView style={{ backgroundColor: 'white', flex: 1 }}>
       <Header
@@ -23,7 +25,7 @@ const ForgotPasswordScreen: React.FC<PropsType> = props => {
         iconLeft={IC_BACK}
         eventLeft={() => navigation.goBack()}
       />
-      <Image source={AVATAR2} style={styles.imgAvatar} />
+      <Image source={{ uri: user?.img }} style={styles.imgAvatar} />
       <View style={styles.viewInput}>
         <Text style={styles.txtTitle}>Mật khẩu cũ</Text>
         <Text style={styles.txtTitlered}>*</Text>
@@ -93,7 +95,7 @@ const ForgotPasswordScreen: React.FC<PropsType> = props => {
       <Button
         title='Xác nhận'
         onPress={() => navigation.navigate('ProfileScreen')}
-        stylePressable={{ marginTop: 80, marginHorizontal: 20, width:"90%" }}
+        stylePressable={{ marginTop: 80, marginHorizontal: 20, width: "90%" }}
       />
     </ScrollView>
   )

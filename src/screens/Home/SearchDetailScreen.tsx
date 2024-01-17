@@ -62,6 +62,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
 
         console.log('Selected Start Date:', selectedStartDate);
         console.log('Selected End Date:', selectedEndDate);
+        console.log('People:', people);
 
         if (type === 'END_DATE') {
             setSelectedEndDate(formattedDate);
@@ -70,18 +71,20 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
             setSelectedEndDate('DD/MM/YYYY');
         }
     };
-
-    const handleContinue = ({ item }: { item: RoomListScreenNavigationParams }) => {
+    const { hotelID, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews } = route.params as RoomListScreenNavigationParams;
+    const handleContinue = () => {
         // Your existing logic to navigate to the next screen
-        console.log('Đã nhấn nút "Continue"');
+        console.log('Đã nhấn nút "Continue"', hotelName);
         navigation.navigate('RoomListScreen', {
-            hotelID: item.hotelID,
+            hotelID,
             selectedStartDate,
             selectedEndDate,
             people,
-            roomID: item.roomID
+            hotelName,
+            hotelImage,
+            hotelViews
         });
-    };
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -89,7 +92,7 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={IC_BACK}
                 eventLeft={() => navigation.goBack()}
-                textLeft='Tìm kiếm theo'
+                textLeft='Chọn ngày'
             />
 
             <CalendarPicker
@@ -114,12 +117,34 @@ const SearchDetailScreen: React.FC<PropsType> = (props) => {
                     <Text style={styles.date}>{'Nhận Phòng'}</Text>
                     <Text style={styles.date}>{'Trả Phòng'}</Text>
                 </View>
+                <View style={styles.header}>
+                    <Text style={styles.numberContainer}>{selectedStartDate}</Text>
+                    <Text style={styles.numberContainer}>{selectedEndDate}</Text>
+                </View>
             </View>
-            <Button
-                title='Continue'
-                onPress={() => handleContinue} />
-        </View>
+            <View style={[styles.peopleContainer, { backgroundColor: 'white' }]}>
+                <View style={styles.numberRow}>
+                    <Text style={styles.numberText}>Số người:</Text>
 
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }}
+                        onPress={() => (people > 1 ? setPeople(people - 1) : setPeople(1))}>
+                        <Text style={styles.plusMinusButton}>-</Text>
+                    </TouchableOpacity>
+
+                    <Text style={{ fontFamily: FONT_FAMILY.exo2_medium, fontSize: 18, color: COLORS.Black }}>{people}</Text>
+
+                    <TouchableOpacity onPress={() => setPeople(people + 1)}>
+                        <Text style={styles.plusMinusButton}>+</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={styles.btnCont}>
+                <Button
+                    title='Continue'
+                    onPress={() => handleContinue()}
+                />
+            </View>
+        </View>
     )
 }
 
@@ -141,15 +166,25 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     date: {
+        marginTop: 15,
         marginBottom: 5,
         color: COLORS.Black,
         fontSize: 17,
         fontFamily: FONT_FAMILY.exo2_bold,
     },
     numberContainer: {
+        fontFamily: 'Exo2-Medium',
+        fontSize: 16,
+        borderRadius: 10,
+        borderWidth: 1,
+        padding: 10
+    },
+    peopleContainer: {
         marginTop: 20,
-        marginHorizontal: 20,
-        borderRadius: 5,
+        fontFamily: 'Exo2-Medium',
+        fontSize: 16,
+        borderRadius: 10,
+        padding: 15
     },
     numberRow: {
         flexDirection: 'row',
@@ -199,4 +234,8 @@ const styles = StyleSheet.create({
         marginRight: 0,
         marginBottom: 20,
     },
+    btnCont: {
+        padding: 15,
+        marginTop: 15
+    }
 })

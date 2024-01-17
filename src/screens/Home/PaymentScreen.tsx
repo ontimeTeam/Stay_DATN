@@ -31,7 +31,7 @@ type ListRoomHotel = {
   nameRoom: string;
   price: string;
   start: number;
-  imageRoom: ImageSourcePropType;
+  imageRoom: string;
 };
 
 type RoomListScreenNavigationParams = {
@@ -67,37 +67,14 @@ const PaymentScreen: React.FC<PropsType> = props => {
 
   const [dataRoomHotel, setDataRoomHotel] = useState<ListRoomHotel[]>([]);
 
-  // const { selectedStartDate, selectedEndDate, people } = route.params;
-  useEffect(() => {
-    if (pay === 'Momo') {
-      setImagePay(MOMO);
-      setNamePay('Ví MoMo');
-    } else if (pay === 'ZaloPay') {
-      setImagePay(ZALOPAY);
-      setNamePay('Ví ZaloPay');
-    } else if (pay === 'Card') {
-      setImagePay(CARD);
-      setNamePay('Thẻ (MasterCard, Visa/Credit) ');
-    };
-  }, [pay]);
-  //FUNCTION TO CALCULATE IN PAYMENT
-  const calculateDays = (startDate: Date, endDate: Date): number => {
-    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    return dayDiff;
-  };
-  const parseDate = (dateString: string): Date => {
-    const parts = dateString.split('/');
-    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-  };
-  const days = calculateDays(parseDate(String(selectedStartDate)), parseDate(String(selectedEndDate)));
-
   const [hotelData, setHotelData] = useState<any>(null);
   const [roomData, setRoomData] = useState<any>(null);
 
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
   const [taxAndFees, setTaxAndFees] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [stayPrice, setStayPrice] = useState<number>(0);
+
 
   // const { hotelId, selectedStartDate, selectedEndDate, people , roomId } = route.params;
 
@@ -115,17 +92,33 @@ const PaymentScreen: React.FC<PropsType> = props => {
   }, [pay]);
 
   useEffect(() => {
-    // Calculate tax and fees (10% of the price) if dataRoomHotel is not empty
+    // Calculate tax and fees (10% of the price, integer) if dataRoomHotel is not empty
     if (dataRoomHotel.length > 0) {
       const roomPrice = parseInt(dataRoomHotel[0].price);
-      const taxAndFeesValue = roomPrice * 0.1 || 0;
+      const taxAndFeesValue = Math.floor(roomPrice * 0.1) || 0;
       setTaxAndFees(taxAndFeesValue);
 
       // Calculate total amount
-      const calculatedTotalAmount = roomPrice * numberOfDays + taxAndFeesValue;
+      const calculatedTotalAmount = roomPrice * days + taxAndFeesValue;
       setTotalAmount(calculatedTotalAmount);
+      // calculate stay price
+      const calculatedStayPrice = parseInt(dataRoomHotel[0].price) * days;
+      setStayPrice(calculatedStayPrice);
     }
   }, [dataRoomHotel, numberOfDays]);
+
+  const calculateDays = (startDate: Date, endDate: Date): number => {
+    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return dayDiff;
+  };
+  const parseDate = (dateString: string): Date => {
+    const parts = dateString.split('/');
+    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  };
+  const days = calculateDays(parseDate(String(selectedStartDate)), parseDate(String(selectedEndDate)));
+
+  
 
   useEffect(() => {
     const fetchHotelRooms = async () => {
@@ -148,13 +141,11 @@ const PaymentScreen: React.FC<PropsType> = props => {
           `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`
         );
 
-        const daysDifference = differenceInDays(endDate, startDate);
-
         console.log('Hotel data:', responseData.hotel);
         console.log('Rooms data:', responseData.hotel.rooms); // Access 'rooms' inside 'hotel'
 
         setHotelData(responseData.hotel);
-        setNumberOfDays(daysDifference);
+        setNumberOfDays(days);
 
         const mappedData: ListRoomHotel[] = [{
           id: responseData.room._id,
@@ -162,13 +153,13 @@ const PaymentScreen: React.FC<PropsType> = props => {
           nameRoom: responseData.room.roomType,
           price: responseData.room.roomPrice.toString(),
           start: responseData.hotel?.hotelRates || 0,
-          imageRoom: { uri: responseData.room.roomImage },
+          imageRoom: responseData.room.roomImage,
         }];
 
         setDataRoomHotel(mappedData);
         console.log('Selected Start Date:', startDate);
         console.log('Selected End Date:', endDate);
-        console.log('Days Difference:', daysDifference);
+        console.log('Stay Days:', days);
 
       } catch (error) {
         console.error('Error fetching hotel rooms:', error);
@@ -176,15 +167,15 @@ const PaymentScreen: React.FC<PropsType> = props => {
     };
 
     fetchHotelRooms();
-  }, [, selectedStartDate, selectedEndDate, roomId]);
+  }, [selectedStartDate, selectedEndDate, roomId]);
 
   const onPress = () => {
     setModalVisible(false);
   };
 
-  const formatPrice = (price: string) => {
-    // Add your formatting logic here, if needed
-    return price;
+  type FormattingFunction = (num: number) => string;
+  const formatPrice: FormattingFunction = (num) => {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
   };
 
   return (
@@ -195,7 +186,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
         textLeft='Thanh toán'
       />
       <View style={styles.viewContainer}>
-        <Image source={dataRoomHotel.length > 0 ? dataRoomHotel[0].imageRoom : ROOM_1} style={styles.imgBanner} />
+        <Image source={{ uri: hotelImage }} style={styles.imgBanner} />
         <View style={styles.viewChildren}>
           <Text style={styles.txtNameBanner}>{hotelData?.hotelName}</Text>
           <View style={styles.viewStar}>
@@ -229,9 +220,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
           <Text style={styles.txtTitleTime}>{numberOfDays} đêm</Text>
           {dataRoomHotel.length > 0 && dataRoomHotel[0] && (
             <Text style={styles.txtTime}>
-              {formatPrice(
-                (parseInt(dataRoomHotel[0].price) * numberOfDays).toString()
-              )} ₫
+              {formatPrice(stayPrice)} ₫
             </Text>
           )}
         </View>
@@ -239,9 +228,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
           <Text style={styles.txtTitleTime}>Thuế và Phí (10%)</Text>
           {dataRoomHotel.length > 0 && (
             <Text style={styles.txtTime}>
-              {formatPrice(
-                (parseInt(dataRoomHotel[0].price) * numberOfDays * 0.1).toString()
-              )} ₫
+              {formatPrice(Number(days * taxAndFees))} ₫
             </Text>
           )}
         </View>
@@ -250,10 +237,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
           <Text style={styles.txtTitleTime}>Tổng cộng</Text>
           {dataRoomHotel.length > 0 && dataRoomHotel[0] && (
             <Text style={styles.txtTime}>
-              {formatPrice(
-                (parseInt(dataRoomHotel[0].price) * numberOfDays +
-                  parseInt(dataRoomHotel[0].price) * numberOfDays * 0.1).toString()
-              )} ₫
+              {formatPrice(totalAmount)} ₫
             </Text>
           )}
         </View>
@@ -284,7 +268,7 @@ const PaymentScreen: React.FC<PropsType> = props => {
           marginVertical: 30,
         }}
         onPress={() => {
-          navigation.navigate('BillScreen', { totalAmount, hotelId, selectedStartDate, selectedEndDate, roomId });
+          navigation.navigate('BillScreen', { totalAmount, hotelId, selectedStartDate, selectedEndDate, roomId, hotelViews, dayStay: numberOfDays });
         }}
       />
     </ScrollView>

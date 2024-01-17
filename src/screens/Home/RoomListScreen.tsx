@@ -9,15 +9,15 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 
-interface ListRoomHotel {
-  _id: Object,
-  roomType: string,
-  roomImage: string,
-  roomPrice: number,
-  isFinished: string
-  // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
-  // roomImage: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
-}
+// interface ListRoomHotel {
+//   _id: Object,
+//   roomType: string,
+//   roomImage: string,
+//   roomPrice: number,
+//   isFinished: string
+//   // nếu là string thì truyền vào bằng source={{uri: item.roomImage}}
+//   // roomImage: ImageSourcePropType; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
+// }
 
 // data start, end, people in SearchDetailScreen
 type RoomListScreenNavigationParams = {
@@ -33,13 +33,14 @@ type RoomListScreenNavigationParams = {
 };
 import { useEffect } from 'react';
 import moment from 'moment'
+import FastImage from 'react-native-fast-image'
 
 interface ListRoomHotel {
   id: string;
   nameRoom: string;
-  price: string;
+  price: number;
   // imageRoom: string; // nếu là string thì truyền vào bằng source={{uri: item.imageRoom}}
-  imageRoom: ImageSourcePropType;
+  imageRoom: string;
   roomId?: number; // nếu là ImageSourcePropType thì truyền vào bằng source={item.imageRoom}
 }
 
@@ -190,7 +191,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
           id: room._id,
           nameRoom: room.roomType,
           price: room.roomPrice.toString(), // Assuming roomPrice is a number, convert it to string
-          imageRoom: { uri: room.roomImage },
+          imageRoom: room.roomImage,
           roomId: room.roomCode, // Assuming roomCode is the appropriate identifier for the room
         })));
 
@@ -209,7 +210,9 @@ const RoomListScreen: React.FC<PropsType> = props => {
     const onPressSelectRoom = () => {
       // console.log(item);
       console.log('Selected roomId:', item.id);
-      navigation.navigate('PaymentScreen', { hotelID, selectedStartDate, selectedEndDate, people, roomId: item.id })
+      navigation.navigate('PaymentScreen', {
+        hotelID, selectedStartDate, selectedEndDate, people, roomId: item.id, hotelViews
+      })
     }
     const onPressItemAll = () => {
       console.log(item);
@@ -218,22 +221,22 @@ const RoomListScreen: React.FC<PropsType> = props => {
 
     return (
       <View style={styles.container}>
-        <Header
+        {/* <Header
           iconLeft={IC_BACK}
           eventLeft={() => navigation.goBack()}
           isCheck={true} // truyền true nếu muốn hiển thị textCenter
           textCenter='Danh sách phòng'
           textCenterMini={hotelName} // truyền vào nameHotel
           styleContainer={{ backgroundColor: COLORS.White }}
-        />
+        /> */}
 
         <View style={styles.containerChildren}>
-          <Text style={styles.textRoom}>Gồm {roomList.length} loại phòng</Text>
+          <Text style={styles.textRoom}>Gồm {roomList.length} loại phòng phù hợp</Text>
           {/* nếu có numberRoom thì thay bằng numberRoom */}
           <FlatList
             data={roomList}
             renderItem={ItemRoomHotel}
-            keyExtractor={(item) => item._id.toString()}
+            keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
           />
         </View>
@@ -269,21 +272,32 @@ const RoomListScreen: React.FC<PropsType> = props => {
     const onPressSelectRoom = () => {
       // console.log(item);
       console.log('Selected roomId:', item.id);
-      navigation.navigate('PaymentScreen', { hotelID, selectedStartDate, selectedEndDate, people, roomId: item.id })
+      navigation.navigate('PaymentScreen', {
+        hotelId: hotelID,
+        selectedStartDate,
+        selectedEndDate,
+        people,
+        roomId: item.id,
+        roomType: item.nameRoom,
+        hotelName,
+        hotelRates,
+        hotelImage,
+        hotelViews
+      })
     }
     const onPressItemAll = () => {
       console.log(item);
-      navigation.navigate('RoomDetailScreen', { hotelID, selectedStartDate, selectedEndDate, people, roomId: item.id })
+      navigation.navigate('RoomDetailScreen', { hotelID, selectedStartDate, selectedEndDate, people, roomId: item.id, roomImage: item.imageRoom })
     }
 
 
     return (
       <Pressable onPress={onPressItemAll} style={styles.containerItemRoom}>
-        <Image source={{ uri: item.roomImage }} style={styles.imageRoom} />
+        <FastImage source={{ uri: item.imageRoom }} style={styles.imageRoom} />
         <View style={styles.containerTextRoom}>
-          <Text style={styles.nameRoom} numberOfLines={2} ellipsizeMode='tail'>{item.roomType}</Text>
+          <Text style={styles.nameRoom} numberOfLines={2} ellipsizeMode='tail'>{item.nameRoom}</Text>
           <View style={styles.containerCenter}>
-            <Text style={styles.priceRoom}>{formatNumber(item.roomPrice)} ₫</Text>
+            <Text style={styles.priceRoom}>{formatNumber(item.price)} ₫</Text>
             <Pressable style={styles.btnSeclect} onPress={onPressSelectRoom}>
               <Text style={styles.textSelect}>Chọn</Text>
             </Pressable>
@@ -302,7 +316,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
         eventLeft={() => navigation.goBack()}
         isCheck={true} // truyền true nếu muốn hiển thị textCenter
         textCenter='Danh sách phòng'
-        textCenterMini='La Vela SaiGon Hotel' // truyền vào nameHotel
+        textCenterMini={hotelName} // truyền vào nameHotel
         styleContainer={{ backgroundColor: COLORS.White }}
       />
       <View style={styles.containerChildren}>

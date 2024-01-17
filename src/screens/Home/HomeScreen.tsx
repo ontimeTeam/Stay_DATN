@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { selectUserData } from '../../share-state/redux/selectors/userSelector';
 import { UserState } from '../../share-state/redux/reducers/userReducer';
 import { AppContext } from '../../share-state/context/AppContext';
+import FastImage from 'react-native-fast-image';
 
 type PropsType = NativeStackScreenProps<HomeStackParamList, 'HomeScreen'>;
 interface Banner {
@@ -179,7 +180,7 @@ const ItemBanner = ({ item, onPress }: {
     }
     return (
         <Pressable style={styles.viewContainer} onPress={onPress}>
-            <Image
+            <FastImage
                 // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
                 source={{ uri: item.hotelDetail.hotelImage }}
                 style={styles.imgBanner}
@@ -338,7 +339,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                         <ActivityIndicator size="large" color="#0000ff" />
                     ) : (
                         <Pressable style={styles.viewContainer} onPress={onPressItemAll}>
-                            <Image
+                            <FastImage
                                 // source={{ uri: item.imageHotel }} // khi ráp api thì sẽ dùng kiểu này, truyền vào uri
                                 source={{ uri: item.rooms[0].roomImage }}
                                 style={styles.imgBanner}
@@ -497,7 +498,7 @@ const HomeScreen: React.FC<PropsType> = props => {
                 styleContainer={{ backgroundColor: COLORS.White }}
                 iconLeft={LOGO}
                 textCenter={user?.username}
-                iconRight={user?.img}
+                iconRight={{ uri: user?.img }}
                 styleIconLeft={{ width: 60, height: 60 }}
                 styleIconRight={{ width: 40, height: 40, borderRadius: 40 / 2, borderColor: COLORS.MainBlue, borderWidth: 2 }}
                 eventLeft={() => navigation.navigate('HomeScreen')}

@@ -5,10 +5,8 @@ import { BookStackParamList } from '../../navigation/BookStack';
 import { COLORS } from '../../themes/theme';
 import Header from '../../components/header/Header';
 import { DECOR, ICON_BACK_BLUE, ICON_STAR_TRON, IC_BACK, LINE, ROOM_1, SUBTRACT } from '../../../assets';
-import { useRoute } from '@react-navigation/native';
-import { RouteProp } from '@react-navigation/native';
-import { AppContext } from '../../share-state/context/AppContext';
 import axios from 'axios';
+import { AppContext } from '../../share-state/context/AppContext';
 
 type RoomPriceParams = {
   roomPrice: number;
@@ -26,20 +24,16 @@ type RoomListScreenNavigationParams = {
   selectedEndDate: string;
   people: number;
   totalAmount: number,
-  roomId: string
-};
-
-type FormattingFunction = (num: number) => string;
-const formatNumber: FormattingFunction = (num) => {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  roomId: string,
+  dayStay: number
 };
 
 type PropsType = NativeStackScreenProps<BookStackParamList, 'BillScreen'>
 const BillScreen: React.FC<PropsType> = props => {
   const { navigation, route } = props;
   const [hotelData, setHotelData] = useState<any>({});
-  const { hotelId, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews, selectedStartDate, selectedEndDate, people, totalAmount, roomId } = route.params as RoomListScreenNavigationParams;
-
+  const { hotelId, hotelName, hotelAddress, hotelImage, hotelRates, hotelViews, selectedStartDate, selectedEndDate, people, totalAmount, roomId, dayStay } = route.params as RoomListScreenNavigationParams;
+  const { user } = useContext(AppContext);
   const [hotelRoomsAvailable, setHotelRoomsAvailable] = useState(false);
 
   const goHome = () => {
@@ -110,6 +104,9 @@ const BillScreen: React.FC<PropsType> = props => {
             startbill: formattedStartDate,
             hotelcitybill: hotelData?.hotel?.hotelAddress,
             dateCheckin: formattedStartDate,
+            paymentDetails: {
+              dayStay: dayStay
+            },
             dateCheckout: formattedEndDate,
             hotelId: hotelId, // Include hotelId in the request payload
             roomId: room._id, // Include roomId in the request payload
@@ -120,6 +117,9 @@ const BillScreen: React.FC<PropsType> = props => {
             billMonney: totalAmount.toString(),
             imageHotelBill: room.roomImage,
             billInfo: room.roomType,
+            paymentDetails: {
+              dayStay: dayStay
+            },
             startbill: formattedStartDate,
             hotelcitybill: hotelData?.hotel?.hotelAddress,
             dateCheckin: formattedStartDate,
@@ -171,6 +171,10 @@ const BillScreen: React.FC<PropsType> = props => {
       // Handle the error as needed
     }
   };
+  type FormattingFunction = (num: number) => string;
+  const formatPrice: FormattingFunction = (num) => {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  };
 
   useEffect(() => {
     // Call the updateRoomStatus API when navigating away
@@ -199,7 +203,7 @@ const BillScreen: React.FC<PropsType> = props => {
             <Image source={DECOR} style={styles.imgDecor} />
             <Text style={styles.txtTitle}>Thanh toán thành công</Text>
             <Text style={styles.txtContent}>Bạn đã thanh toán thành công phòng{'\n'}{room.roomType} - {room.maxPeople} người</Text>
-            <Text style={styles.txtPrice}>{totalAmount.toString()} ₫</Text>
+            <Text style={styles.txtPrice}>{formatPrice(totalAmount)} ₫</Text>
             <Image source={LINE} style={styles.imgLine} />
             <View style={styles.itemHotel}>
               <Image source={{ uri: room.roomImage }} style={styles.imgHotel} />
@@ -208,7 +212,7 @@ const BillScreen: React.FC<PropsType> = props => {
                 <View style={styles.viewStar}>
                   <Image source={ICON_STAR_TRON} style={styles.iconStar} />
                   <Text style={styles.txtStar}>{hotelData.hotel.hotelRates ? hotelData.hotel.hotelRates.toFixed(1) : ''}</Text>
-                  <Text style={styles.txtReview}>(3107 lượt xem)</Text>
+                  <Text style={styles.txtReview}>({hotelViews} lượt xem)</Text>
                 </View>
                 <Text style={styles.txtAddress}>{hotelData?.hotel?.hotelAddress}</Text>
               </View>
@@ -231,7 +235,7 @@ const BillScreen: React.FC<PropsType> = props => {
                 </View>
                 <View style={styles.bottomRight}>
                   <Text style={styles.txtName}>Tên khách hàng</Text>
-                  <Text style={styles.txtValue}>Bảo Ngọc</Text>
+                  <Text style={styles.txtValue}>{user?.username}</Text>
                 </View>
               </View>
             </View>
