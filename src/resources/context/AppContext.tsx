@@ -1,10 +1,13 @@
 import React, { createContext, useState } from 'react';
+import { User } from './User';
 
 interface AppContextProps {
   isLoggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   pay: string;
   setPay: React.Dispatch<React.SetStateAction<string>>;
+  user: User | null
+    setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 type AppContextProviderProps = {
@@ -16,6 +19,8 @@ const defaultContextValue: AppContextProps = {
   setLoggedIn: () => { },
   pay: 'Momo',
   setPay: () => { },
+  user: null,
+  setUser: () => { },
 };
 
 export const AppContext = createContext<AppContextProps>(defaultContextValue);
@@ -30,11 +35,15 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   
   const [userData, setUserData] = useState(null);
 
+  const [user, setUser] = useState<User | null>(null)
+
   const appContextValue: AppContextProps = {
     isLoggedIn,
     setLoggedIn,
     pay,
     setPay,
+    user,
+    setUser
   };
 
   return (

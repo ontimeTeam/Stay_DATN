@@ -6,6 +6,7 @@ import Header from '../../components/header/Header'
 import { IC_BACK, IMG_ROOM_1, IMG_ROOM_2, IMG_ROOM_3, IMG_ROOM_4 } from '../../../assets'
 import { COLORS } from '../../themes/theme'
 import { useEffect } from 'react';
+import moment from 'moment'
 
 interface ListRoomHotel {
   id: string;
@@ -53,44 +54,82 @@ const RoomListScreen: React.FC<PropsType> = props => {
 
   const [dataRoomHotel, setDataRoomHotel] = useState<ListRoomHotel[]>([]);
 
+  const formatDate = (dateString: string): string | null => {
+    try {
+      // Parse the date using moment library and set the time to 12:00:00.000Z
+      const momentDate = moment.utc(dateString, 'DD/MM/YYYY').set({
+        hour: 12,
+        minute: 0,
+        second: 0,
+        millisecond: 0
+      });
+    
+      // Check if the date is valid
+      if (!momentDate.isValid()) {
+        throw new Error('Invalid date string');
+      }
+    
+      // Format the date as "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      const formattedDate = momentDate.toISOString();
+    
+      return formattedDate;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return null;
+    }
+  };
+  
   useEffect(() => {
-    const fetchHotelRooms = async () => {
+    // Function to fetch data from the API
+    const fetchData = async () => {
       try {
-        const response = await fetch(`https://newapihtbk-production.up.railway.app/api/hotel/${hotelId}/rooms`);
+        const formattedStartDate = formatDate(selectedStartDate);
+        const formattedEndDate = formatDate(selectedEndDate);
+
+        console.log('Formatted Start Date:', formattedStartDate);
+        console.log('Formatted End Date:', formattedEndDate);
+    
+        if (!formattedStartDate || !formattedEndDate) {
+          throw new Error('Invalid date format');
+        }
+    
+        const response = await fetch(`https://newapihtbk-production.up.railway.app/api/hotel/findroomtheongay/${hotelId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: hotelId,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+          }),
+        });
+    
         if (!response.ok) {
-          console.error('Error fetching hotel rooms. Status:', response.status);
-          return;
+          throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-  
-        const newData = await response.json();
-  
-        // Check if newData is an array or needs to be extracted from the response
-        const roomsArray = newData.rooms || newData; // Adjust the property name based on the API response structure
-  
-        // Check if the extracted data is an array before using map
-        if (Array.isArray(roomsArray)) {
-          const mappedData: ListRoomHotel[] = roomsArray.map((room: any) => ({
-            id: room._id,
-            nameRoom: room.roomType,
-            price: room.roomPrice.toString(),
-            imageRoom: { uri: room.roomImage },
-          }));
-  
-          // Update the state with the fetched data
-          setDataRoomHotel(mappedData);
-        } else {
-          console.error('Fetched data is not an array:', roomsArray);
-  
-          // Log the entire response to help diagnose the issue
-          // console.log('Full response:', newData);
-        }
+    
+        const data = await response.json();
+
+        // Assuming the API response has the structure { hotel: {...}, availableRooms: [...] }
+        setDataRoomHotel(data.availableRooms.map(room => ({
+          id: room._id,
+          nameRoom: room.roomType,
+          price: room.roomPrice.toString(), // Assuming roomPrice is a number, convert it to string
+          imageRoom: { uri: room.roomImage },
+          roomId: room.roomCode, // Assuming roomCode is the appropriate identifier for the room
+        })));
+    
+        // Log the data received from the API
+        console.log('API Data:', data);
       } catch (error) {
-        console.error('Error fetching hotel rooms:', error);
+        //console.error('Error fetching data:', error.message);
+        // Handle the error, show an error message, or perform other actions as needed
       }
     };
-  
-    fetchHotelRooms();
-  }, [hotelId]);
+    
+    fetchData(); // Call the fetchData function when the component mounts
+  }, [hotelId, selectedStartDate, selectedEndDate]);
   
    const ItemRoomHotel = ({ item }: { item: ListRoomHotel }) => {
     const onPressSelectRoom = () => {
@@ -100,7 +139,7 @@ const RoomListScreen: React.FC<PropsType> = props => {
     }
     const onPressItemAll = () => {
       console.log(item);
-      navigation.navigate('RoomDetailScreen')
+      navigation.navigate('RoomDetailScreen', {hotelId, selectedStartDate, selectedEndDate, people, roomId: item.id})
     }
 
     return (

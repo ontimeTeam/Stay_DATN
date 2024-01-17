@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Pressable, ScrollView, Image, ImageSourcePropType, FlatList, ListRenderItemInfo } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { ICON_CANCEL, ICON_CHECK, ICON_CLOCK, ICON_MONEYCHECK, ICON_PLANE, IC_BACK, IMG_NOGPS, IMG_ROOM, IMG_ROOM2, IMG_ROOM3, } from '../../../assets';
@@ -23,36 +23,76 @@ const TripScreen: React.FC<PropsType> = props => {
     // biến selectedItemId dùng để lưu id của item được chọn, mặc định là null
     const [keyExtractorUpdateCount, setKeyExtractorUpdateCount] = useState(0);
     // biến keyExtractorUpdateCount dùng để cập nhật keyExtractor của FlatList, mặc định là 0
+
+    const [dataWant, setDataWant] = useState<Item[]>([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('https://newapihtbk-production.up.railway.app/api/hotel/findbillandroomchoxacnhan');
+            const apiData = await response.json();
+
+            console.log('API Data:', apiData);
+
+            const formattedData: Item[] = apiData.map((item: any) => ({
+                id: item.billID._id,
+                image: { uri: item.roomImage },
+                nameHotel: item.hotelName,
+                roomName: item.roomType,
+            }));
+
+            setdataConfirm(formattedData);
+             // Update dataCancel only when the user presses the "Hủy đặt phòng" button
+             if (selectedItemId) {
+                setdataCancel((prevData) => [...prevData, ...formattedData]);
+                setKeyExtractorUpdateCount((prevCount) => prevCount + 1);
+                setShowDeleteModal(false);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchDataroomstatus();
+    }, []);
+
+    const fetchDataroomstatus = async () => {
+        try {
+            const response = await fetch('https://newapihtbk-production.up.railway.app/api/hotel/findroomstatusdaxacnhanandbill');
+            const apiData = await response.json();
+
+            console.log('API Data:', apiData);
+
+            const formattedData: Item[] = apiData.map((item: any) => ({
+                id: item.billID._id,
+                image: { uri: item.roomImage },
+                nameHotel: item.hotelName,
+                roomName: item.roomType,
+                billMonney: item.billID.billMonney, // Add billMonney to the formatted data
+                dateCheckin: item.billID.dateCheckin, // Add dateCheckin to the formatted data
+                dateCheckout: item.billID.dateCheckout, 
+                hotelID: item.hotelID,
+                roomID: item.roomID,
+            }));
+
+            setData(formattedData);
+            
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     const [data, setData] = useState<Item[]>([
-        // {
-        //     id: 1,
-        //     image: IMG_ROOM,
-        //     nameHotel: 'Fusion Original Saigon',
-        //     roomName: 'Luxury Deluxe Room - 1 King Bed',
-        // },
-        // {
-        //     id: 2,
-        //     image: IMG_ROOM_PLAN1,
-        //     nameHotel: 'Majestic SaiGon Hotel',
-        //     roomName: 'Colonial Suite',
-        // },
-        // {
-        //     id: 3,
-        //     image: IMG_ROOM_PLAN2,
-        //     nameHotel: 'Superior Queen',
-        //     roomName: 'Luxury Deluxe Room - 1 King Bed',
-        // },
-        // {
-        //     id: 4,
-        //     image: IMG_ROOM_PLAN3,
-        //     nameHotel: 'Rex Hotel Saigon',
-        //     roomName: 'Governor Suite',
-        // },
         {
-            id: 5,
+            id: 1,
             image: IMG_ROOM,
             nameHotel: 'Fusion Original Saigon',
-            roomName: 'Executive Premium ( Double/Twin )',
+            roomName: 'Luxury Deluxe Room - 1 King Bed',
         },
     ]);
     const [dataConfirm, setdataConfirm] = useState<Item[]>([
@@ -62,96 +102,15 @@ const TripScreen: React.FC<PropsType> = props => {
             nameHotel: 'Fusion Original Saigon',
             roomName: 'Luxury Room with Balcony',
         },
-        {
-            id: 2,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Room with Balcony',
-        },
-        {
-            id: 3,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Room with Balcony',
-        },
-        {
-            id: 4,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Room with Balcony',
-        },
-        {
-            id: 5,
-            image: IMG_ROOM,
-            nameHotel: 'Fusion Original Saigon',
-            roomName: 'Luxury Room with Balcony',
-        },
     ]);
     const [dataComplete, setdataComplete] = useState<Item[]>([
-            // {
-            //     id: 1,
-            //     image: IMG_ROOM2,
-            //     nameHotel: 'Hotel Grand Saigon',
-            //     roomName: 'Deluxe Double Room',
-            // },
-            // {
-            //     id: 2,
-            //     image: IMG_DONE2,
-            //     nameHotel: 'Hotel Grand Saigon',
-            //     roomName: 'Premium Deluxe King',
-            // },
-            // {
-            //     id: 3,
-            //     image: IMG_DONE3,
-            //     nameHotel: 'The Reverie Saigon',
-            //     roomName: 'Senior Deluxe',
-            // },
-            // {
-            //     id: 4,
-            //     image: IMG_DONE4,
-            //     nameHotel: 'Park Hyatt Saigon ',
-            //     roomName: 'Grand Deluxe Twin',
-            // },
-            // {
-            //     id: 5,
-            //     image: IMG_DONE1,
-            //     nameHotel: 'Park Hyatt Saigon ',
-            //     roomName: 'Deluxe Double Room',
-            // },
-    ]);
-    const [dataCancel, setdataCancel] = useState<Item[]>([
-        {
-            id: 1,
-            image: IMG_ROOM3,
-            nameHotel: 'Pullman Hanoi Hotel ',
-            roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        },
-        {
-            id: 2,
-            image: IMG_ROOM3,
-            nameHotel: 'Pullman Hanoi Hotel ',
-            roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        },
-        // {
-        //     id: 3,
-        //     image: IMG_ROOM3,
-        //     nameHotel: 'Pullman Hanoi Hotel ',
-        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        // },
-        // {
-        //     id: 4,
-        //     image: IMG_ROOM3,
-        //     nameHotel: 'Pullman Hanoi Hotel ',
-        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        // },
-        // {
-        //     id: 5,
-        //     image: IMG_ROOM3,
-        //     nameHotel: 'Pullman Hanoi Hotel ',
-        //     roomName: 'Club Lounge Presidential Suite - Club Benefits Included',
-        // },
-
-    ]);
+            {
+                id: 1,
+                image: IMG_ROOM2,
+                nameHotel: 'Hotel Grand Saigon',
+                roomName: 'Deluxe Double Room',
+            },]);
+    const [dataCancel, setdataCancel] = useState<Item[]>([]);
     const initialLayout = { width: Dimensions.get('window').width };
 
     const [index, setIndex] = useState(0);
@@ -243,8 +202,14 @@ const TripScreen: React.FC<PropsType> = props => {
                 </View>
                 <View style={{ borderBottomColor: 'rgba(0, 0, 0, 0.25)', borderBottomWidth: 1, marginVertical: 20 }}>
                 </View>
-                <Pressable style={styles.viewbtnTag}
-                    onPress={() => { navigation.navigate('BillScreen') }}
+                <Pressable
+                    style={styles.viewbtnTag}
+                    onPress={() => {
+                        navigation.navigate('BillScreenget', {
+                            hotelID: item.hotelID,
+                            roomID: item.roomID,
+                        });
+                    }}
                 >
                     <Text style={styles.textbtnTag}>
                         Xem hóa đơn
@@ -276,6 +241,28 @@ const TripScreen: React.FC<PropsType> = props => {
         }
     }
 
+    const handleCancelReservation = (reservationId: number) => {
+        console.log(`Cancel reservation with ID: ${reservationId}`);
+        // Find the reservation in the dataConfirm array
+    const canceledReservation = dataConfirm.find((item) => item.id === reservationId);
+
+    // Check if the reservation is found
+    if (canceledReservation) {
+        // Update the dataCancel state by adding the canceled reservation
+        setdataCancel((prevData) => [...prevData, canceledReservation]);
+
+        // Remove the canceled reservation from the dataConfirm array
+        setdataConfirm((prevData) => prevData.filter((item) => item.id !== reservationId));
+
+        // Set the selectedItemId to null to reset the state
+        setSelectedItemId(null);
+
+        // Optionally, you can close the modal or perform any other necessary actions
+        setShowDeleteModal(false);
+    }
+    
+    };    
+
     const renderListHotelConfirm = ({ item }: { item: Item }) => {
         return (
             <View
@@ -304,7 +291,9 @@ const TripScreen: React.FC<PropsType> = props => {
                 <View style={{ borderBottomColor: 'rgba(0, 0, 0, 0.25)', borderBottomWidth: 1, marginVertical: 20 }}>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                    <Pressable style={styles.viewbtnTag1}>
+                    <Pressable style={styles.viewbtnTag1}
+                    onPress={() => handleCancelReservation(item.id)}
+                    >
                         <Text style={styles.textbtnTag1}>
                             Hủy đặt phòng
                         </Text>
